@@ -99,7 +99,6 @@ private slots:
     void paint();
     void paintWaiting();
     void paintTextbar();
-
     void textBarOff();
 
 private:
