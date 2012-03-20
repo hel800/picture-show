@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>img/waiting01.png</file>
+        <file alias="logo">img/logo.png</file>
+        <file>img/waiting02.png</file>
+        <file>img/waiting03.png</file>
+        <file>img/waiting04.png</file>
+        <file>img/waiting05.png</file>
+        <file>img/waiting06.png</file>
+        <file>img/waiting07.png</file>
+        <file>img/waiting08.png</file>
+        <file>img/textbar_big.png</file>
+        <file>img/logoText.png</file>
+        <file>img/static.png</file>
+        <file>img/stopwatch-icon.png</file>
+        <file>img/stopwatchOff-icon.png</file>
+        <file>img/jumpto-icon.png</file>
+        <file>img/logo256x256.png</file>
+        <file>img/header2Logo.png</file>
+        <file>img/headerLogo.png</file>
+    </qresource>
+</RCC>
