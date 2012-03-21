@@ -47,12 +47,12 @@ bool overlayBase::blendIn(QPixmap& bg)
 {
     if (this->m_currentState == READY)
     {
+        this->m_currentBlendValue = 0.0;
         this->m_background = QPixmap(bg);
-
         this->generatePixmap();
         this->m_currentState = BLEND_IN;
-        this->m_currentBlendValue = 0.0;
-        this->m_overlayTimer->start(5);
+
+        this->m_overlayTimer->start(10);
         return true;
     }
 
@@ -65,7 +65,7 @@ bool overlayBase::blendOut()
     {
         this->generatePixmap();
         this->m_currentState = BLEND_OUT;
-        this->m_overlayTimer->start(5);
+        this->m_overlayTimer->start(10);
         return true;
     }
 
@@ -98,7 +98,7 @@ void overlayBase::timedOut()
     else if (this->m_currentState = BLEND_OUT)
         this->m_currentBlendValue -= this->m_fadeSpeed;
 
-    if (this->m_currentBlendValue >= 1.0)
+    if (this->m_currentBlendValue + 0.001 >= 1.0)
     {
         this->m_overlayTimer->stop();
         this->m_currentBlendValue = 1.0;
@@ -106,7 +106,7 @@ void overlayBase::timedOut()
         this->paint(this->m_paintWidget);
         emit blendInFinished();
     }
-    else if (this->m_currentBlendValue <= 0.0)
+    else if (this->m_currentBlendValue - 0.001 <= 0.0)
     {
         this->m_overlayTimer->stop();
         this->m_currentBlendValue = 0.0;
@@ -118,8 +118,6 @@ void overlayBase::timedOut()
     {
         this->paint(this->m_paintWidget);
     }
-
-
 }
 
 void overlayBase::paint(QPaintDevice * device)
@@ -132,9 +130,10 @@ void overlayBase::paint(QPaintDevice * device)
     p.setOpacity(1.0);
     p.drawPixmap(0, 0, device->width(), device->height(), this->m_background);
 
-    p.setPen(QPen(QColor(0, 0, 0)));
-    p.setBrush(QBrush(QColor(0,0,0)));
     p.setOpacity(this->m_currentBlendValue);
+    p.setPen(QPen(QColor(0, 0, 0)));
+    p.setBrush(QBrush(QColor(0,0,0)));    
+
     p.drawPixmap(0, 0, device->width(), device->height(), this->m_overlay);
     p.end();
 }

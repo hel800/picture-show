@@ -35,6 +35,9 @@ MainWidget::MainWidget(QWidget *parent) :
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
 
+    this->displayMenu = new overlayMenu(this);
+    connect(this->displayMenu, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
+
     ui->setupUi(this);
 
     this->settingsDial = new SettingsDialog(this);
@@ -384,6 +387,8 @@ void MainWidget::restoreDisplayState()
 {
     if (this->displayState == SHOW_HELP)
         this->displayHelp->blendIn(this->effectEngine->currentDisplay());
+    else if (this->displayState == SHOW_MENU)
+        this->displayMenu->blendIn(this->effectEngine->currentDisplay());
 }
 
 void MainWidget::resizeEvent ( QResizeEvent * event )
@@ -399,6 +404,8 @@ void MainWidget::resizeEvent ( QResizeEvent * event )
         {
             if (this->displayState == SHOW_HELP && this->effectEngine->isDoingNothing())
                 this->displayHelp->update(this->effectEngine->currentDisplay());
+            else if (this->displayState == SHOW_MENU && this->effectEngine->isDoingNothing())
+                this->displayMenu->update(this->effectEngine->currentDisplay());
             else
                 this->effectEngine->paintStartScreen();
         }
@@ -423,6 +430,8 @@ void MainWidget::paintEvent ( QPaintEvent * event )
 {
     if (this->displayState == SHOW_HELP && this->effectEngine->isDoingNothing())
         this->displayHelp->update(this->effectEngine->currentDisplay());
+    else if (this->displayState == SHOW_MENU && this->effectEngine->isDoingNothing())
+        this->displayMenu->update(this->effectEngine->currentDisplay());
     else
         this->effectEngine->repaintState();
 
@@ -436,6 +445,8 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
 
     if (this->displayState == SHOW_HELP)
         return this->keyPressEvent_showingHelp( event );
+    else if (this->displayState == SHOW_MENU)
+        return this->keyPressEvent_showingMenu( event );
     else if (this->displayState == SHOW_INFO)
         return this->keyPressEvent_showingInfo( event );
 
@@ -510,6 +521,17 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
             {
                 this->displayState = SHOW_HELP;
+                this->automaticForward->stop();
+                this->effectEngine->textBarReset();
+            }
+        }
+    break;
+    case Qt::Key_D:
+        if (this->current_task != RECALC && this->current_task != START && !this->effectEngine->isBusy())
+        {
+            if (this->displayMenu->blendIn(this->effectEngine->currentDisplay()))
+            {
+                this->displayState = SHOW_MENU;
                 this->automaticForward->stop();
                 this->effectEngine->textBarReset();
             }
@@ -601,6 +623,39 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
     case Qt::Key_Escape:
 
     break;
+    }
+}
+
+void MainWidget::keyPressEvent_showingMenu ( QKeyEvent * event )
+{
+    if (!this->effectEngine->isDoingNothing())
+        return;
+
+    switch (event->key())
+    {
+    case Qt::Key_D:
+    case Qt::Key_Escape:
+        this->displayMenu->blendOut();
+    break;
+    case Qt::Key_F:
+        if (this->current_task == NONE)
+        {
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
+                this->setCursor(Qt::BlankCursor);
+            else
+                this->unsetCursor();
+        }
+    break;
+//    case Qt::Key_O:
+//        if (this->effectEngine->isBusy())
+//            return;
+
+//        if (this->settingsDial->isHidden())
+//            this->settingsDial->show();
+//        else
+//            this->settingsDial->hide();
+//    break;
     }
 }
 

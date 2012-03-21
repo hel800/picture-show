@@ -46,6 +46,7 @@ February 2012
 #include "animation.h"
 #include "settingsdialog.h"
 #include "overlayhelp.h"
+#include "overlaymenu.h"
 
 namespace Ui {
 class MainWidget;
@@ -74,6 +75,7 @@ public:
         NORMAL,
         SHOW_HELP,
         SHOW_INFO,
+        SHOW_MENU,
         SHOW_TEXTBAR
     };
 
@@ -104,6 +106,7 @@ protected:
 
     void keyPressEvent_showingHelp ( QKeyEvent * event );
     void keyPressEvent_showingInfo ( QKeyEvent * event );
+    void keyPressEvent_showingMenu ( QKeyEvent * event );
     
 private:
     QPixmap scale(QPixmap & map);
@@ -118,6 +121,7 @@ private:
 
     animation * effectEngine;
     overlayHelp * displayHelp;
+    overlayMenu * displayMenu;
 
     QTimer * resizeTimer;
     double current_blend;
