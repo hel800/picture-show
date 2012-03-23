@@ -58,6 +58,7 @@ signals:
 private slots:
     void on_pushButton_browse_clicked();
 
+
 private:
     Ui::SettingsDialog *ui;
 

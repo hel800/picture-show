@@ -37,6 +37,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->displayMenu = new overlayMenu(this);
     connect(this->displayMenu, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
+    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name | QDir::Reversed));
 
     ui->setupUi(this);
 

@@ -34,13 +34,21 @@ class overlayMenu : public overlayBase
     Q_OBJECT
 public:
     explicit overlayMenu(QWidget * pWidget);
-    void setDirectory(const QString &path);
+    void addCategory(const QString & name, const QList<QFileInfo>& list);
+
+public slots:
+    void keyPressEvent ( QKeyEvent * event );
     
 protected:
     void generatePixmap();
 
 private:
-    QDir m_currentDirectory;
+    QList< QPair< QString, QList<QFileInfo> > > m_categoryContainer;
+    int m_currentIndex;
+    int m_currentGroup;
+
+    QPixmap generateFolderAndName(int group, int index, QSize size);
+    QPixmap generateDirList(QSize size);
 
 
 };

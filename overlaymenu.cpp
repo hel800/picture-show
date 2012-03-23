@@ -26,11 +26,21 @@ March 2012
 overlayMenu::overlayMenu(QWidget *pWidget) :
     overlayBase(pWidget)
 {
+    this->m_currentIndex = 0;
+    this->m_currentGroup = 0;
 }
 
-void overlayMenu::setDirectory(const QString &path)
+void overlayMenu::addCategory(const QString & name, const QList<QFileInfo>& list)
 {
-    this->m_currentDirectory = QDir(path);
+    QPair< QString, QList<QFileInfo> > newPair;
+    newPair.first = QString(name);
+    newPair.second = QList<QFileInfo>(list);
+    this->m_categoryContainer.append(newPair);
+}
+
+void overlayMenu::keyPressEvent ( QKeyEvent * event )
+{
+
 }
 
 void overlayMenu::generatePixmap()
@@ -84,6 +94,14 @@ void overlayMenu::generatePixmap()
     QPen rect2Pen(QColor::fromRgb(0, 0, 0, 0));
     rect2Pen.setWidth(0);
 
+    QRect titleRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + rect2Height * .05), int(rect2Width * .94), int(rect2Height * .12));
+    QRect dirRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .6), int(rect2Height * .44));
+    QRect listRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .2)), int(rect2Width * .58), int(rect2Height * .32));
+    QRect setRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .94), int(rect2Height * .24));
+    QRect infoRect(int(rect2PosX + rect2Width * .06) + int(rect2Width * .6), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .31), int(rect2Height * .44));
+
+    QPixmap dirListing = this->generateDirList(listRect.size());
+
     QPainter p;
     p.begin(&this->m_overlay);
     p.setRenderHint(QPainter::Antialiasing);
@@ -96,5 +114,83 @@ void overlayMenu::generatePixmap()
     p.setPen(rect2Pen);
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, 20.0, 20.0);
+
+    p.setPen(QPen(Qt::red));
+    p.drawRect(titleRect);
+    p.drawRect(dirRect);
+    p.drawRect(listRect);
+    p.drawRect(setRect);
+    p.drawRect(infoRect);
+    if (!dirListing.isNull())
+        p.drawPixmap(listRect.x(), listRect.y(), dirListing.width(), dirListing.height(), dirListing);
+
+
     p.end();
 }
+
+QPixmap overlayMenu::generateFolderAndName(int group, int index, QSize size)
+{
+    if (this->m_categoryContainer.size() <= group)
+        return QPixmap();
+
+    QList<QFileInfo> dirList = this->m_categoryContainer.at(group).second;
+
+    if (dirList.size() <= index)
+        return QPixmap();
+
+    QFileInfo dirInfo = dirList.at(index);
+
+    QPixmap pix(size);
+    pix.fill(QColor(0, 0, 0, 0));
+
+    QFont fontText(QString("Helvetica"), int(double(size.height()) * 0.4));
+    fontText.setStyleStrategy(QFont::PreferAntialias);
+    QFontMetrics fmHeader(fontText);
+    QRect rectText(int(size.width()*0.1), int(size.height() * .2), int(size.width()*0.8), int(size.height() * 0.6));
+
+    QString name = dirInfo.fileName();
+    if (name == ".")
+        name = tr(". <Hauptverzeichnis>");
+
+    QPainter p;
+    p.begin(&pix);
+    p.setOpacity(0.7);
+    p.setFont(fontText);
+    p.setPen(QPen(Qt::white));
+    p.drawText(rectText, name);
+    p.end();
+
+    return pix;
+}
+
+QPixmap overlayMenu::generateDirList(QSize size)
+{
+    QPixmap pix(size);
+    pix.fill(QColor(0, 0, 0, 0));
+
+    QList<QFileInfo> dirList = this->m_categoryContainer.at(this->m_currentGroup).second;
+
+    QSize dirListingSize(size.width(), int(size.height() / 5.0));
+
+    QPainter p;
+    p.begin(&pix);
+    p.setOpacity(1.0);
+
+    int curYpos = 0;
+
+    for (int i = this->m_currentIndex; i < this->m_currentIndex + 5; i++)
+    {
+        if (i >= dirList.size())
+            break;
+        QPixmap cur_dir = this->generateFolderAndName(this->m_currentGroup, i, dirListingSize);
+
+        p.drawPixmap(0, curYpos, cur_dir.width(), cur_dir.height(), cur_dir);
+        curYpos += dirListingSize.height();
+    }
+
+    p.end();
+
+    return pix;
+}
+
+
