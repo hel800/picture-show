@@ -38,14 +38,15 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->setupUi(this);
 
     this->settingsDial = new SettingsDialog(this);
-    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));
-//    connect(this->settingsDial, SIGNAL(changed()), this, SLOT(update()));
+    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));    
 
     if (this->settingsDial->getLanguage() != "de")
         if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
             qApp->installTranslator(&translator);
     this->settingsDial->updateLanguage();
     this->settingsDial->show();
+
+    connect(this->settingsDial, SIGNAL(languageChanged(QString)), this, SLOT(changeLanguage(QString)));
 
     this->resizeTimer = new QTimer(this);
     connect(this->resizeTimer, SIGNAL(timeout()), this, SLOT(reloadImages()));
@@ -135,11 +136,11 @@ void MainWidget::initialize()
     this->current_blendType = this->settingsDial->getBlendType();
     this->current_scaleType = this->settingsDial->getScaleType();
 
-    qApp->removeTranslator(&translator);
-    if (this->settingsDial->getLanguage() != "de")
-        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
-            qApp->installTranslator(&translator);
-    this->settingsDial->updateLanguage();
+//    qApp->removeTranslator(&translator);
+//    if (this->settingsDial->getLanguage() != "de")
+//        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
+//            qApp->installTranslator(&translator);
+//    this->settingsDial->updateLanguage();
 
     this->img = QPixmap();
     this->img_next = QPixmap();
@@ -164,6 +165,7 @@ void MainWidget::directoryLoadFinished(bool success)
         this->effectEngine->paintStartScreen();
         this->current_task = NONE;
         this->imagesLoaded = false;
+        this->settingsDial->show();
         return;
     }
 
@@ -173,6 +175,7 @@ void MainWidget::directoryLoadFinished(bool success)
         this->effectEngine->paintStartScreen();
         this->current_task = NONE;
         this->imagesLoaded = false;
+        this->settingsDial->show();
         return;
     }
 
@@ -242,6 +245,15 @@ void MainWidget::overlayBlendOutFinished()
 {
     this->displayState = NORMAL;
     this->processQueuedCommands();
+}
+
+void MainWidget::changeLanguage(QString language_short)
+{
+    qApp->removeTranslator(&translator);
+    if (language_short != "de")
+        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + language_short))
+            qApp->installTranslator(&translator);
+    this->settingsDial->updateLanguage();
 }
 
 void MainWidget::reloadImages()
@@ -501,6 +513,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         this->effectEngine->numberEntered(event->text().toInt());
     break;
     case Qt::Key_J:
+        this->automaticForward->stop();
         this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
     break;
     case Qt::Key_H:

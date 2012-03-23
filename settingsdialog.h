@@ -53,15 +53,16 @@ public:
     void updateLanguage();
 
 signals:
-    void changed();
+    void languageChanged(QString lang);
     
 private slots:
     void on_pushButton_browse_clicked();
 
+    void on_comboBox_language_currentIndexChanged(int index);
+
 private:
     Ui::SettingsDialog *ui;
-
-    void changeEvent( QEvent * event );
+    bool languageChangeSignalOff;
 
     void loadSettings();
     void saveSettings();

@@ -84,6 +84,7 @@ public slots:
     void initialize();
     void directoryLoadFinished(bool success);
     void overlayBlendOutFinished();
+    void changeLanguage(QString language_short);
     void advanceImages(bool forward = true, bool hard = false);
     void jumpToImage(int num);
     void setValueOfAutomaticTimer(int msecs);

@@ -31,7 +31,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->setupUi(this);    
     this->setModal(true);
 
+    this->languageChangeSignalOff = true;
     this->loadSettings();
+    this->languageChangeSignalOff = false;
 }
 
 SettingsDialog::~SettingsDialog()
@@ -95,9 +97,11 @@ QString SettingsDialog::getLanguage()
 
 void SettingsDialog::updateLanguage()
 {
+    this->languageChangeSignalOff = true;
     this->saveSettings();
     ui->retranslateUi(this);
     this->loadSettings();
+    this->languageChangeSignalOff = false;
 }
 
 void SettingsDialog::on_pushButton_browse_clicked()
@@ -106,12 +110,6 @@ void SettingsDialog::on_pushButton_browse_clicked()
                                                      ui->lineEdit_directory->text(),
                                                      QFileDialog::ShowDirsOnly
                                                      | QFileDialog::DontResolveSymlinks));
-}
-
-void SettingsDialog::changeEvent( QEvent * event )
-{
-    emit changed();
-    event->accept();
 }
 
 void SettingsDialog::loadSettings()
@@ -147,4 +145,13 @@ void SettingsDialog::saveSettings()
     settings.setValue("sortOrder", QVariant(ui->comboBox_sort->currentIndex()));
     settings.setValue("scaleType", QVariant(ui->comboBox_scaling->currentIndex()));
     settings.setValue("languageID", QVariant(ui->comboBox_language->currentIndex()));
+}
+
+void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)
+{
+    if (!this->languageChangeSignalOff)
+    {
+        QString lang = this->getLanguage();
+        emit this->languageChanged(lang);
+    }
 }
