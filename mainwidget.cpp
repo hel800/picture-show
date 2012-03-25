@@ -513,8 +513,11 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         this->effectEngine->numberEntered(event->text().toInt());
     break;
     case Qt::Key_J:
-        this->automaticForward->stop();
-        this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
+        if (this->effectEngine->isDoingNothing())
+        {
+            this->automaticForward->stop();
+            this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
+        }
     break;
     case Qt::Key_H:
     case Qt::Key_F1:
