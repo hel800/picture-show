@@ -40,7 +40,37 @@ void overlayMenu::addCategory(const QString & name, const QList<QFileInfo>& list
 
 void overlayMenu::keyPressEvent ( QKeyEvent * event )
 {
+    switch (event->key())
+    {
+    case Qt::Key_Left:
 
+    break;
+    case Qt::Key_Right:
+
+    break;
+    case Qt::Key_Up:
+        if (this->m_currentIndex > 0)
+            this->m_currentIndex--;
+        this->update(this->m_background);
+    break;
+    case Qt::Key_Down:
+        if (this->m_currentIndex < this->m_categoryContainer.at(this->m_currentGroup).second.size())
+            this->m_currentIndex++;
+        this->update(this->m_background);
+    break;
+    case Qt::Key_PageUp:
+        this->m_currentIndex -= 5;
+        if (this->m_currentIndex < 0)
+            this->m_currentIndex = 0;
+        this->update(this->m_background);
+    break;
+    case Qt::Key_PageDown:
+        this->m_currentIndex += 5;
+        if (this->m_currentIndex >= this->m_categoryContainer.at(this->m_currentGroup).second.size())
+            this->m_currentIndex = this->m_categoryContainer.at(this->m_currentGroup).second.size()-1;
+        this->update(this->m_background);
+    break;
+    }
 }
 
 void overlayMenu::generatePixmap()
@@ -96,11 +126,13 @@ void overlayMenu::generatePixmap()
 
     QRect titleRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + rect2Height * .05), int(rect2Width * .94), int(rect2Height * .12));
     QRect dirRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .6), int(rect2Height * .44));
-    QRect listRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .2)), int(rect2Width * .58), int(rect2Height * .32));
+    QRect groupRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .58), int(rect2Height * .06));
+    QRect listRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .14)), int(rect2Width * .58), int(rect2Height * .44));
     QRect setRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .94), int(rect2Height * .24));
     QRect infoRect(int(rect2PosX + rect2Width * .06) + int(rect2Width * .6), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .31), int(rect2Height * .44));
 
     QPixmap dirListing = this->generateDirList(listRect.size());
+    QPixmap groupListing = this->generateGroupList(groupRect.size());
 
     QPainter p;
     p.begin(&this->m_overlay);
@@ -118,11 +150,14 @@ void overlayMenu::generatePixmap()
     p.setPen(QPen(Qt::red));
     p.drawRect(titleRect);
     p.drawRect(dirRect);
+    p.drawRect(groupRect);
     p.drawRect(listRect);
     p.drawRect(setRect);
     p.drawRect(infoRect);
     if (!dirListing.isNull())
         p.drawPixmap(listRect.x(), listRect.y(), dirListing.width(), dirListing.height(), dirListing);
+    if (!groupListing.isNull())
+        p.drawPixmap(groupRect.x(), groupRect.y(), groupListing.width(), groupListing.height(), groupListing);
 
 
     p.end();
@@ -170,20 +205,26 @@ QPixmap overlayMenu::generateDirList(QSize size)
 
     QList<QFileInfo> dirList = this->m_categoryContainer.at(this->m_currentGroup).second;
 
-    QSize dirListingSize(size.width(), int(size.height() / 5.0));
+    QSize dirListingSize(size.width(), int(size.height() / 7.0));
 
     QPainter p;
     p.begin(&pix);
-    p.setOpacity(1.0);
 
     int curYpos = 0;
 
-    for (int i = this->m_currentIndex; i < this->m_currentIndex + 5; i++)
+    for (int i = this->m_currentIndex-3; i < this->m_currentIndex + 4; i++)
     {
+        if (i < 0)
+        {
+            curYpos += dirListingSize.height();
+            continue;
+        }
+
         if (i >= dirList.size())
             break;
-        QPixmap cur_dir = this->generateFolderAndName(this->m_currentGroup, i, dirListingSize);
 
+        QPixmap cur_dir = this->generateFolderAndName(this->m_currentGroup, i, dirListingSize);
+        p.setOpacity(1.0 - (fabs(double(i-this->m_currentIndex))) / 3.5);
         p.drawPixmap(0, curYpos, cur_dir.width(), cur_dir.height(), cur_dir);
         curYpos += dirListingSize.height();
     }
@@ -191,6 +232,45 @@ QPixmap overlayMenu::generateDirList(QSize size)
     p.end();
 
     return pix;
+}
+
+QPixmap overlayMenu::generateGroupList(QSize size)
+{
+    QPixmap pix(size);
+    pix.fill(QColor(0, 0, 0, 0));
+
+    QPainter p;
+    p.begin(&pix);
+
+    QFont fontText(QString("Helvetica"), int(double(size.height()) * 0.5));
+    fontText.setStyleStrategy(QFont::PreferAntialias);
+
+    QSize groupListingSize(int(size.width()/5.0), size.height());
+    int curXpos = 0;
+
+    for (int i = this->m_currentGroup-2; i < this->m_currentGroup + 3; i++)
+    {
+        if (i < 0)
+        {
+            curXpos += groupListingSize.width();
+            continue;
+        }
+
+        if (i >= this->m_categoryContainer.size())
+            break;
+
+        QString groupName = this->m_categoryContainer.at(i).first;
+        p.setOpacity(1.0 - (fabs(double(i-this->m_currentGroup))) / 3.5);
+        p.setFont(fontText);
+        p.setPen(QPen(Qt::white));
+        p.drawText(curXpos, 0, groupListingSize.width(), groupListingSize.height(), Qt::AlignHCenter | Qt::AlignVCenter, groupName);
+        curXpos += groupListingSize.width();
+    }
+
+    p.end();
+
+    return pix;
+
 }
 
 

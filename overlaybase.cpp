@@ -74,7 +74,7 @@ bool overlayBase::blendOut()
 
 void overlayBase::update(QPixmap& bg)
 {
-    if (this->m_currentState != READY)
+    if (this->m_currentState != READY || bg.isNull())
         return;
 
     this->m_background = QPixmap(bg);

@@ -26,6 +26,7 @@ March 2012
 
 #include <QString>
 #include <QDir>
+#include <QKeyEvent>
 
 #include "overlaybase.h"
 
@@ -49,6 +50,7 @@ private:
 
     QPixmap generateFolderAndName(int group, int index, QSize size);
     QPixmap generateDirList(QSize size);
+    QPixmap generateGroupList(QSize size);
 
 
 };

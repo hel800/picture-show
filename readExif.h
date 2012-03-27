@@ -27,7 +27,7 @@ February 2012
 #include <QString>
 #include <QDateTime>
 #include <QFile>
-#include <stdio.h>
+#include <iostream>
 #include "exif.h"
 
 static QDateTime readOriginalDate(const QString &fname)
@@ -44,7 +44,7 @@ static QDateTime readOriginalDate(const QString &fname)
 
     qint64 fsize = file.size();
     qint64 cappedSize = 1500;
-    unsigned char *buf = new unsigned char[fsize];
+    unsigned char *buf = new unsigned char[cappedSize];
 
     if (file.read((char*)buf, cappedSize) != cappedSize)
     {
@@ -54,10 +54,8 @@ static QDateTime readOriginalDate(const QString &fname)
         return originalDate;
     }
 
-    //EXIFInfo result;
-    //ParseEXIF(buf, fsize, result);
     QString date;
-    ExtractDateTime(buf, fsize, date);
+    ExtractDateTime(buf, cappedSize, date);
 
     if(!date.isEmpty())
     {
@@ -73,10 +71,13 @@ static QDateTime readOriginalDate(const QString &fname)
             return originalDate;
         }
 
+        qDebug("Try to read Date from whole file!");
         ExtractDateTime(buf, fsize, date);
 
         if(!date.isEmpty())
             originalDate = QDateTime::fromString(date, QString("yyyy:MM:dd HH:mm:ss"));
+        else
+            qDebug("CANNOT READ DATE!!!");
     }
 
     delete[] buf;

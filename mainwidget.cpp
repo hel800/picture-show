@@ -37,7 +37,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->displayMenu = new overlayMenu(this);
     connect(this->displayMenu, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
-    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name | QDir::Reversed));
+    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name));
 
     ui->setupUi(this);
 
@@ -631,6 +631,8 @@ void MainWidget::keyPressEvent_showingMenu ( QKeyEvent * event )
 {
     if (!this->effectEngine->isDoingNothing())
         return;
+
+    this->displayMenu->keyPressEvent( event );
 
     switch (event->key())
     {
