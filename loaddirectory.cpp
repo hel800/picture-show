@@ -23,6 +23,8 @@ March 2012
 
 #include "loaddirectory.h"
 
+#include <time.h>
+
 loadDirectory::loadDirectory() : QThread()
 {
     this->m_dirList = NULL;
@@ -50,6 +52,9 @@ QString& loadDirectory::getErrorMsg()
 
 void loadDirectory::run()
 {
+//    clock_t start, end;
+//    start = clock();
+
     QStringList filters;
     filters << "*.jpeg" << "*.jpg" << "*.JPG" << "*.JPEG";
 
@@ -88,6 +93,9 @@ void loadDirectory::run()
         for (int i = 0; i < tempList.size(); i++)
             this->m_dirList->append(tempList.at(i));
     }
+
+//    end = clock();
+//    qDebug(QString::number(end - start).toStdString().c_str());
 
     emit loadDirectoryFinished(true);
 }
