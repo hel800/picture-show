@@ -42,6 +42,7 @@ February 2012
 
 #include "global.h"
 #include "loaddirectory.h"
+#include "loadlibrary.h"
 #include "loadimage.h"
 #include "animation.h"
 #include "settingsdialog.h"
@@ -146,6 +147,7 @@ private:
     QPixmap img_next;
 
     loadDirectory * load_directory;
+    loadLibrary * load_library;
 
     QTranslator translator;
 

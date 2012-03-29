@@ -37,7 +37,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->displayMenu = new overlayMenu(this);
     connect(this->displayMenu, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
-    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name));
+//    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name));
 
     ui->setupUi(this);
 
@@ -81,9 +81,14 @@ MainWidget::MainWidget(QWidget *parent) :
     this->load_directory = new loadDirectory();
     this->load_directory->setDirectoryList(&this->current_directory_list);
 
+    this->load_library = new loadLibrary(this->displayMenu);
+    this->load_library->setPath("D:/Bilder/Fotos");
+
     this->load_img_prev = new loadImage();
     this->load_img = new loadImage();
     this->load_img_next = new loadImage();
+    connect(this->load_library, SIGNAL(finished()), this->effectEngine, SLOT(paintStartScreen()));
+    this->load_library->start();
 
     connect(this->load_img_prev, SIGNAL(finished()), this, SLOT(loadImagePrevFinished()));
     connect(this->load_img, SIGNAL(finished()), this, SLOT(loadImageFinished()));
@@ -99,10 +104,8 @@ MainWidget::MainWidget(QWidget *parent) :
     }
 
     this->automaticForwardInverval = settings.value("automaticTimerInterval", QVariant(10000)).toInt();
-
     this->show();
     this->effectEngine->paintStartScreen();
-    this->settingsDial->raise();
 }
 
 MainWidget::~MainWidget()
@@ -528,7 +531,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         }
     break;
     case Qt::Key_D:
-        if (this->current_task != RECALC && this->current_task != START && !this->effectEngine->isBusy())
+        if (this->current_task != RECALC && this->current_task != START && this->effectEngine->isDoingNothing())
         {
             if (this->displayMenu->blendIn(this->effectEngine->currentDisplay()))
             {

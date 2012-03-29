@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------
-overlaymenu.h is part of picture-show.
+loadlibrary.h is part of picture-show.
 .....................................................................
 
 picture-show is free software: you can redistribute it and/or modify
@@ -21,41 +21,40 @@ March 2012
 
 --------------------------------------------------------------------*/
 
-#ifndef OVERLAYMENU_H
-#define OVERLAYMENU_H
+#ifndef LOADLIBRARY_H
+#define LOADLIBRARY_H
 
-#include <QString>
-#include <QDir>
-#include <QKeyEvent>
+#include <QThread>
+#include <QPair>
+#include <QMap>
 
-#include "overlaybase.h"
+#include "global.h"
+#include "overlaymenu.h"
+#include "readExif.h"
 
-class overlayMenu : public overlayBase
+static bool fileCreateLessThan(const QPair< QDateTime, QFileInfo > &f1, const QPair< QDateTime, QFileInfo > &f2);
+
+class loadLibrary : public QThread
 {
     Q_OBJECT
 public:
-    explicit overlayMenu(QWidget * pWidget);
-    void addCategory(const QString & name, const QList<QFileInfo>& list);
+    explicit loadLibrary(overlayMenu * oMenu);
 
-public slots:
-    void loadingFinished();
-    void keyPressEvent ( QKeyEvent * event );
+    void setPath(const QString& dirpath);
+    QString& getErrorMsg();
+
+    void run();
     
-protected:
-    void generatePixmap();
+signals:
+    void loadingLibraryFinished(bool success);
+public slots:
 
 private:
-    QList< QPair< QString, QList<QFileInfo> > > m_categoryContainer;
-    int m_currentIndex;
-    int m_currentGroup;
+    overlayMenu * m_menu;
 
-    bool isLoading;
-
-    QPixmap generateFolderAndName(int group, int index, QSize size);
-    QPixmap generateDirList(QSize size);
-    QPixmap generateGroupList(QSize size);
-
-
+    QString m_path;
+    QString m_error_msg;
+    
 };
 
-#endif // OVERLAYMENU_H
+#endif // LOADLIBRARY_H

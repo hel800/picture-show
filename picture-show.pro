@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     loaddirectory.cpp \
     overlaybase.cpp \
     overlayhelp.cpp \
-    overlaymenu.cpp
+    overlaymenu.cpp \
+    loadlibrary.cpp
 
 HEADERS  += mainwidget.h \
     loadimage.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwidget.h \
     loaddirectory.h \
     overlaybase.h \
     overlayhelp.h \
-    overlaymenu.h
+    overlaymenu.h \
+    loadlibrary.h
 
 FORMS    += mainwidget.ui \
     settingsdialog.ui

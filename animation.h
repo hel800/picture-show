@@ -73,6 +73,7 @@ public:
     void setScaleTypeToScreen();
     void setScaleTypeTo(ScaleType type);
 
+public slots:
     void paintStartScreen();
     void paintToWaiting(QPixmap & from = QPixmap());
     void paintFromWaiting(QPixmap & to = QPixmap());

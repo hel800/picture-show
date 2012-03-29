@@ -28,6 +28,8 @@ overlayMenu::overlayMenu(QWidget *pWidget) :
 {
     this->m_currentIndex = 0;
     this->m_currentGroup = 0;
+
+    this->isLoading = true;
 }
 
 void overlayMenu::addCategory(const QString & name, const QList<QFileInfo>& list)
@@ -54,9 +56,12 @@ void overlayMenu::keyPressEvent ( QKeyEvent * event )
         this->update(this->m_background);
     break;
     case Qt::Key_Down:
-        if (this->m_currentIndex < this->m_categoryContainer.at(this->m_currentGroup).second.size())
-            this->m_currentIndex++;
-        this->update(this->m_background);
+        if (this->m_categoryContainer.size() > this->m_currentGroup)
+        {
+            if (this->m_currentIndex < this->m_categoryContainer.at(this->m_currentGroup).second.size())
+                this->m_currentIndex++;
+            this->update(this->m_background);
+        }
     break;
     case Qt::Key_PageUp:
         this->m_currentIndex -= 5;
@@ -65,12 +70,21 @@ void overlayMenu::keyPressEvent ( QKeyEvent * event )
         this->update(this->m_background);
     break;
     case Qt::Key_PageDown:
-        this->m_currentIndex += 5;
-        if (this->m_currentIndex >= this->m_categoryContainer.at(this->m_currentGroup).second.size())
-            this->m_currentIndex = this->m_categoryContainer.at(this->m_currentGroup).second.size()-1;
-        this->update(this->m_background);
+        if (this->m_categoryContainer.size() > this->m_currentGroup)
+        {
+            this->m_currentIndex += 5;
+            if (this->m_currentIndex >= this->m_categoryContainer.at(this->m_currentGroup).second.size())
+                this->m_currentIndex = this->m_categoryContainer.at(this->m_currentGroup).second.size()-1;
+            this->update(this->m_background);
+        }
     break;
     }
+}
+
+void overlayMenu::loadingFinished()
+{
+    this->isLoading = false;
+    this->update(this->m_background);
 }
 
 void overlayMenu::generatePixmap()
@@ -159,6 +173,12 @@ void overlayMenu::generatePixmap()
     if (!groupListing.isNull())
         p.drawPixmap(groupRect.x(), groupRect.y(), groupListing.width(), groupListing.height(), groupListing);
 
+    // if still loading print loading...
+    if (this->isLoading)
+    {
+
+    }
+
 
     p.end();
 }
@@ -200,6 +220,9 @@ QPixmap overlayMenu::generateFolderAndName(int group, int index, QSize size)
 
 QPixmap overlayMenu::generateDirList(QSize size)
 {
+    if (this->m_categoryContainer.size() <= this->m_currentGroup)
+        return QPixmap();
+
     QPixmap pix(size);
     pix.fill(QColor(0, 0, 0, 0));
 
@@ -270,7 +293,6 @@ QPixmap overlayMenu::generateGroupList(QSize size)
     p.end();
 
     return pix;
-
 }
 
 

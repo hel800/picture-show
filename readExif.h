@@ -63,6 +63,10 @@ static QDateTime readOriginalDate(const QString &fname)
     }
     else
     {
+        file.seek(0);
+        delete[] buf;
+        buf = new unsigned char[fsize];
+
         if (file.read((char*)buf, fsize) != fsize)
         {
             qDebug("Can't read file2");
