@@ -78,7 +78,9 @@ static QDateTime readOriginalDate(const QString &fname)
         }
 
         qDebug("Try to read Date from whole file!");
+
         ExtractDateTime(buf, fsize, date);
+        qDebug(fname.toStdString().c_str());
 
         if(!date.isEmpty())
             originalDate = QDateTime::fromString(date, QString("yyyy:MM:dd HH:mm:ss"));

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setApplicationName(QString("picture-show"));
-    a.setApplicationVersion(QString("0.5 alpha (win-x86)"));
+    a.setApplicationVersion(QString("0.5 beta (win-x86)"));
 
     MainWidget w;
     w.show();
