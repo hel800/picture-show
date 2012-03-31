@@ -45,10 +45,20 @@ void overlayMenu::keyPressEvent ( QKeyEvent * event )
     switch (event->key())
     {
     case Qt::Key_Left:
-
+        if (this->m_currentGroup > 0)
+        {
+            this->m_currentGroup--;
+            this->m_currentIndex = 0;
+            this->update();
+        }
     break;
     case Qt::Key_Right:
-
+        if (this->m_categoryContainer.size() > this->m_currentGroup+1)
+        {
+            this->m_currentGroup++;
+            this->m_currentIndex = 0;
+            this->update();
+        }
     break;
     case Qt::Key_Up:
         if (this->m_currentIndex > 0)
@@ -58,7 +68,7 @@ void overlayMenu::keyPressEvent ( QKeyEvent * event )
     case Qt::Key_Down:
         if (this->m_categoryContainer.size() > this->m_currentGroup)
         {
-            if (this->m_currentIndex < this->m_categoryContainer.at(this->m_currentGroup).second.size())
+            if (this->m_currentIndex+1 < this->m_categoryContainer.at(this->m_currentGroup).second.size())
                 this->m_currentIndex++;
             this->update(this->m_background);
         }
@@ -176,9 +186,12 @@ void overlayMenu::generatePixmap()
     // if still loading print loading...
     if (this->isLoading)
     {
-
+        QFont fontText(QString("Helvetica"), int(double(rect2Height) * 0.03));
+        fontText.setStyleStrategy(QFont::PreferAntialias);
+        p.setFont(fontText);
+        p.setPen(QPen(Qt::white));
+        p.drawText(listRect, Qt::AlignVCenter | Qt::AlignHCenter, tr("Bibliothek wird geladen..."));
     }
-
 
     p.end();
 }

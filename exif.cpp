@@ -239,7 +239,7 @@ int ExtractDateTime(unsigned char *buf, unsigned len, QString &dateString)
     }
 
     for(int j = 0; j < nentries; j++)  {
-        if (offs-32 >= len)
+        if (offs+32 >= len)
             return PARSE_EXIF_ERROR_CORRUPT;
 
       unsigned short tag = parse16(buf+offs, alignIntel);
@@ -262,7 +262,7 @@ int ExtractDateTime(unsigned char *buf, unsigned len, QString &dateString)
     nentries = parse16(buf+offs, alignIntel);
     offs += 2;
     for(int j = 0; j < nentries; j++)  {
-        if (offs-32 >= len)
+        if (offs+32 >= len)
             return PARSE_EXIF_ERROR_CORRUPT;
 
       unsigned short tag = parse16(buf+offs, alignIntel);

@@ -87,7 +87,7 @@ MainWidget::MainWidget(QWidget *parent) :
     this->load_img_prev = new loadImage();
     this->load_img = new loadImage();
     this->load_img_next = new loadImage();
-    connect(this->load_library, SIGNAL(finished()), this->effectEngine, SLOT(paintStartScreen()));
+    connect(this->load_library, SIGNAL(finished()), this->displayMenu, SLOT(loadingFinished()));
     this->load_library->start();
 
     connect(this->load_img_prev, SIGNAL(finished()), this, SLOT(loadImagePrevFinished()));

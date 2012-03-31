@@ -55,7 +55,7 @@ public slots:
     virtual bool blendIn(QPixmap& bg);
     virtual bool blendOut();
 
-    virtual void update(QPixmap& bg);
+    virtual void update(QPixmap& bg = QPixmap());
 
 protected slots:
     virtual void timedOut();
