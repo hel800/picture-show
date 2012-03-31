@@ -122,7 +122,7 @@ bool fileCreateLessThan(const QPair< QDateTime, QFileInfo > &f1, const QPair< QD
     QDateTime f2_date = f2.first;
 
     if (f1_date.isValid() && f2_date.isValid())
-        return f1_date < f2_date;
+        return f1_date > f2_date;
     else if (f2_date.isValid() && !f1_date.isValid())
         return false;
     else if (f1_date.isValid() && !f2_date.isValid())

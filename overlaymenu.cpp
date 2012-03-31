@@ -30,6 +30,8 @@ overlayMenu::overlayMenu(QWidget *pWidget) :
     this->m_currentGroup = 0;
 
     this->isLoading = true;
+    this->emitNewDirectoryOnBlendOut = false;
+    connect(this, SIGNAL(blendOutFinished()), this, SLOT(emitOpenDirectory()));
 }
 
 void overlayMenu::addCategory(const QString & name, const QList<QFileInfo>& list)
@@ -38,6 +40,8 @@ void overlayMenu::addCategory(const QString & name, const QList<QFileInfo>& list
     newPair.first = QString(name);
     newPair.second = QList<QFileInfo>(list);
     this->m_categoryContainer.append(newPair);
+
+    qSort(this->m_categoryContainer.begin(), this->m_categoryContainer.end(), groupNameLess);
 }
 
 void overlayMenu::keyPressEvent ( QKeyEvent * event )
@@ -88,6 +92,11 @@ void overlayMenu::keyPressEvent ( QKeyEvent * event )
             this->update(this->m_background);
         }
     break;
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        this->emitNewDirectoryOnBlendOut = true;
+        this->blendOut();
+    break;
     }
 }
 
@@ -95,6 +104,19 @@ void overlayMenu::loadingFinished()
 {
     this->isLoading = false;
     this->update(this->m_background);
+}
+
+void overlayMenu::emitOpenDirectory()
+{
+    if (this->emitNewDirectoryOnBlendOut)
+        if (this->m_categoryContainer.size() > this->m_currentGroup)
+            if (this->m_categoryContainer.at(this->m_currentGroup).second.size() > this->m_currentIndex)
+            {
+                QString current_dir_path = this->m_categoryContainer.at(this->m_currentGroup).second.at(this->m_currentIndex).absoluteFilePath();
+                emit openDirectory(current_dir_path);
+            }
+
+    this->emitNewDirectoryOnBlendOut = false;
 }
 
 void overlayMenu::generatePixmap()
@@ -136,12 +158,12 @@ void overlayMenu::generatePixmap()
     int skipH = int(rect2Width * 0.05);
     int skipV = int(rect2Height * 0.05);
 
-    QBrush rectBrush(QColor::fromRgb(255, 255, 255, 120));
+    QBrush rectBrush(QColor::fromRgb(255, 255, 255, 140));
     QPen rectPen(QColor::fromRgb(255, 255, 255, 0));
     rectPen.setWidth(0);
 
-    QLinearGradient linearGrad(0.0, 0.0, this->m_paintWidget->width(), this->m_paintWidget->height());
-    linearGrad.setColorAt(0, QColor::fromRgb(0, 0, 0, 100));
+    QLinearGradient linearGrad(rectPosX, rectPosY, rectPosX+rectWidth, rectPosY+rectHeight);
+    linearGrad.setColorAt(0, QColor::fromRgb(0, 0, 0, 150));
     linearGrad.setColorAt(1, QColor::fromRgb(0, 0, 0, 240));
     QBrush rect2Brush(linearGrad);
 
@@ -179,20 +201,20 @@ void overlayMenu::generatePixmap()
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, 20.0, 20.0);
 
-    p.setPen(QPen(Qt::red));
-    p.drawRect(titleRect);
-    p.drawRect(dirRect);
-    p.drawRect(groupRect);
-    p.drawRect(listRect);
-    p.drawRect(setRect);
-    p.drawRect(infoRect);
+//    p.setPen(QPen(Qt::red));
+//    p.drawRect(titleRect);
+//    p.drawRect(dirRect);
+//    p.drawRect(groupRect);
+//    p.drawRect(listRect);
+//    p.drawRect(setRect);
+//    p.drawRect(infoRect);
 
-    p.setOpacity(lightOpacity);
+    p.setOpacity(lightOpacity-0.1);
     p.drawPixmap(titleRect.x(), titleRect.y()-int(titleRect.height()/2.0), headerImage.width(), headerImage.height(), headerImage);
+    p.setOpacity(lightOpacity);
     p.setFont(fontTitle);
     p.setPen(QPen(Qt::white));
     p.drawText(titleRect.x() + int(headerImage.width()*1.2), titleRect.y(), titleRect.width() - int(headerImage.width()*1.4), titleRect.height(), Qt::AlignVCenter, titleText);
-
 
     if (!dirListing.isNull())
         p.drawPixmap(listRect.x(), listRect.y(), dirListing.width(), dirListing.height(), dirListing);
@@ -229,16 +251,24 @@ QPixmap overlayMenu::generateFolderAndName(int group, int index, QSize size)
 
     QFont fontText(QString("Helvetica"), int(double(size.height()) * 0.4));
     fontText.setStyleStrategy(QFont::PreferAntialias);
-    QFontMetrics fmHeader(fontText);
-    QRect rectText(int(size.width()*0.1), int(size.height() * .2), int(size.width()*0.8), int(size.height() * 0.6));
+    QFontMetrics fontTextMetric (fontText);
+
+    QPixmap folderImage(":/images/img/pictureFolder-64.png");
+    folderImage = folderImage.scaledToHeight(int(size.height()*0.7), Qt::SmoothTransformation);
+    QRect rectText(int(size.width()*0.12), int(size.height() * .2), int(size.width()*0.8), int(size.height() * 0.6));
 
     QString name = dirInfo.fileName();
     if (name == ".")
         name = tr(". <Hauptverzeichnis>");
 
+    while (fontTextMetric.boundingRect(name).width() > rectText.width())
+        name = name.left(name.size()-4) + "...";
+
     QPainter p;
     p.begin(&pix);
     p.setOpacity(0.7);
+    p.drawPixmap(int(size.width()*0.02), int(size.height()*0.15), folderImage.width(), folderImage.height(), folderImage);
+    p.setOpacity(0.95);
     p.setFont(fontText);
     p.setPen(QPen(Qt::white));
     p.drawText(rectText, name);
@@ -276,7 +306,20 @@ QPixmap overlayMenu::generateDirList(QSize size)
             break;
 
         QPixmap cur_dir = this->generateFolderAndName(this->m_currentGroup, i, dirListingSize);
-        p.setOpacity(1.0 - (fabs(double(i-this->m_currentIndex))) / 3.5);
+
+        //        p.setOpacity(1.0 - (fabs(double(i-this->m_currentIndex))) / 3.5);
+        if (abs(i-this->m_currentIndex) == 3)
+            p.setOpacity(0.1);
+        else if (i != this->m_currentIndex)
+            p.setOpacity(0.3);
+        else
+        {
+            p.setOpacity(1.0);
+            p.setPen(QPen(Qt::NoPen));
+            p.setBrush(QBrush(QColor(Qt::darkGray)));
+            p.drawRect(0, curYpos, size.width(), cur_dir.height());
+        }
+
         p.drawPixmap(0, curYpos, cur_dir.width(), cur_dir.height(), cur_dir);
         curYpos += dirListingSize.height();
     }
@@ -312,7 +355,17 @@ QPixmap overlayMenu::generateGroupList(QSize size)
             break;
 
         QString groupName = this->m_categoryContainer.at(i).first;
-        p.setOpacity(1.0 - (fabs(double(i-this->m_currentGroup))) / 3.5);
+        if (i != this->m_currentGroup)
+        {
+            p.setOpacity(0.3);
+            fontText.setBold(false);
+        }
+        else
+        {
+            p.setOpacity(0.9);
+            fontText.setBold(true);
+        }
+
         p.setFont(fontText);
         p.setPen(QPen(Qt::white));
         p.drawText(curXpos, 0, groupListingSize.width(), groupListingSize.height(), Qt::AlignHCenter | Qt::AlignVCenter, groupName);
@@ -322,6 +375,22 @@ QPixmap overlayMenu::generateGroupList(QSize size)
     p.end();
 
     return pix;
+}
+
+static bool groupNameLess(const QPair< QString, QList<QFileInfo> > &g1, const QPair< QString, QList<QFileInfo> > &g2)
+{
+    QString g1_string = g1.first;
+    QString g2_string = g2.first;
+
+    if (g1_string.at(0).isDigit() && !g2_string.at(0).isDigit())
+        return true;
+    else if (!g1_string.at(0).isDigit() && g2_string.at(0).isDigit())
+        return false;
+    else if (g1_string.at(0).isDigit() && g2_string.at(0).isDigit())
+        return g1_string > g2_string;
+    else
+        return g1_string < g2_string;
+
 }
 
 

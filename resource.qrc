@@ -19,5 +19,6 @@
         <file>img/header2Logo.png</file>
         <file>img/headerLogo.png</file>
         <file>img/library-256.png</file>
+        <file>img/pictureFolder-64.png</file>
     </qresource>
 </RCC>

@@ -243,11 +243,11 @@ int ExtractDateTime(unsigned char *buf, unsigned len, QString &dateString)
             return PARSE_EXIF_ERROR_CORRUPT;
 
       unsigned short tag = parse16(buf+offs, alignIntel);
-      unsigned coffs = parse32(buf+offs+8, alignIntel);
 
       switch(tag) {
           case 0x8769:
             // EXIF subIFD offset
+            unsigned coffs = parse32(buf+offs+8, alignIntel);
             exifSubIFD = ifdOffset + coffs;
             break;
       }
@@ -266,13 +266,14 @@ int ExtractDateTime(unsigned char *buf, unsigned len, QString &dateString)
             return PARSE_EXIF_ERROR_CORRUPT;
 
       unsigned short tag = parse16(buf+offs, alignIntel);
-      unsigned ncomp = parse32(buf+offs+4, alignIntel);
-      unsigned coffs = parse32(buf+offs+8, alignIntel);
 
       switch(tag) {
         case 0x9003:
           // original image date/time string
           char * date = (char*)0;
+          unsigned ncomp = parse32(buf+offs+4, alignIntel);
+          unsigned coffs = parse32(buf+offs+8, alignIntel);
+
           copyEXIFString(&date, ncomp, ifdOffset, coffs, buf);
           dateString = date;
           return 0;

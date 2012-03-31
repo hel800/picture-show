@@ -37,6 +37,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->displayMenu = new overlayMenu(this);
     connect(this->displayMenu, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
+    connect(this->displayMenu, SIGNAL(openDirectory(QString)), this, SLOT(initialize(QString)));
 //    this->displayMenu->addCategory(QString("alle"), QDir("D:/Bilder/Fotos").entryInfoList(QDir::AllDirs | QDir::NoDotDot, QDir::Name));
 
     ui->setupUi(this);
@@ -87,7 +88,7 @@ MainWidget::MainWidget(QWidget *parent) :
     this->load_img_prev = new loadImage();
     this->load_img = new loadImage();
     this->load_img_next = new loadImage();
-    connect(this->load_library, SIGNAL(finished()), this->displayMenu, SLOT(loadingFinished()));
+    connect(this->load_library, SIGNAL(finished()), this->displayMenu, SLOT(loadingFinished()));    
     this->load_library->start();
 
     connect(this->load_img_prev, SIGNAL(finished()), this, SLOT(loadImagePrevFinished()));
@@ -126,13 +127,15 @@ MainWidget::~MainWidget()
     delete this->load_img_prev;
 }
 
-void MainWidget::initialize()
+void MainWidget::initialize(QString newDirectory)
 {
     this->current_task = START;
 
     this->effectEngine->reset();
-    this->effectEngine->paintToWaiting();
-
+    if (!this->img.isNull())
+        this->effectEngine->paintToWaiting(this->img);
+    else
+        this->effectEngine->paintToWaiting();
     // stop timer, if active
     this->automaticForward->stop();
 
@@ -154,8 +157,17 @@ void MainWidget::initialize()
 
     this->current_position = 0;
 
-    this->load_directory->setDirectory(this->settingsDial->getCurrentDirectory());
-    this->load_directory->setSorting(this->settingsDial->getDirectorySorting());
+    if (newDirectory.isEmpty())
+    {
+        this->load_directory->setDirectory(this->settingsDial->getCurrentDirectory());
+        this->load_directory->setSorting(this->settingsDial->getDirectorySorting());
+    }
+    else
+    {
+        this->load_directory->setDirectory(newDirectory);
+        this->load_directory->setSorting(this->settingsDial->getDirectorySorting());
+    }
+
     this->load_directory->start();
 }
 

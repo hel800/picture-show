@@ -30,6 +30,8 @@ March 2012
 
 #include "overlaybase.h"
 
+static bool groupNameLess(const QPair< QString, QList<QFileInfo> > &g1, const QPair< QString, QList<QFileInfo> > &g2);
+
 class overlayMenu : public overlayBase
 {
     Q_OBJECT
@@ -40,9 +42,17 @@ public:
 public slots:
     void loadingFinished();
     void keyPressEvent ( QKeyEvent * event );
+
+private slots:
+    void emitOpenDirectory();
+
+signals:
+    void openDirectory(QString dirPath);
     
 protected:
     void generatePixmap();
+
+
 
 private:
     QList< QPair< QString, QList<QFileInfo> > > m_categoryContainer;
@@ -50,6 +60,7 @@ private:
     int m_currentGroup;
 
     bool isLoading;
+    bool emitNewDirectoryOnBlendOut;
 
     QPixmap generateFolderAndName(int group, int index, QSize size);
     QPixmap generateDirList(QSize size);

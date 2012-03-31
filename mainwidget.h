@@ -84,7 +84,7 @@ public:
     ~MainWidget();
 
 public slots:
-    void initialize();
+    void initialize(QString newDirectory = QString());
     void directoryLoadFinished(bool success);
     void overlayBlendOutFinished();
     void advanceImages(bool forward = true, bool hard = false);
