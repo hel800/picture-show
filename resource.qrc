@@ -18,5 +18,6 @@
         <file>img/logo256x256.png</file>
         <file>img/header2Logo.png</file>
         <file>img/headerLogo.png</file>
+        <file>img/library-256.png</file>
     </qresource>
 </RCC>

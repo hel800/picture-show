@@ -283,6 +283,3 @@ int ExtractDateTime(unsigned char *buf, unsigned len, QString &dateString)
 
     return 0;
 }
-
-
-

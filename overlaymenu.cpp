@@ -155,9 +155,17 @@ void overlayMenu::generatePixmap()
     QRect setRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .94), int(rect2Height * .24));
     QRect infoRect(int(rect2PosX + rect2Width * .06) + int(rect2Width * .6), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .31), int(rect2Height * .44));
 
+    QPixmap headerImage(":/images/img/library-256.png");
+    headerImage = headerImage.scaledToHeight(titleRect.height()*2, Qt::SmoothTransformation);
+    QFont fontTitle(QString("Helvetica"), int(titleRect.height() * 0.3));
+    fontTitle.setStyleStrategy(QFont::PreferAntialias);
+    QString titleText = tr("Bildbibliothek beta");
+
     QPixmap dirListing = this->generateDirList(listRect.size());
     QPixmap groupListing = this->generateGroupList(groupRect.size());
 
+
+    // Painting
     QPainter p;
     p.begin(&this->m_overlay);
     p.setRenderHint(QPainter::Antialiasing);
@@ -178,6 +186,14 @@ void overlayMenu::generatePixmap()
     p.drawRect(listRect);
     p.drawRect(setRect);
     p.drawRect(infoRect);
+
+    p.setOpacity(lightOpacity);
+    p.drawPixmap(titleRect.x(), titleRect.y()-int(titleRect.height()/2.0), headerImage.width(), headerImage.height(), headerImage);
+    p.setFont(fontTitle);
+    p.setPen(QPen(Qt::white));
+    p.drawText(titleRect.x() + int(headerImage.width()*1.2), titleRect.y(), titleRect.width() - int(headerImage.width()*1.4), titleRect.height(), Qt::AlignVCenter, titleText);
+
+
     if (!dirListing.isNull())
         p.drawPixmap(listRect.x(), listRect.y(), dirListing.width(), dirListing.height(), dirListing);
     if (!groupListing.isNull())
