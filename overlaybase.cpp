@@ -43,7 +43,7 @@ void overlayBase::setFadeSteps(double step)
     this->m_fadeSpeed = step;
 }
 
-bool overlayBase::blendIn(QPixmap& bg)
+bool overlayBase::blendIn(const QPixmap& bg)
 {
     if (this->m_currentState == READY)
     {
@@ -72,7 +72,7 @@ bool overlayBase::blendOut()
     return false;
 }
 
-void overlayBase::update(QPixmap& bg)
+void overlayBase::update(const QPixmap& bg)
 {
     if (this->m_currentState != READY)
         return;

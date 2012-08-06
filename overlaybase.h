@@ -52,10 +52,10 @@ signals:
     void blendOutFinished();
     
 public slots:
-    virtual bool blendIn(QPixmap& bg);
+    virtual bool blendIn(const QPixmap& bg);
     virtual bool blendOut();
 
-    virtual void update(QPixmap& bg);
+    virtual void update(const QPixmap &bg);
 
 protected slots:
     virtual void timedOut();

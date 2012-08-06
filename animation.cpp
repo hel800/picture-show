@@ -165,7 +165,7 @@ void animation::paintStartScreen()
     this->m_doingWhat = NOTHING;
 }
 
-void animation::paintToWaiting(QPixmap &from)
+void animation::paintToWaiting(const QPixmap &from)
 {
     if (this->isWaiting())
         return;
@@ -182,7 +182,7 @@ void animation::paintToWaiting(QPixmap &from)
 }
 
 
-void animation::paintFromWaiting(QPixmap &to)
+void animation::paintFromWaiting(const QPixmap &to)
 {
     if (this->isWaiting())
     {
@@ -402,7 +402,7 @@ QPixmap animation::currentDisplay()
     return pixmap;
 }
 
-void animation::blendTextbar(QString & text)
+void animation::blendTextbar(const QString & text)
 {
     if (this->isBusy() || this->isWaiting())
         return;
@@ -412,7 +412,7 @@ void animation::blendTextbar(QString & text)
     this->m_textbarTimer->start(10);
 }
 
-void animation::setTextbarText(QString &text)
+void animation::setTextbarText(const QString &text)
 {
     if (this->isBusy() || this->isWaiting())
         return;

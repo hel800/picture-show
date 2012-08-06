@@ -32,6 +32,7 @@ February 2012
 #include <QStyleOptionGraphicsItem>
 
 #include "global.h"
+#include <math.h>
 
 class animation : public QObject
 {
@@ -74,8 +75,8 @@ public:
     void setScaleTypeTo(ScaleType type);
 
     void paintStartScreen();
-    void paintToWaiting(QPixmap & from = QPixmap());
-    void paintFromWaiting(QPixmap & to = QPixmap());
+    void paintToWaiting(const QPixmap & from = QPixmap());
+    void paintFromWaiting(const QPixmap & to = QPixmap());
     void blendImages(QPixmap &from, QPixmap &to, bool forward = true);
     void repaintState();
 
@@ -107,8 +108,8 @@ private:
     void paintHARD();
     void paintSLIDE();
 
-    void blendTextbar(QString &text);
-    void setTextbarText(QString &text);
+    void blendTextbar(const QString &text);
+    void setTextbarText(const QString &text);
 
     void drawStartScreen(QPainter * p);
     void drawPixmap(QPainter * p, QPixmap & pix, double opacity = 1.0, bool background = true, int offset = 0);

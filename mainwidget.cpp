@@ -620,7 +620,7 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
     }
 }
 
-QPixmap MainWidget::scale(QPixmap & map)
+QPixmap MainWidget::scale(const QPixmap & map)
 {
     return map.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }

@@ -107,7 +107,7 @@ protected:
     void keyPressEvent_showingInfo ( QKeyEvent * event );
     
 private:
-    QPixmap scale(QPixmap & map);
+    QPixmap scale(const QPixmap &map);
     QPixmap loadAndScale(QString & fn);
 
     QSize calcNewSize(QSize oldsize);
