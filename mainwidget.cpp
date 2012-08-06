@@ -50,7 +50,7 @@ MainWidget::MainWidget(QWidget *parent) :
         if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
             qApp->installTranslator(&translator);
     this->settingsDial->updateLanguage();
-    this->settingsDial->show();
+//    this->settingsDial->show();
 
     this->resizeTimer = new QTimer(this);
     connect(this->resizeTimer, SIGNAL(timeout()), this, SLOT(reloadImages()));

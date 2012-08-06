@@ -174,8 +174,11 @@ void overlayMenu::generatePixmap()
     QRect dirRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .6), int(rect2Height * .44));
     QRect groupRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .58), int(rect2Height * .06));
     QRect listRect(int(rect2PosX + rect2Width * .04), int(rect2PosY + (rect2Height * .12) + (rect2Height * .14)), int(rect2Width * .58), int(rect2Height * .44));
-    QRect setRect(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .94), int(rect2Height * .24));
     QRect infoRect(int(rect2PosX + rect2Width * .06) + int(rect2Width * .6), int(rect2PosY + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .31), int(rect2Height * .44));
+
+    QRect setRect1(int(rect2PosX + rect2Width * .03), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .29), int(rect2Height * .24));
+    QRect setRect2(int(rect2PosX + rect2Width * .35), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .29), int(rect2Height * .24));
+    QRect setRect3(int(rect2PosX + rect2Width * .67), int(rect2PosY + (rect2Height * .49) + (rect2Height * .12) + (rect2Height * .1)), int(rect2Width * .30), int(rect2Height * .24));
 
     QPixmap headerImage(":/images/img/library-256.png");
     headerImage = headerImage.scaledToHeight(titleRect.height()*2, Qt::SmoothTransformation);
@@ -185,6 +188,8 @@ void overlayMenu::generatePixmap()
 
     QPixmap dirListing = this->generateDirList(listRect.size());
     QPixmap groupListing = this->generateGroupList(groupRect.size());
+    QPixmap infoArea = this->generateInfoArea(infoRect.size());
+    QPixmap setting1 = this->generateTransOptions(setRect1.size());
 
 
     // Painting
@@ -206,7 +211,9 @@ void overlayMenu::generatePixmap()
 //    p.drawRect(dirRect);
 //    p.drawRect(groupRect);
 //    p.drawRect(listRect);
-//    p.drawRect(setRect);
+    p.drawRect(setRect1);
+    p.drawRect(setRect2);
+    p.drawRect(setRect3);
 //    p.drawRect(infoRect);
 
     p.setOpacity(lightOpacity-0.1);
@@ -220,6 +227,10 @@ void overlayMenu::generatePixmap()
         p.drawPixmap(listRect.x(), listRect.y(), dirListing.width(), dirListing.height(), dirListing);
     if (!groupListing.isNull())
         p.drawPixmap(groupRect.x(), groupRect.y(), groupListing.width(), groupListing.height(), groupListing);
+    if (!infoArea.isNull())
+        p.drawPixmap(infoRect.x(), infoRect.y(), infoArea.width(), infoArea.height(), infoArea);
+    if (!setting1.isNull())
+        p.drawPixmap(setRect1.x(), setRect1.y(), setting1.width(), setting1.height(), setting1);
 
     // if still loading print loading...
     if (this->isLoading)
@@ -377,6 +388,78 @@ QPixmap overlayMenu::generateGroupList(QSize size)
     return pix;
 }
 
+QPixmap overlayMenu::generateInfoArea(QSize size)
+{
+    QPixmap pix(size);
+    pix.fill(QColor(0, 0, 0, 30));
+
+    QPainter p;
+    p.begin(&pix);
+
+    int pEdgeWidth = int(size.height()*0.02);
+    int pEdgeLength = int(size.height()*0.15);
+
+    QPolygon pEdge;
+    pEdge << QPoint(0,0) << QPoint(0, pEdgeLength) << QPoint(pEdgeWidth, pEdgeLength);
+    pEdge << QPoint(pEdgeWidth, pEdgeWidth) << QPoint(pEdgeLength, pEdgeWidth);
+    pEdge << QPoint(pEdgeLength, 0);
+
+    QPolygon pEdge2;
+    pEdge2 << QPoint(size.width(),size.height()) << QPoint(size.width(), size.height()-pEdgeLength) << QPoint(size.width()-pEdgeWidth, size.height()-pEdgeLength);
+    pEdge2 << QPoint(size.width()-pEdgeWidth, size.height()-pEdgeWidth) << QPoint(size.width()-pEdgeLength, size.height()-pEdgeWidth);
+    pEdge2 << QPoint(size.width()-pEdgeLength, size.height());
+
+    QPixmap images(":/images/img/images-256.png");
+    images = images.scaledToHeight(int(size.height()*0.9), Qt::SmoothTransformation);
+
+    p.setPen(QPen(Qt::NoPen));
+    p.setBrush(QBrush(QColor(Qt::gray)));
+    p.setOpacity(0.8);
+    p.drawPolygon(pEdge);
+    p.drawPolygon(pEdge2);
+    p.setOpacity(0.1);
+    p.drawPixmap(int((size.width()-images.width())/2.0), int(size.height()*0.05), images.width(), images.height(), images);
+
+    p.end();
+
+    return pix;
+}
+
+QPixmap overlayMenu::generateTransOptions(QSize size)
+{
+    QPixmap pix(size);
+    pix.fill(QColor(0, 0, 0, 30));
+
+    QPainter p;
+    p.begin(&pix);
+
+    QFont fontText(QString("Helvetica"), int(double(size.height()) * 0.1));
+    fontText.setStyleStrategy(QFont::PreferAntialias);
+
+    QPixmap button(":/images/img/key_button_F4.png");
+    button = button.scaledToHeight(int(size.height()*0.25), Qt::SmoothTransformation);
+
+    p.setFont(fontText);
+    p.setOpacity(0.8);
+    p.setPen(QPen(QColor(Qt::white)));
+    p.drawText(QRect(0, 0, size.width(), size.height()), Qt::AlignTop | Qt::AlignLeft, tr("Übergangseffekt:"));
+    p.drawPixmap(0, int((size.height()/2.0) - (button.height()/2.0)), button.width(), button.height(), button);
+
+    p.end();
+
+    return pix;
+}
+
+QPixmap overlayMenu::generateIntervalOptions(QSize size)
+{
+    return QPixmap();
+}
+
+QPixmap overlayMenu::generatePictureZoom(QSize size)
+{
+    return QPixmap();
+}
+
 static bool groupNameLess(const QPair< QString, QList<QFileInfo> > &g1, const QPair< QString, QList<QFileInfo> > &g2)
 {
     QString g1_string = g1.first;
@@ -390,7 +473,6 @@ static bool groupNameLess(const QPair< QString, QList<QFileInfo> > &g1, const QP
         return g1_string > g2_string;
     else
         return g1_string < g2_string;
-
 }
 
 

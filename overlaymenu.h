@@ -65,7 +65,11 @@ private:
     QPixmap generateFolderAndName(int group, int index, QSize size);
     QPixmap generateDirList(QSize size);
     QPixmap generateGroupList(QSize size);
+    QPixmap generateInfoArea(QSize size);
 
+    QPixmap generateTransOptions(QSize size);
+    QPixmap generateIntervalOptions(QSize size);
+    QPixmap generatePictureZoom(QSize size);
 
 };
 

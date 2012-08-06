@@ -40,6 +40,6 @@ FORMS    += mainwidget.ui \
 RESOURCES += \
     resource.qrc
 
-RC_FILE = picture-show_icon.rc
+#RC_FILE = picture-show_icon.rc
 
 TRANSLATIONS = picture-show_en.ts

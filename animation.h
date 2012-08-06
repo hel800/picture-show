@@ -32,6 +32,7 @@ February 2012
 #include <QStyleOptionGraphicsItem>
 
 #include "global.h"
+#include "math.h"
 
 class animation : public QObject
 {

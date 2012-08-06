@@ -20,5 +20,7 @@
         <file>img/headerLogo.png</file>
         <file>img/library-256.png</file>
         <file>img/pictureFolder-64.png</file>
+        <file>img/images-256.png</file>
+        <file>img/key_button_F4.png</file>
     </qresource>
 </RCC>
