@@ -184,6 +184,7 @@ QStringList overlayHelp::helpItems()
     items << tr("<Bild ab>") << tr("Springt zum nächsten Bild");
     items << tr("<Bild auf>") << tr("Springt zum vorherigen Bild");
     items << "J" << tr("Jump-to Dialog zum springen zu einem Bild, Eingabe der Bildnummer gefolgt von <Enter>");
+    items << tr("I") << tr("Anzeige mit Infos über das aktuelle Bild anzeigen");
     items << tr("<Leertaste>") << tr("Startet den Timer, Eingabe der Dauer in Sekunden (4-99) gefolgt von <Enter>");
     items << "" << tr("");
     items << "H / F1" << tr("Diese Hilfe anzeigen");

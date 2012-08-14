@@ -32,11 +32,17 @@ class overlayInfo : public overlayBase
 public:
     overlayInfo(QWidget * pWidget);
 
+    void setImageNumberAndNumberOfImages(int num, int total);
+
 protected slots:
     void paint(QPaintDevice *device);
 
 protected:
     void generatePixmap();
+
+private:
+    int imageNumber;
+    int numTotalImages;
 };
 
 #endif // OVERLAYINFO_H

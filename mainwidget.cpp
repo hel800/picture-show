@@ -528,6 +528,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
     case Qt::Key_I:
         if (this->effectEngine->isDoingNothing() && this->imagesLoaded)
         {
+            this->displayInfo->setImageNumberAndNumberOfImages(this->current_position+1, this->current_directory_list.size());
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {
                 this->displayState = SHOW_INFO;
