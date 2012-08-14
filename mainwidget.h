@@ -46,6 +46,7 @@ February 2012
 #include "animation.h"
 #include "settingsdialog.h"
 #include "overlayhelp.h"
+#include "overlayinfo.h"
 
 namespace Ui {
 class MainWidget;
@@ -119,6 +120,7 @@ private:
 
     animation * effectEngine;
     overlayHelp * displayHelp;
+    overlayInfo * displayInfo;
 
     QTimer * resizeTimer;
     double current_blend;

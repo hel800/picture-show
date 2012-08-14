@@ -35,6 +35,10 @@ MainWidget::MainWidget(QWidget *parent) :
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
 
+    this->displayInfo = new overlayInfo(this);
+    this->displayInfo->setFadeSteps(0.16);
+    connect(this->displayInfo, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
+
     ui->setupUi(this);
 
     this->settingsDial = new SettingsDialog(this);
@@ -435,6 +439,8 @@ void MainWidget::paintEvent ( QPaintEvent * event )
 {
     if (this->displayState == SHOW_HELP && this->effectEngine->isDoingNothing())
         this->displayHelp->update(this->effectEngine->currentDisplay());
+    else if (this->displayState == SHOW_INFO && this->effectEngine->isDoingNothing())
+        this->displayInfo->update(this->effectEngine->currentDisplay());
     else
         this->effectEngine->repaintState();
 
@@ -517,6 +523,16 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         {
             this->automaticForward->stop();
             this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
+        }
+    break;
+    case Qt::Key_I:
+        if (this->effectEngine->isDoingNothing() && this->imagesLoaded)
+        {
+            if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
+            {
+                this->displayState = SHOW_INFO;
+                this->effectEngine->textBarReset();
+            }
         }
     break;
     case Qt::Key_H:
@@ -609,13 +625,63 @@ void MainWidget::keyPressEvent_showingHelp ( QKeyEvent * event )
 
 void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
 {
+    if (!this->effectEngine->isDoingNothing())
+        return;
+
+    if (this->imagesLoaded)
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            this->displayInfo->blendOut();
+            this->m_queuedComm = PREV_IMG;
+            this->m_queuedBlendComm = this->current_blendType;
+        break;
+        case Qt::Key_Right:
+            this->displayInfo->blendOut();
+            this->m_queuedComm = NEXT_IMG;
+            this->m_queuedBlendComm = this->current_blendType;
+        break;
+        case Qt::Key_PageUp:
+            this->displayInfo->blendOut();
+            this->m_queuedComm = PREV_IMG;
+            this->m_queuedBlendComm = HARD;
+        break;
+        case Qt::Key_PageDown:
+            this->displayInfo->blendOut();
+            this->m_queuedComm = NEXT_IMG;
+            this->m_queuedBlendComm = HARD;
+        break;
+        }
+    }
+
+
     switch (event->key())
     {
     case Qt::Key_I:
     case Qt::Key_Enter:
     case Qt::Key_Return:
     case Qt::Key_Escape:
+        this->displayInfo->blendOut();
+    break;
+    case Qt::Key_F:
+        if (this->current_task == NONE)
+        {
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
+                this->setCursor(Qt::BlankCursor);
+            else
+                this->unsetCursor();
+        }
+    break;
+    case Qt::Key_O:
+        if (this->effectEngine->isBusy())
+            return;
 
+        if (this->settingsDial->isHidden())
+            this->settingsDial->show();
+        else
+            this->settingsDial->hide();
     break;
     }
 }

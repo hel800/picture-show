@@ -33,8 +33,8 @@ February 2012
 // Info anzeigen, wenn "i" gedrückt wird
 // Panoramafunktion
 // --> // Hilfe einblenden
-// Übersetzung ins Englische
-// Code kommentieren und License einfügen
+// --> Übersetzung ins Englische
+// --> Code kommentieren und License einfügen
 // --> // Ausschnitt wählen: Ganzes Bild/Schirm füllen
 
 // FEHLER:

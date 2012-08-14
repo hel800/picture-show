@@ -43,6 +43,8 @@ void overlayHelp::generatePixmap()
     int rectPosX;
     int rectPosY;
 
+
+
     if (this->m_paintWidget->width() > this->m_paintWidget->height())
     {
         rectHeight = int(this->m_paintWidget->height() * 0.9);
@@ -58,10 +60,12 @@ void overlayHelp::generatePixmap()
         rectPosY = int((this->m_paintWidget->height() - rectHeight) / 2.0);
     }
 
-    int rect2Width = rectWidth - 40;
-    int rect2Height = rectHeight - 40;
-    int rect2PosX = rectPosX + 20;
-    int rect2PosY = rectPosY + 20;
+    int borderthickness = int(rectHeight * 0.04);
+
+    int rect2Width = rectWidth - borderthickness;
+    int rect2Height = rectHeight - borderthickness;
+    int rect2PosX = rectPosX + int(borderthickness / 2.0);
+    int rect2PosY = rectPosY + int(borderthickness / 2.0);
 
     int skipH = int(rect2Width * 0.05);
     int skipV = int(rect2Height * 0.05);
