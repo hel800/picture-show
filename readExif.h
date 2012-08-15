@@ -94,5 +94,35 @@ static QDateTime readOriginalDate(const QString &fname)
     return originalDate;
 }
 
+static EXIFInfo readExifHeader(const QString &fname)
+{
+    EXIFInfo headerData;
+
+    QFile file(fname);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug("Can't read file");
+        qDebug(fname.toStdString().c_str());
+        return headerData;
+    }
+
+    qint64 fsize = file.size();
+    unsigned char * buf = new unsigned char[fsize];
+
+    file.seek(0);
+    qint64 newSize = file.read((char*)buf, fsize);
+    if (newSize != fsize)
+    {
+        qDebug("Can't read file");
+        delete[] buf;
+        file.close();
+        return headerData;
+    }
+
+    ParseEXIF(buf, fsize, headerData);
+
+    return headerData;
+}
+
 
 #endif // READEXIF_H

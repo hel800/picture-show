@@ -78,6 +78,14 @@ public:
     focalLength = 0;
     FStop = exposureTime = 0;
   }
+
+  bool isValid() {
+      if (cameraMake == (char*)0 && cameraModel == (char*)0 && dateTimeModified == (char*)0 &&
+              dateTimeOriginal == (char*)0 && imgDescription == (char*)0 )
+          return false;
+      else
+          return true;
+  }
 };
 
 //

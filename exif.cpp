@@ -150,7 +150,7 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
       case 0x9003:
         // original image date/time string
         copyEXIFString(&result.dateTimeOriginal, ncomp, ifdOffset, coffs, buf);
-        std::cout << "j: " << j << " offs: " << offs << std::endl;
+//        std::cout << "j: " << j << " offs: " << offs << std::endl;
         break;
 
       case 0x920a:
