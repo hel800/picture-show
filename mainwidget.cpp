@@ -530,13 +530,13 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         {
             this->displayInfo->setImageNumberAndNumberOfImages(this->current_position+1, this->current_directory_list.size());
 
-//            QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
-//            EXIFInfo exif = readExifHeader(fname);
+            QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
+            EXIFInfo exif = readExifHeader(fname);
 
-//            if (exif.isValid())
-//                std::cout << exif.exposureTime << std::endl;
-//            else
-//                std::cout << "not valid" << std::endl;
+            if (exif.isValid())
+                std::cout << exif.exposureTime << std::endl;
+            else
+                std::cout << "not valid" << std::endl;
 
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {
