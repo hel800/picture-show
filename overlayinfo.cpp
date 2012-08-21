@@ -14,6 +14,50 @@ void overlayInfo::setImageNumberAndNumberOfImages(int num, int total)
     this->numTotalImages = total;
 }
 
+void overlayInfo::ggT (float fl, int & numerator, int & denominator)
+{
+   float newFL = fl;
+
+   int c = 0;
+   while(newFL - int(newFL) != 0)
+   {
+       newFL *= 10;
+
+       c++;
+       if (c > 8)
+           break;
+   }
+
+   int num = int(newFL);
+   int den = int(pow(float(10), float(c)));
+
+   if (num >= den)
+   {
+       numerator = num;
+       denominator = den;
+       return;
+   }
+
+   std::cout << "newFL: " << int(newFL) << " denom: " << den << " (" << c << ")" << std::endl;
+
+   int a = num;
+   int b = den;
+
+   int rest;
+   do
+   {
+       rest = b % a;
+       b = a;
+       std::cout << "b: " << b << " rest: " << rest << std::endl;
+       a = rest;
+   } while (rest > 200);
+
+   std::cout << "b: " << b << std::endl;
+
+   numerator = num/b;
+   denominator = den/b;
+}
+
 void overlayInfo::generatePixmap()
 {
     if (this->m_background.isNull())
@@ -35,10 +79,13 @@ void overlayInfo::generatePixmap()
     rectPosX = int((this->m_paintWidget->width() - rectWidth) / 2.0);
     rectPosY = int(this->m_paintWidget->height() * 0.93);
 
-    int rect2Width = rectWidth - this->m_paintWidget->height() * 0.016;
-    int rect2Height = rectHeight - this->m_paintWidget->height() * 0.016;
-    int rect2PosX = rectPosX + this->m_paintWidget->height() * 0.008;
-    int rect2PosY = rectPosY + this->m_paintWidget->height() * 0.008;
+    int smaller = int(this->m_paintWidget->height() * 0.016);
+    if (smaller % 2 != 0)
+        smaller += 1;
+    int rect2Width = rectWidth - smaller;
+    int rect2Height = rectHeight - smaller;
+    int rect2PosX = rectPosX + smaller/2;
+    int rect2PosY = rectPosY + smaller/2;
 
     int borderwidth = int(rectWidth - rect2Width);
     double radius1 = this->m_paintWidget->width() / 70.0;
@@ -56,11 +103,11 @@ void overlayInfo::generatePixmap()
     QPen rect2Pen(QColor::fromRgb(0, 0, 0, 0));
     rect2Pen.setWidth(0);
 
-    QPixmap infoLogo(":/images/img/header2Logo.png");
-    infoLogo = infoLogo.scaledToHeight(int(rect2Height*0.3), Qt::SmoothTransformation);
+    QPixmap infoLogo(":/images/img/Button-info-256.png");
+    infoLogo = infoLogo.scaledToHeight(int(rect2Height*0.56), Qt::SmoothTransformation);
 
     QString imageNumber = tr("%1/%2").arg(this->imageNumber).arg(this->numTotalImages);
-    QFont fontNumber(QString("Helvetica"), int(rect2Height*0.25));
+    QFont fontNumber(QString("Helvetica"), int(rect2Height*0.15));
     QFontMetrics fm(fontNumber);
     QPen textPen(QColor::fromRgb(255, 255, 255, 200));
     QRect rectImageNumber(rectPosX+borderwidth*2+infoLogo.width(), rectPosY+borderwidth, fm.width(imageNumber), int(rect2Height*0.3));
@@ -77,9 +124,7 @@ void overlayInfo::generatePixmap()
     p.setPen(rect2Pen);
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, radius2, radius2);
-    p.setOpacity(veryLightOpacity);
-    p.drawPixmap(rectPosX+borderwidth, rectPosY+borderwidth, infoLogo);
-    p.setOpacity(lightOpacity);
+    p.drawPixmap(rectPosX+borderwidth, rectPosY-borderwidth, infoLogo);
     p.setPen(textPen);
     p.setFont(fontNumber);
     p.drawText(rectImageNumber, Qt::AlignLeft | Qt::AlignVCenter, imageNumber);

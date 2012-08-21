@@ -48,12 +48,17 @@ class EXIFInfo {
 public:
   char byteAlign;        // 0 = Motorola byte alignment, 1 = Intel
   char *cameraMake;      // String with camera manufacturer's name
+  QString cameraMake_st;
   char *cameraModel;      // String with camera model
+  QString cameraModel_st;
   char *dateTimeModified;    // date/time string of last modification
+  QString dateTimeModified_st;
                 // (may be blank)
   char *dateTimeOriginal;    // date/time string of original image
+  QString dateTimeOriginal_st;
                 // (may be blank, or not present)
   char *imgDescription;    // String describing the image
+  QString imgDescription_st;
   float focalLength;    // Focal length of lens (millimeters)
   float FStop;        // F-number of lens = 1/FStop
   float exposureTime;      // Exposure time in seconds
@@ -79,13 +84,6 @@ public:
     FStop = exposureTime = 0;
   }
 
-  bool isValid() {
-      if (cameraMake == (char*)0 && cameraModel == (char*)0 && dateTimeModified == (char*)0 &&
-              dateTimeOriginal == (char*)0 && imgDescription == (char*)0 )
-          return false;
-      else
-          return true;
-  }
 };
 
 //

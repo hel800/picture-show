@@ -64,7 +64,7 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
   unsigned offs  = 0;    // current offset into buffer
 
   // Prepare return structure
-  memset(&result, 0, sizeof(result));
+  //memset(&result, 0, sizeof(result));
 
   // Scan for EXIF header and do a sanity check
   for(offs = 0; offs < len-1; offs++)
@@ -113,69 +113,95 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
         break;
 
       case 0x10F:
+      {
         // Digicam manufacturer
-        char * test = (char*)0;
-
-        std::cout << "ncomp: " << ncomp << " ifdOffset : " << ifdOffset << " coffs: " << coffs << std::endl;
-        copyEXIFString(&test, ncomp, ifdOffset, coffs, buf);
-        std::cout << test << std::endl;
-
+        char * cm = (char*)0;
+        copyEXIFString(&cm, ncomp, ifdOffset, coffs, buf);
+        result.cameraMake_st = QString(cm);
+        delete cm;
+      }
         break;
 
-//      case 0x110:
-//        // Digicam model
-//        copyEXIFString(&result.cameraModel, ncomp, ifdOffset, coffs, buf);
-//        break;
+      case 0x110:
+      {
+        // Digicam model
+        char * dm = (char*)0;
+        copyEXIFString(&dm, ncomp, ifdOffset, coffs, buf);
+        result.cameraModel_st = QString(dm);
+        delete dm;
+      }
+        break;
 
-//      case 0x132:
-//        // EXIF/TIFF date/time of image
-//        copyEXIFString(&result.dateTimeModified, ncomp, ifdOffset, coffs, buf);
-//        break;
+      case 0x132:
+      {
+        // EXIF/TIFF date/time of image
+        char * dateTime = (char*)0;
+        copyEXIFString(&dateTime, ncomp, ifdOffset, coffs, buf);
+        result.dateTimeModified_st = QString(dateTime);
+        delete dateTime;
+      }
+        break;
 
-//      case 0x10E:
-//        // image description
-//        copyEXIFString(&result.imgDescription, ncomp, ifdOffset, coffs, buf);
-//        break;
+      case 0x10E:
+      {
+        // image description
+        char * desc = (char*)0;
+        copyEXIFString(&desc, ncomp, ifdOffset, coffs, buf);
+        result.imgDescription_st = QString(desc);
+        delete desc;
+      }
+        break;
     }
     offs += 12;
   }
-//  if(!exifSubIFD)
-//    return 0;
+  if(!exifSubIFD)
+    return 0;
 
-//  // At the EXIF SubIFD, read the rest of the EXIF tags
-//  offs = exifSubIFD;
-//  nentries = parse16(buf+offs, alignIntel);
-//  offs += 2;
-//  for(int j = 0; j < nentries; j++)  {
-//    unsigned short tag = parse16(buf+offs, alignIntel);
-//    unsigned ncomp = parse32(buf+offs+4, alignIntel);
-//    unsigned coffs = parse32(buf+offs+8, alignIntel);
+  // At the EXIF SubIFD, read the rest of the EXIF tags
+  offs = exifSubIFD;
+  nentries = parse16(buf+offs, alignIntel);
+  offs += 2;
+  for(int j = 0; j < nentries; j++)  {
+    unsigned short tag = parse16(buf+offs, alignIntel);
+    unsigned ncomp = parse32(buf+offs+4, alignIntel);
+    unsigned coffs = parse32(buf+offs+8, alignIntel);
 
-//    switch(tag) {
-//      case 0x9003:
-//        // original image date/time string
-//        copyEXIFString(&result.dateTimeOriginal, ncomp, ifdOffset, coffs, buf);
-////        std::cout << "j: " << j << " offs: " << offs << std::endl;
-//        break;
+    switch(tag) {
+      case 0x9003:
+      {
+        // original image date/time string
+        char * dateTimeOrig = (char*)0;
+        copyEXIFString(&dateTimeOrig, ncomp, ifdOffset, coffs, buf);
+//        std::cout << "j: " << j << " offs: " << offs << std::endl;
+        result.dateTimeOriginal_st = QString(dateTimeOrig);
+        delete dateTimeOrig;
+      }
+        break;
 
-//      case 0x920a:
-//        // Focal length in mm
-//        // result.focalLength = *((unsigned*)(buf+ifdOffset+coffs));
-//        result.focalLength = parseEXIFrational(buf+ifdOffset+coffs);
-//        break;
+      case 0x920a:
+      {
+        // Focal length in mm
+        // result.focalLength = *((unsigned*)(buf+ifdOffset+coffs));
+        result.focalLength = parseEXIFrational(buf+ifdOffset+coffs);
+      }
+        break;
 
-//      case 0x829D:
-//        // F-stop
-//        result.FStop = parseEXIFrational(buf+ifdOffset+coffs);
-//        break;
+      case 0x829D:
+      {
+        // F-stop
+        result.FStop = parseEXIFrational(buf+ifdOffset+coffs);
+      }
+        break;
 
-//      case 0x829A:
-//        // Exposure time
-//        result.exposureTime = parseEXIFrational(buf+ifdOffset+coffs);
-//        break;
-//    }
-//    offs += 12;
-//  }
+      case 0x829A:
+      {
+        // Exposure time
+        result.exposureTime = parseEXIFrational(buf+ifdOffset+coffs);
+      }
+        break;
+    }
+    offs += 12;
+  }
 
   return 0;
 }

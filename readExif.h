@@ -119,7 +119,7 @@ static EXIFInfo readExifHeader(const QString &fname)
         return headerData;
     }
 
-    std::cout << ParseEXIF(buf, fsize, headerData) << std::endl;
+    ParseEXIF(buf, fsize, headerData);
 
     return headerData;
 }

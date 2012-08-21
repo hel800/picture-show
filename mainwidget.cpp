@@ -533,10 +533,20 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
             EXIFInfo exif = readExifHeader(fname);
 
-            if (exif.isValid())
-                std::cout << exif.exposureTime << std::endl;
-            else
-                std::cout << "not valid" << std::endl;
+            std::cout << exif.cameraMake_st.toStdString() << std::endl;
+            std::cout << exif.cameraModel_st.toStdString() << std::endl;
+            std::cout << exif.dateTimeModified_st.toStdString() << std::endl;
+            std::cout << exif.imgDescription_st.toStdString() << std::endl;
+            std::cout << exif.dateTimeOriginal_st.toStdString() << std::endl;
+
+            std::cout << exif.focalLength << std::endl;
+            std::cout << exif.FStop << std::endl;
+            std::cout << exif.exposureTime << std::endl;
+
+            int a, b = 0;
+            this->displayInfo->ggT(exif.exposureTime, a, b);
+
+            std::cout << "exif.exposureTime: " << a << "/" << b << std::endl;
 
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {

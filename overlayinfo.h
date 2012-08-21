@@ -34,6 +34,8 @@ public:
 
     void setImageNumberAndNumberOfImages(int num, int total);
 
+    static void ggT (float fl, int &numerator, int &denominator);
+
 protected slots:
     void paint(QPaintDevice *device);
 
