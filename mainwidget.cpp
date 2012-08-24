@@ -75,6 +75,8 @@ MainWidget::MainWidget(QWidget *parent) :
     this->m_queuedComm = EMPTY;
     this->m_queuedBlendComm = FADE;
 
+    this->m_displayInfo_active = false;
+
     this->img = QPixmap();
     this->img_next = QPixmap();
     this->img_prev = QPixmap();
@@ -400,6 +402,22 @@ void MainWidget::restoreDisplayState()
 {
     if (this->displayState == SHOW_HELP)
         this->displayHelp->blendIn(this->effectEngine->currentDisplay());
+
+    if (this->m_displayInfo_active || this->displayState == SHOW_INFO)
+    {
+        this->displayInfo->setImageNumberAndNumberOfImages(this->current_position+1, this->current_directory_list.size());
+
+        QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
+        EXIFInfo exif = readExifHeader(fname);
+        this->displayInfo->setCurrentExifInformation(exif);
+        this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
+
+        if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
+        {
+            this->displayState = SHOW_INFO;
+            this->effectEngine->textBarReset();
+        }
+    }
 }
 
 void MainWidget::resizeEvent ( QResizeEvent * event )
@@ -532,21 +550,8 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
 
             QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
             EXIFInfo exif = readExifHeader(fname);
-
-            std::cout << exif.cameraMake_st.toStdString() << std::endl;
-            std::cout << exif.cameraModel_st.toStdString() << std::endl;
-            std::cout << exif.dateTimeModified_st.toStdString() << std::endl;
-            std::cout << exif.imgDescription_st.toStdString() << std::endl;
-            std::cout << exif.dateTimeOriginal_st.toStdString() << std::endl;
-
-            std::cout << exif.focalLength << std::endl;
-            std::cout << exif.FStop << std::endl;
-            std::cout << exif.exposureTime << std::endl;
-
-            int a, b = 0;
-            this->displayInfo->ggT(exif.exposureTime, a, b);
-
-            std::cout << "exif.exposureTime: " << a << "/" << b << std::endl;
+            this->displayInfo->setCurrentExifInformation(exif);
+            this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
 
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {
@@ -654,21 +659,25 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
         {
         case Qt::Key_Left:
             this->displayInfo->blendOut();
+            this->m_displayInfo_active = true;
             this->m_queuedComm = PREV_IMG;
             this->m_queuedBlendComm = this->current_blendType;
         break;
         case Qt::Key_Right:
             this->displayInfo->blendOut();
+            this->m_displayInfo_active = true;
             this->m_queuedComm = NEXT_IMG;
             this->m_queuedBlendComm = this->current_blendType;
         break;
         case Qt::Key_PageUp:
             this->displayInfo->blendOut();
+            this->m_displayInfo_active = true;
             this->m_queuedComm = PREV_IMG;
             this->m_queuedBlendComm = HARD;
         break;
         case Qt::Key_PageDown:
             this->displayInfo->blendOut();
+            this->m_displayInfo_active = true;
             this->m_queuedComm = NEXT_IMG;
             this->m_queuedBlendComm = HARD;
         break;
@@ -683,6 +692,7 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
     case Qt::Key_Return:
     case Qt::Key_Escape:
         this->displayInfo->blendOut();
+        this->m_displayInfo_active = false;
     break;
     case Qt::Key_F:
         if (this->current_task == NONE)
@@ -692,6 +702,15 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
                 this->setCursor(Qt::BlankCursor);
             else
                 this->unsetCursor();
+        }
+    break;
+    case Qt::Key_J:
+        if (this->effectEngine->isDoingNothing())
+        {
+            this->automaticForward->stop();
+            this->displayState = SHOW_TEXTBAR;
+            this->m_displayInfo_active = true;
+            this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
         }
     break;
     case Qt::Key_O:

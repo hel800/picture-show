@@ -140,6 +140,8 @@ private:
     queuedCommand m_queuedComm;
     BlendType m_queuedBlendComm;
 
+    bool m_displayInfo_active;
+
     QPixmap img_prev;
     QPixmap img;
     QPixmap img_next;

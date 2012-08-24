@@ -6,6 +6,7 @@ overlayInfo::overlayInfo(QWidget *pWidget) : overlayBase(pWidget)
 {
     this->imageNumber = -1;
     this->numTotalImages = -1;
+    this->m_fadeSpeed = 0.0001;
 }
 
 void overlayInfo::setImageNumberAndNumberOfImages(int num, int total)
@@ -14,9 +15,22 @@ void overlayInfo::setImageNumberAndNumberOfImages(int num, int total)
     this->numTotalImages = total;
 }
 
+void overlayInfo::setCurrentExifInformation(EXIFInfo info)
+{
+    this->currentInformation = info;
+}
+
+void overlayInfo::setCurrentFileInformation(QFileInfo info)
+{
+    this->currentFileInformation = info;
+}
+
 void overlayInfo::ggT (float fl, int & numerator, int & denominator)
 {
    float newFL = fl;
+
+   if (newFL == 0.0)
+       return;
 
    int c = 0;
    while(newFL - int(newFL) != 0)
@@ -38,8 +52,6 @@ void overlayInfo::ggT (float fl, int & numerator, int & denominator)
        return;
    }
 
-   std::cout << "newFL: " << int(newFL) << " denom: " << den << " (" << c << ")" << std::endl;
-
    int a = num;
    int b = den;
 
@@ -48,11 +60,9 @@ void overlayInfo::ggT (float fl, int & numerator, int & denominator)
    {
        rest = b % a;
        b = a;
-       std::cout << "b: " << b << " rest: " << rest << std::endl;
        a = rest;
    } while (rest > 200);
 
-   std::cout << "b: " << b << std::endl;
 
    numerator = num/b;
    denominator = den/b;
@@ -68,6 +78,10 @@ void overlayInfo::generatePixmap()
 
     double lightOpacity = 0.8;
     double veryLightOpacity = 0.6;
+
+    // EXIF INFO
+    int exp_time1, exp_time2 = 0;
+    this->ggT(this->currentInformation.exposureTime, exp_time1, exp_time2);
 
     int rectWidth;
     int rectHeight;
@@ -107,10 +121,31 @@ void overlayInfo::generatePixmap()
     infoLogo = infoLogo.scaledToHeight(int(rect2Height*0.56), Qt::SmoothTransformation);
 
     QString imageNumber = tr("%1/%2").arg(this->imageNumber).arg(this->numTotalImages);
-    QFont fontNumber(QString("Helvetica"), int(rect2Height*0.15));
+    QFont fontNumber(QString("Helvetica"), int(rect2Height*0.18));
     QFontMetrics fm(fontNumber);
     QPen textPen(QColor::fromRgb(255, 255, 255, 200));
-    QRect rectImageNumber(rectPosX+borderwidth*2+infoLogo.width(), rectPosY+borderwidth, fm.width(imageNumber), int(rect2Height*0.3));
+    QRect rectImageNumber(rectPosX + borderwidth*3 + infoLogo.width(), rectPosY+borderwidth, fm.width(imageNumber), int(rect2Height*0.3));
+
+    int rectInfoWidth = int((rect2Width - int(rectImageNumber.width() + infoLogo.width() + borderwidth * 8.0)) / 4.0) - borderwidth;
+    QRect rectInfo1(rectImageNumber.x() + fm.width(imageNumber) + borderwidth * 4, rectPosY+borderwidth, rectInfoWidth, int(rect2Height*0.3 + .5));
+    QRect rectInfo2(rectInfo1.x() + rectInfoWidth + borderwidth, rectPosY+borderwidth, rectInfoWidth, int(rect2Height*0.3 + .5));
+    QRect rectInfo3(rectInfo2.x() + rectInfoWidth + borderwidth, rectPosY+borderwidth, rectInfoWidth, int(rect2Height*0.3 + .5));
+    QRect rectInfo4(rectInfo3.x() + rectInfoWidth + borderwidth, rectPosY+borderwidth, rectInfoWidth, int(rect2Height*0.3 + .5));
+
+    QRect rectImageName(rectInfo1.x(), rectInfo1.y(), rectInfo1.width(), int(rectInfo1.height() / 2.0));
+    QRect rectImageSize(rectInfo1.x(), rectInfo1.y() + int(rectInfo1.height() / 2.0), rectInfo1.width(), int(rectInfo1.height() / 2.0));
+
+    QRect rectExpFstop(rectInfo2.x(), rectInfo2.y(), rectInfo2.width(), int(rectInfo2.height() / 2.0));
+    QString expFStop = "f/" + QString::number(this->currentInformation.FStop, 'f', 1) + "   " + QString::number(exp_time1) + "/" + QString::number(exp_time2) + " sec";
+    QRect rectFocalLength(rectInfo2.x(), rectInfo2.y() + int(rectInfo1.height() / 2.0), rectInfo2.width(), int(rectInfo2.height() / 2.0));
+
+    QRect rectCameraModel(rectInfo3.x(), rectInfo3.y(), rectInfo3.width(), int(rectInfo3.height() / 2.0));
+    QRect rectDescription(rectInfo3.x(), rectInfo3.y() + rectInfo3.y() + int(rectInfo3.height() / 2.0), rectInfo3.width() + borderwidth + rectInfo4.width(),  int(rectInfo3.height() / 2.0));
+
+    QRect rectDateTaken(rectInfo4.x(), rectInfo4.y(), rectInfo4.width(), int(rectInfo4.height() / 2.0));
+
+    QFont fontText(QString("Helvetica"), int(rectInfo1.height() / 4.0));
+    QFontMetrics ftm(fontText);
 
     QPainter p;
     p.begin(&this->m_overlay);
@@ -124,10 +159,25 @@ void overlayInfo::generatePixmap()
     p.setPen(rect2Pen);
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, radius2, radius2);
-    p.drawPixmap(rectPosX+borderwidth, rectPosY-borderwidth, infoLogo);
+    p.drawPixmap(rectPosX + 2 * borderwidth, rectPosY-borderwidth, infoLogo);
     p.setPen(textPen);
     p.setFont(fontNumber);
     p.drawText(rectImageNumber, Qt::AlignLeft | Qt::AlignVCenter, imageNumber);
+//    p.drawRect(rectInfo1);
+//    p.drawRect(rectInfo2);
+//    p.drawRect(rectInfo3);
+//    p.drawRect(rectInfo4);
+    p.setFont(fontText);
+    p.drawText(rectImageName, Qt::AlignRight | Qt::AlignVCenter, this->currentFileInformation.fileName());
+    p.drawText(rectImageSize, Qt::AlignRight | Qt::AlignVCenter, QString::number(double(this->currentFileInformation.size())/1024.0, 'f', 0) + " kb");
+
+    p.drawText(rectExpFstop, Qt::AlignRight | Qt::AlignVCenter, expFStop);
+    p.drawText(rectFocalLength, Qt::AlignRight | Qt::AlignVCenter, QString::number(this->currentInformation.focalLength, 'f', 0) + " mm");
+
+    p.drawText(rectCameraModel, Qt::AlignRight | Qt::AlignVCenter, this->currentInformation.cameraModel_st + " (" + this->currentInformation.cameraMake_st + ")");
+    p.drawText(rectDescription, Qt::AlignRight | Qt::AlignVCenter, this->currentInformation.imgDescription_st);
+
+    p.drawText(rectDateTaken, Qt::AlignRight | Qt::AlignVCenter, this->currentInformation.dateTimeOriginal_st);
 
     p.end();
 }

@@ -24,7 +24,10 @@ August 2012
 #ifndef OVERLAYINFO_H
 #define OVERLAYINFO_H
 
+#include <QFileInfo>
+
 #include <overlaybase.h>
+#include "exif.h"
 
 class overlayInfo : public overlayBase
 {
@@ -33,6 +36,8 @@ public:
     overlayInfo(QWidget * pWidget);
 
     void setImageNumberAndNumberOfImages(int num, int total);
+    void setCurrentExifInformation(EXIFInfo info);
+    void setCurrentFileInformation(QFileInfo info);
 
     static void ggT (float fl, int &numerator, int &denominator);
 
@@ -45,6 +50,9 @@ protected:
 private:
     int imageNumber;
     int numTotalImages;
+
+    EXIFInfo currentInformation;
+    QFileInfo currentFileInformation;
 };
 
 #endif // OVERLAYINFO_H
