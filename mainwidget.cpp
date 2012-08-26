@@ -29,8 +29,9 @@ MainWidget::MainWidget(QWidget *parent) :
     ui(new Ui::MainWidget)
 {
     this->effectEngine = new animation(this);
-    connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(processQueuedCommands()));
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(restoreDisplayState()));
+    connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(processQueuedCommands()));
+
 
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
@@ -48,7 +49,7 @@ MainWidget::MainWidget(QWidget *parent) :
         if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
             qApp->installTranslator(&translator);
     this->settingsDial->updateLanguage();
-    this->settingsDial->show();
+
 
     connect(this->settingsDial, SIGNAL(languageChanged(QString)), this, SLOT(changeLanguage(QString)));
 
@@ -100,6 +101,13 @@ MainWidget::MainWidget(QWidget *parent) :
         this->setWindowState(Qt::WindowFullScreen);
         this->setCursor(Qt::BlankCursor);
     }
+    else
+    {
+        this->resize(settings.value("MainWindow_size", QSize(800, 600)).toSize());
+        this->move(settings.value("MainWindow_pos", QPoint(200, 200)).toPoint());
+    }
+
+    this->settingsDial->show();
 
     this->automaticForwardInverval = settings.value("automaticTimerInterval", QVariant(10000)).toInt();
 
@@ -113,6 +121,8 @@ MainWidget::~MainWidget()
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
     settings.setValue("fullscreenState", QVariant(this->windowState() == Qt::WindowFullScreen));
     settings.setValue("automaticTimerInterval", QVariant(this->automaticForwardInverval));
+    settings.setValue("MainWindow_size", this->size());
+    settings.setValue("MainWindow_pos", this->pos());
 
     delete ui;
 
@@ -403,7 +413,7 @@ void MainWidget::restoreDisplayState()
     if (this->displayState == SHOW_HELP)
         this->displayHelp->blendIn(this->effectEngine->currentDisplay());
 
-    if (this->m_displayInfo_active || this->displayState == SHOW_INFO)
+    if ((this->m_displayInfo_active || this->displayState == SHOW_INFO) && this->m_queuedComm == EMPTY)
     {
         this->displayInfo->setImageNumberAndNumberOfImages(this->current_position+1, this->current_directory_list.size());
 
