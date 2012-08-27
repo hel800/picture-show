@@ -9,27 +9,27 @@
         <translation>picture-view</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="161"/>
+        <location filename="mainwidget.cpp" line="178"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="170"/>
+        <location filename="mainwidget.cpp" line="188"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="170"/>
+        <location filename="mainwidget.cpp" line="188"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="205"/>
+        <location filename="mainwidget.cpp" line="224"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="205"/>
+        <location filename="mainwidget.cpp" line="224"/>
         <source>Das Bild %1 konnte nicht geladen werden!</source>
         <translation>The picture %1 could not be loaded!</translation>
     </message>
@@ -37,9 +37,13 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settingsdialog.ui" line="14"/>
         <source>picture show - Options</source>
-        <translation>picture-show options</translation>
+        <translation type="obsolete">picture-show options</translation>
+    </message>
+    <message utf8="true">
+        <location filename="settingsdialog.ui" line="14"/>
+        <source>picture show - Bilder öffnen und Einstellungen</source>
+        <translation>picture-show - open images and options</translation>
     </message>
     <message>
         <location filename="settingsdialog.ui" line="44"/>
@@ -142,7 +146,7 @@
         <translation>Press F1 or &apos;h&apos; for help in presentation mode.</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="105"/>
+        <location filename="settingsdialog.cpp" line="109"/>
         <source>Open Directory</source>
         <translation>Open directory</translation>
     </message>
@@ -150,32 +154,37 @@
 <context>
     <name>animation</name>
     <message>
-        <location filename="animation.cpp" line="262"/>
-        <location filename="animation.cpp" line="296"/>
+        <location filename="animation.cpp" line="265"/>
+        <location filename="animation.cpp" line="299"/>
         <source>Timer aus</source>
         <translation>timer off</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="272"/>
-        <location filename="animation.cpp" line="286"/>
-        <location filename="animation.cpp" line="644"/>
+        <location filename="animation.cpp" line="275"/>
+        <location filename="animation.cpp" line="289"/>
+        <location filename="animation.cpp" line="678"/>
         <source>%1 Sekunden</source>
         <translation>%1 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="326"/>
+        <location filename="animation.cpp" line="337"/>
+        <source>ESC zum beenden</source>
+        <translation type="unfinished">Press ESC to exit</translation>
+    </message>
+    <message>
+        <location filename="animation.cpp" line="356"/>
         <source>%1_ Sekunden</source>
         <translation>%1_ seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="328"/>
+        <location filename="animation.cpp" line="358"/>
         <source>%1%2 Sekunden</source>
         <translation>%1%2 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="312"/>
-        <location filename="animation.cpp" line="354"/>
-        <location filename="animation.cpp" line="358"/>
+        <location filename="animation.cpp" line="316"/>
+        <location filename="animation.cpp" line="384"/>
+        <location filename="animation.cpp" line="388"/>
         <source>Jump to: %1/%2</source>
         <translation>Jump to: %1/%2</translation>
     </message>
@@ -183,7 +192,7 @@
 <context>
     <name>loadDirectory</name>
     <message>
-        <location filename="loaddirectory.cpp" line="59"/>
+        <location filename="loaddirectory.cpp" line="64"/>
         <source>Das angegebene Verzeichnis existiert nicht!</source>
         <translation>The chosen directory doesn&apos;t exist!</translation>
     </message>
@@ -191,22 +200,22 @@
 <context>
     <name>overlayHelp</name>
     <message>
-        <location filename="overlayhelp.cpp" line="87"/>
+        <location filename="overlayhelp.cpp" line="91"/>
         <source>version: %1</source>
         <translation>version: %1</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="104"/>
+        <location filename="overlayhelp.cpp" line="108"/>
         <source>Kommandos</source>
         <translation>Commands</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="118"/>
+        <location filename="overlayhelp.cpp" line="122"/>
         <source>Über picture-show</source>
         <translation>About picture show</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="121"/>
+        <location filename="overlayhelp.cpp" line="125"/>
         <source>Dieses Programm unterliegt der GPL v3 Lizenz. Es kann frei verwendet und verändert werden, muss allerdings stets unter GPL Lizenz veröffentlicht werden. Es verwendet das Qt Framework (version %1). 
 
 2012 by Sebastian Schäfer / web: http://code.google.com/p/picture-show/</source>
@@ -215,79 +224,97 @@
 2012 by Sebastian Schäfer / web: http://code.google.com/p/picture-show/</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="175"/>
+        <location filename="overlayhelp.cpp" line="179"/>
         <source>Öffnet den Dialog zur Auswahl das Bilderordners und der Einstellungen für die picture show</source>
         <translation>Opens the dialog to choose the image directory and the preferences for picture-show</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="176"/>
+        <location filename="overlayhelp.cpp" line="180"/>
         <source>Wechselt zwischen Fullscreen- und Fenstermodus hin und her</source>
         <translation>Changes between Fullscreen and windowed mode (and back)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="178"/>
+        <location filename="overlayhelp.cpp" line="182"/>
         <source>Zum nächsten Bild blenden</source>
         <translation>Blend to next image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="178"/>
+        <location filename="overlayhelp.cpp" line="182"/>
         <source>&lt;Pfeil rechts&gt;</source>
         <translation>&lt;right arrow&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="179"/>
+        <location filename="overlayhelp.cpp" line="183"/>
         <source>Zum vorherigen Bild blenden</source>
         <translation>Blend to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="179"/>
+        <location filename="overlayhelp.cpp" line="183"/>
         <source>&lt;Pfeil links&gt;</source>
         <translation>&lt;left arrow&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="180"/>
+        <location filename="overlayhelp.cpp" line="184"/>
         <source>Springt zum nächsten Bild</source>
         <translation>Jump to next image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="180"/>
+        <location filename="overlayhelp.cpp" line="184"/>
         <source>&lt;Bild ab&gt;</source>
         <translation>&lt;Page down&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="181"/>
+        <location filename="overlayhelp.cpp" line="185"/>
         <source>Springt zum vorherigen Bild</source>
         <translation>Jump to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="181"/>
+        <location filename="overlayhelp.cpp" line="185"/>
         <source>&lt;Bild auf&gt;</source>
         <translation>&lt;Page up&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="182"/>
+        <location filename="overlayhelp.cpp" line="186"/>
         <source>Jump-to Dialog zum springen zu einem Bild, Eingabe der Bildnummer gefolgt von &lt;Enter&gt;</source>
         <translation>Jump to dialog to jump to a specified image (type the image number, then press &lt;Enter&gt;)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="183"/>
+        <location filename="overlayhelp.cpp" line="187"/>
+        <source>I</source>
+        <translation>I</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="187"/>
+        <source>Anzeige mit Infos über das aktuelle Bild anzeigen</source>
+        <translation>Show infobar with metadata for current image</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="188"/>
         <source>Startet den Timer, Eingabe der Dauer in Sekunden (4-99) gefolgt von &lt;Enter&gt;</source>
         <translation>Starts the timer, then type the duration in seconds (4-99) followed by &lt;Enter&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="183"/>
+        <location filename="overlayhelp.cpp" line="188"/>
         <source>&lt;Leertaste&gt;</source>
         <translation>&lt;Space&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="185"/>
+        <location filename="overlayhelp.cpp" line="190"/>
         <source>Diese Hilfe anzeigen</source>
         <translation>Shows this help dialog</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="186"/>
+        <location filename="overlayhelp.cpp" line="191"/>
         <source>Blendet Overlays aus bzw. beendet das Programm</source>
         <translation>Sets overlays to off/exits the program</translation>
+    </message>
+</context>
+<context>
+    <name>overlayInfo</name>
+    <message>
+        <location filename="overlayinfo.cpp" line="161"/>
+        <source>%1/%2</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

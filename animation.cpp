@@ -72,10 +72,13 @@ animation::animation(QWidget * pWidget)
     this->m_textbarVisible = false;
     this->m_nothingEnteredYet = true;
 
+    this->m_isAskingExit = false;
+
     this->m_staticLogo = QPixmap(":/images/img/static.png");
     this->m_stopwatch_icon = QPixmap(":/images/img/stopwatch-icon.png");
     this->m_stopwatch_off_icon = QPixmap(":/images/img/stopwatchOff-icon.png");
     this->m_jumpto_icon = QPixmap(":/images/img/jumpto-icon.png");
+    this->m_exit_icon = QPixmap(":/images/img/exit_logo.png");
     this->m_logoText = QPixmap(":/images/img/logoText.png");
 
     this->m_waitingPix.append(QPixmap(":/images/img/waiting01.png"));
@@ -309,7 +312,34 @@ void animation::startJumptoBar(int currentImage, int numImages)
 
     this->m_tbReason = JUMP;
     this->m_nothingEnteredYet = true;
+
     this->blendTextbar(tr("Jump to: %1/%2").arg(currentImage).arg(numImages));
+}
+
+void animation::startExitApp()
+{
+    if (this->isBusy() || this->isWaiting())
+        return;
+
+    if (this->m_blendTo.isNull())
+    {
+        this->m_blendTo = QPixmap(this->m_paintWidget->width(), this->m_paintWidget->height());
+        QPainter p(&this->m_blendTo);
+        this->drawStartScreen(&p);
+    }
+
+    this->m_tbReason = EXIT;
+    this->m_isAskingExit = true;
+
+    this->m_textWaitTimer->setSingleShot(true);
+    this->m_textWaitTimer->start(2500);
+
+    this->blendTextbar(tr("ESC zum beenden"));
+}
+
+bool animation::exitRequested()
+{
+    return this->m_isAskingExit;
 }
 
 void animation::numberEntered(int num)
@@ -431,6 +461,8 @@ void animation::setTextbarText(const QString &text)
         this->drawTextbar(&p, STOPWATCH_OFF);
     else if (this->m_tbReason == JUMP)
         this->drawTextbar(&p, JUMP_TO);
+    else if (this->m_tbReason == EXIT)
+        this->drawTextbar(&p, EXIT_ICO);
 
     p.end();
 }
@@ -611,6 +643,8 @@ void animation::paintTextbar()
         this->drawTextbar(&p, STOPWATCH_OFF, this->m_current_textbar_blend);
     else if (this->m_tbReason == JUMP)
         this->drawTextbar(&p, JUMP_TO, this->m_current_textbar_blend);
+    else if (this->m_tbReason == EXIT)
+        this->drawTextbar(&p, EXIT_ICO, this->m_current_textbar_blend);
 
     p.end();
 
@@ -661,6 +695,8 @@ void animation::textBarOff()
                 emit jumptoImage(newNum);
         }
     }
+
+    this->m_isAskingExit = false;
 
     // fade textbar out
     this->blendTextbar(this->m_textbarText);
@@ -733,7 +769,8 @@ void animation::drawTextbar(QPainter * p, IconType icon, double opacity)
         p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_stopwatch_off_icon);
     else if (icon == JUMP_TO)
         p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_jumpto_icon);
-
+    else if (icon == EXIT_ICO)
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_exit_icon);
 
 
     QFont f("Helvetica");

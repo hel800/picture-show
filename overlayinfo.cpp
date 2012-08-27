@@ -2,11 +2,12 @@
 
 #include <iostream>
 
+
 overlayInfo::overlayInfo(QWidget *pWidget) : overlayBase(pWidget)
 {
     this->imageNumber = -1;
     this->numTotalImages = -1;
-    this->m_fadeSpeed = 0.1;
+    this->m_fadeSpeed = 0.05;
 }
 
 void overlayInfo::setImageNumberAndNumberOfImages(int num, int total)
@@ -74,8 +75,6 @@ void overlayInfo::ggT (float fl, int & numerator, int & denominator)
 
 void overlayInfo::generatePixmap()
 {
-    this->m_fadeSpeed = 0.05;
-
     if (this->m_background.isNull())
         return;
 
@@ -101,25 +100,18 @@ void overlayInfo::generatePixmap()
     if (this->currentInformation.FStop != 0.0)
         expFStop += "f/" + QString::number(this->currentInformation.FStop, 'f', 1);
 
-    if (exp_time1 > exp_time2 && exp_time2 != 0 && exp_time1 != 0)
+    if (this->currentInformation.exposureTime > 0.5 && this->currentInformation.exposureTime != 0.0)
     {
-        double new_exp = exp_time1 / exp_time2;
-        expFStop += "   " + QString::number(new_exp, 'f', 1) + " sec";
+        expFStop += "   " + QString::number(this->currentInformation.exposureTime, 'f', 1) + " sec";
     }
-    else
+    else if (this->currentInformation.exposureTime <= 0.5 && this->currentInformation.exposureTime != 0.0)
     {
-        if (exp_time1 != 0 && exp_time2 != 0)
-            expFStop += "   " + QString::number(exp_time1);
-
-        if (exp_time1 != 0 && exp_time2 > 1)
-            expFStop += "/" + QString::number(exp_time2);
-
-        if (exp_time1 != 0 && exp_time2 != 0)
-            expFStop += " sec";
+        double den = 1.0 / this->currentInformation.exposureTime;
+        expFStop += "   1/" + QString::number(int(den + .5)) + " sec";
     }
 
     QString imageFocalLength;
-    if (this->currentInformation.focalLength != 0.0)
+    if (this->currentInformation.focalLength >= 1.0)
         imageFocalLength += QString::number(this->currentInformation.focalLength, 'f', 0) + " mm";
 
     int rectWidth;
@@ -128,7 +120,6 @@ void overlayInfo::generatePixmap()
     int rectPosY;
 
     rectWidth =  int(this->m_paintWidget->width() * 0.9);
-//    rectHeight = int(this->m_paintWidget->height() * 0.17);
     rectHeight = rectWidth * 0.1;
     rectPosX = int((this->m_paintWidget->width() - rectWidth) / 2.0);
     rectPosY = int(this->m_paintWidget->height() - (rectHeight * 0.45));

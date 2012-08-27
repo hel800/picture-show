@@ -46,14 +46,24 @@ static void copyEXIFString(char **dest, unsigned ncomp, unsigned base, unsigned 
   else
     memcpy(*dest, (char*) &offs, 4);
 }
-static float parseEXIFrational(unsigned char *buf) {
+static float parseEXIFrational(unsigned char *buf, bool align, float * num = NULL, float * den = NULL) {
   float numerator   = 0;
   float denominator = 1;
 
-  numerator  = (float) *((unsigned *)buf);
-  denominator= (float) *(((unsigned *)buf)+1);
+//  numerator  = (float) *((unsigned *)buf);
+//  denominator= (float) *(((unsigned *)buf)+1);
+
+  numerator = (float) parse32(buf, align);
+  denominator = (float) parse32(buf+4, align);
+
   if(denominator < 1e-20)
     return 0;
+
+  if (num != NULL)
+      *num = numerator;
+  if (den != NULL)
+      *den = denominator;
+
   return numerator/denominator;
 }
 
@@ -182,21 +192,23 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
       {
         // Focal length in mm
         // result.focalLength = *((unsigned*)(buf+ifdOffset+coffs));
-        result.focalLength = parseEXIFrational(buf+ifdOffset+coffs);
+        result.focalLength = parseEXIFrational(buf+ifdOffset+coffs, alignIntel);
       }
         break;
 
       case 0x829D:
       {
         // F-stop
-        result.FStop = parseEXIFrational(buf+ifdOffset+coffs);
+        result.FStop = parseEXIFrational(buf+ifdOffset+coffs, alignIntel);
       }
         break;
 
       case 0x829A:
       {
         // Exposure time
-        result.exposureTime = parseEXIFrational(buf+ifdOffset+coffs);
+        float num, den = 0.0;
+        result.exposureTime = parseEXIFrational(buf+ifdOffset+coffs, alignIntel, &num, &den);
+        result.exposureTime_st = QString::number(num) + "/" + QString::number(den);
       }
         break;
     }

@@ -48,13 +48,15 @@ public:
     enum IconType {
         STOPWATCH,
         STOPWATCH_OFF,
-        JUMP_TO
+        JUMP_TO,
+        EXIT_ICO
     };
 
     enum TextBarReason {
         TIMER_ON,
         TIMER_OFF,
-        JUMP
+        JUMP,
+        EXIT
     };
 
     animation(QWidget * pWidget);
@@ -83,6 +85,9 @@ public:
     void startTimerBar(int secs = 10);
     void stopTimerBar();
     void startJumptoBar(int currentImage, int numImages);
+    void startExitApp();
+
+    bool exitRequested();
 
     void numberEntered(int num);
     void enterPressed();
@@ -135,6 +140,7 @@ private:
     QPixmap m_stopwatch_icon;
     QPixmap m_stopwatch_off_icon;
     QPixmap m_jumpto_icon;
+    QPixmap m_exit_icon;
     QPixmap m_logoText;
 
     QVector<QPixmap> m_waitingPix;
@@ -150,6 +156,7 @@ private:
     QString m_textbarText;
 
     double m_fadeSpeed;
+    bool m_isAskingExit;
 
     BlendType m_bType;
     ScaleType m_sType;

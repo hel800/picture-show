@@ -32,12 +32,10 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(restoreDisplayState()));
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(processQueuedCommands()));
 
-
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
 
     this->displayInfo = new overlayInfo(this);
-    this->displayInfo->setFadeSteps(0.16);
     connect(this->displayInfo, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
 
     ui->setupUi(this);
@@ -501,10 +499,12 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         this->advanceImages(true, true);
     break;
     case Qt::Key_Escape:
-        if (this->effectEngine->isShowingTextbar())
+        if (this->effectEngine->exitRequested())
+            this->close();
+        else if (this->effectEngine->isShowingTextbar())
             this->effectEngine->escPressed();
         else
-            this->close();
+            this->effectEngine->startExitApp();
     break;
     case Qt::Key_O:
         if (this->effectEngine->isBusy() && this->current_task == NONE)
@@ -525,7 +525,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             this->automaticForward->stop();
             this->effectEngine->stopTimerBar();
         }
-        else
+        else if (this->imagesLoaded)
         {
             this->effectEngine->startTimerBar(int(this->automaticForwardInverval/1000));
         }
@@ -547,7 +547,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         this->effectEngine->numberEntered(event->text().toInt());
     break;
     case Qt::Key_J:
-        if (this->effectEngine->isDoingNothing())
+        if (this->effectEngine->isDoingNothing() && this->imagesLoaded)
         {
             this->automaticForward->stop();
             this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
@@ -668,25 +668,29 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
         switch (event->key())
         {
         case Qt::Key_Left:
-            this->displayInfo->blendOut();
+            if ((this->current_position - 1) >= 0)
+                this->displayInfo->blendOut();
             this->m_displayInfo_active = true;
             this->m_queuedComm = PREV_IMG;
             this->m_queuedBlendComm = this->current_blendType;
         break;
         case Qt::Key_Right:
-            this->displayInfo->blendOut();
+            if ((this->current_position + 1) < this->current_directory_list.size())
+                this->displayInfo->blendOut();
             this->m_displayInfo_active = true;
             this->m_queuedComm = NEXT_IMG;
             this->m_queuedBlendComm = this->current_blendType;
         break;
         case Qt::Key_PageUp:
-            this->displayInfo->blendOut();
+            if ((this->current_position - 1) >= 0)
+                this->displayInfo->blendOut();
             this->m_displayInfo_active = true;
             this->m_queuedComm = PREV_IMG;
             this->m_queuedBlendComm = HARD;
         break;
         case Qt::Key_PageDown:
-            this->displayInfo->blendOut();
+            if ((this->current_position + 1) < this->current_directory_list.size())
+                this->displayInfo->blendOut();
             this->m_displayInfo_active = true;
             this->m_queuedComm = NEXT_IMG;
             this->m_queuedBlendComm = HARD;

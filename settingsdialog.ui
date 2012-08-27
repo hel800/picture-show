@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>picture show - Options</string>
+   <string>picture show - Bilder öffnen und Einstellungen</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
