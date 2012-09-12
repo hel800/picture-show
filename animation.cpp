@@ -40,6 +40,8 @@ February 2012
 // FEHLER:
 // --> // kleine Ruckler bei Slideeffekt
 
+#include <iostream>
+
 animation::animation(QWidget * pWidget)
 {
     this->m_paintWidget = pWidget;
@@ -73,6 +75,8 @@ animation::animation(QWidget * pWidget)
     this->m_nothingEnteredYet = true;
 
     this->m_isAskingExit = false;
+
+    this->m_firstStart = false;
 
     this->m_staticLogo = QPixmap(":/images/img/static.png");
     this->m_stopwatch_icon = QPixmap(":/images/img/stopwatch-icon.png");
@@ -151,6 +155,11 @@ void animation::setScaleTypeToScreen()
 void animation::setScaleTypeTo(ScaleType type)
 {
     this->m_sType = type;
+}
+
+void animation::setFirstStart(bool fs)
+{
+    this->m_firstStart = fs;
 }
 
 void animation::paintStartScreen()
@@ -709,6 +718,23 @@ void animation::drawStartScreen(QPainter * p)
     p->drawPixmap(int(this->m_paintWidget->width()/2)-140, int(this->m_paintWidget->height()/2)-140, this->m_staticLogo);
     p->setOpacity(0.3);
     p->drawPixmap(int(this->m_paintWidget->width()/2)-226, int(this->m_paintWidget->height()/2)+150, this->m_logoText);
+
+    if (this->m_firstStart)
+    {
+        QFont f("Helvetica");
+        f.setPointSizeF(this->m_paintWidget->width()*0.015);
+        f.setStyleStrategy(QFont::PreferAntialias);
+        f.setBold(true);
+
+        QFontMetrics fm(f);
+        int helpTextWidth = fm.width(tr("Bitte H drücken für Hilfe"));
+
+        p->setOpacity(0.8);
+        p->setPen(QColor(255, 255, 255, 190));
+        p->setFont(f);
+        p->setRenderHint(QPainter::TextAntialiasing);
+        p->drawText(int(this->m_paintWidget->width()/2)-int(helpTextWidth/2), int(this->m_paintWidget->height())-fm.height()+2, tr("Bitte H drücken für Hilfe"));
+    }
 }
 
 void animation::drawPixmap(QPainter * p, QPixmap & pix, double opacity, bool background, int offset)

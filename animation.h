@@ -76,6 +76,8 @@ public:
     void setScaleTypeToScreen();
     void setScaleTypeTo(ScaleType type);
 
+    void setFirstStart(bool fs);
+
     void paintStartScreen();
     void paintToWaiting(const QPixmap & from = QPixmap());
     void paintFromWaiting(const QPixmap & to = QPixmap());
@@ -160,6 +162,8 @@ private:
 
     BlendType m_bType;
     ScaleType m_sType;
+
+    bool m_firstStart;
 
 };
 

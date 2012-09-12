@@ -9,27 +9,27 @@
         <translation>picture-view</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="178"/>
+        <location filename="mainwidget.cpp" line="179"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="188"/>
+        <location filename="mainwidget.cpp" line="189"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="188"/>
+        <location filename="mainwidget.cpp" line="189"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="224"/>
+        <location filename="mainwidget.cpp" line="225"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="224"/>
+        <location filename="mainwidget.cpp" line="225"/>
         <source>Das Bild %1 konnte nicht geladen werden!</source>
         <translation>The picture %1 could not be loaded!</translation>
     </message>
@@ -154,37 +154,43 @@
 <context>
     <name>animation</name>
     <message>
-        <location filename="animation.cpp" line="265"/>
-        <location filename="animation.cpp" line="299"/>
+        <location filename="animation.cpp" line="274"/>
+        <location filename="animation.cpp" line="308"/>
         <source>Timer aus</source>
         <translation>timer off</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="275"/>
-        <location filename="animation.cpp" line="289"/>
-        <location filename="animation.cpp" line="678"/>
+        <location filename="animation.cpp" line="284"/>
+        <location filename="animation.cpp" line="298"/>
+        <location filename="animation.cpp" line="687"/>
         <source>%1 Sekunden</source>
         <translation>%1 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="337"/>
+        <location filename="animation.cpp" line="346"/>
         <source>ESC zum beenden</source>
-        <translation type="unfinished">Press ESC to exit</translation>
+        <translation>Press ESC to exit</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="356"/>
+        <location filename="animation.cpp" line="365"/>
         <source>%1_ Sekunden</source>
         <translation>%1_ seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="358"/>
+        <location filename="animation.cpp" line="367"/>
         <source>%1%2 Sekunden</source>
         <translation>%1%2 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="316"/>
-        <location filename="animation.cpp" line="384"/>
-        <location filename="animation.cpp" line="388"/>
+        <location filename="animation.cpp" line="730"/>
+        <location filename="animation.cpp" line="736"/>
+        <source>Bitte H drücken für Hilfe</source>
+        <translation>Press &apos;H&apos; for help</translation>
+    </message>
+    <message>
+        <location filename="animation.cpp" line="325"/>
+        <location filename="animation.cpp" line="393"/>
+        <location filename="animation.cpp" line="397"/>
         <source>Jump to: %1/%2</source>
         <translation>Jump to: %1/%2</translation>
     </message>
@@ -312,7 +318,7 @@
 <context>
     <name>overlayInfo</name>
     <message>
-        <location filename="overlayinfo.cpp" line="161"/>
+        <location filename="overlayinfo.cpp" line="154"/>
         <source>%1/%2</source>
         <translation></translation>
     </message>

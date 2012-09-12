@@ -149,7 +149,7 @@ void overlayInfo::generatePixmap()
     rect2Pen.setWidth(0);
 
     QPixmap infoLogo(":/images/img/Button-info-256.png");
-    infoLogo = infoLogo.scaledToHeight(int(this->m_paintWidget->width() * 0.05), Qt::SmoothTransformation);
+    infoLogo = infoLogo.scaledToHeight(int(this->m_paintWidget->width() * 0.06), Qt::SmoothTransformation);
 
     QString imageNumber = tr("%1/%2").arg(this->imageNumber).arg(this->numTotalImages);
     QFont fontNumber(QString("Helvetica"), int(rect2Height*0.18));

@@ -110,6 +110,7 @@ MainWidget::MainWidget(QWidget *parent) :
     this->automaticForwardInverval = settings.value("automaticTimerInterval", QVariant(10000)).toInt();
 
     this->show();
+    this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
     this->effectEngine->paintStartScreen();
     this->settingsDial->raise();
 }
@@ -227,6 +228,12 @@ void MainWidget::loadImageFinished()
     else
     {
         this->imagesLoaded = true;
+
+        // Set firstStart to false for future sessions
+        QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+        settings.setValue("firstStart", QVariant(false));
+        this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
+
         this->effectEngine->paintFromWaiting(this->img);
     }
 }
@@ -576,6 +583,9 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         {
             if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
             {
+                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+                settings.setValue("firstStart", QVariant(false));
+                this->effectEngine->setFirstStart(false);
                 this->displayState = SHOW_HELP;
                 this->automaticForward->stop();
                 this->effectEngine->textBarReset();
