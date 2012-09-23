@@ -24,12 +24,19 @@
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="225"/>
+        <location filename="mainwidget.cpp" line="224"/>
+        <location filename="mainwidget.cpp" line="255"/>
+        <location filename="mainwidget.cpp" line="270"/>
+        <source>%1 x %2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="229"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="225"/>
+        <location filename="mainwidget.cpp" line="229"/>
         <source>Das Bild %1 konnte nicht geladen werden!</source>
         <translation>The picture %1 could not be loaded!</translation>
     </message>
@@ -318,7 +325,7 @@
 <context>
     <name>overlayInfo</name>
     <message>
-        <location filename="overlayinfo.cpp" line="154"/>
+        <location filename="overlayinfo.cpp" line="179"/>
         <source>%1/%2</source>
         <translation></translation>
     </message>
