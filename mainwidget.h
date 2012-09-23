@@ -134,6 +134,9 @@ private:
 
     QList<QFileInfo> current_directory_list;
     int current_position;
+
+    QMap<int, QString> current_list_imageSizes;
+
     BlendType current_blendType;
     ScaleType current_scaleType;
 

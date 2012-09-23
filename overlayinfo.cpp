@@ -26,6 +26,11 @@ void overlayInfo::setCurrentFileInformation(QFileInfo info)
     this->currentFileInformation = info;
 }
 
+void overlayInfo::setCurrentImageResolution(const QString & imgRes)
+{
+    this->currentImageResolution = QString(imgRes);
+}
+
 void overlayInfo::ggT (float fl, int & numerator, int & denominator)
 {
    float newFL = fl;
@@ -84,6 +89,10 @@ void overlayInfo::generatePixmap()
     double lightOpacity = 0.8;
     double veryLightOpacity = 0.6;
 
+    // Image size and resolution
+    QString imageSizeAndResolution = this->currentImageResolution + " (";
+    imageSizeAndResolution += QString::number(double(this->currentFileInformation.size())/1024.0, 'f', 0) + " kb)";
+
     // EXIF INFO
     int exp_time1, exp_time2 = 0;
     this->ggT(this->currentInformation.exposureTime, exp_time1, exp_time2);
@@ -113,6 +122,22 @@ void overlayInfo::generatePixmap()
     QString imageFocalLength;
     if (this->currentInformation.focalLength >= 1.0)
         imageFocalLength += QString::number(this->currentInformation.focalLength, 'f', 0) + " mm";
+
+//    // get image dimensions from file
+//    QString imageDimensions = "";
+//    int t0 = clock();
+
+//    {
+//        QImage temp = QImage(this->currentFileInformation.absoluteFilePath());
+//        if (!temp.isNull())
+//        {
+//            imageDimensions = tr("(%1 x %2)").arg(temp.width()).arg(temp.height());
+//        }
+//    }
+
+//    int t1 = clock();
+
+//    printf ("It took me %d clicks (%f seconds).\n",t1-t0,((float)t1-t0)/CLOCKS_PER_SEC);
 
     int rectWidth;
     int rectHeight;
@@ -173,10 +198,10 @@ void overlayInfo::generatePixmap()
     QRect rectImageSize(rectInfo1.x(), rectInfo1.y() + int(rectInfo1.height() / 2.0), rectInfo1.width(), int(rectInfo1.height() / 2.0));
 
     QRect rectExpFstop(rectInfo2.x(), rectInfo2.y(), rectInfo2.width(), int(rectInfo2.height() / 2.0));
-    QRect rectFocalLength(rectInfo2.x(), rectInfo2.y() + int(rectInfo1.height() / 2.0), rectInfo2.width(), int(rectInfo2.height() / 2.0));
+    QRect rectFocalLength(rectInfo2.x(), rectInfo2.y() + int(rectInfo2.height() / 2.0), rectInfo2.width(), int(rectInfo2.height() / 2.0));
 
     QRect rectCameraModel(rectInfo3.x(), rectInfo3.y(), rectInfo3.width(), int(rectInfo3.height() / 2.0));
-    QRect rectDescription(rectInfo3.x(), rectInfo3.y() + rectInfo3.y() + int(rectInfo3.height() / 2.0), rectInfo3.width() + borderwidth + rectInfo4.width(),  int(rectInfo3.height() / 2.0));
+    QRect rectDescription(rectInfo3.x(), rectInfo3.y() + int(rectInfo3.height() / 2.0), rectInfo3.width() + borderwidth + rectInfo4.width(),  int(rectInfo3.height() / 2.0));
 
     QRect rectDateTaken(rectInfo4.x(), rectInfo4.y(), rectInfo4.width(), int(rectInfo4.height() / 2.0));
 
@@ -212,10 +237,10 @@ void overlayInfo::generatePixmap()
 //    p.drawRect(rectInfo1);
 //    p.drawRect(rectInfo2);
 //    p.drawRect(rectInfo3);
-//    p.drawRect(rectInfo4);
+//    p.drawRect(rectDescription);
     p.setFont(fontText);
     p.drawText(rectImageName, Qt::AlignRight | Qt::AlignVCenter, imageFileName);
-    p.drawText(rectImageSize, Qt::AlignRight | Qt::AlignVCenter, QString::number(double(this->currentFileInformation.size())/1024.0, 'f', 0) + " kb");
+    p.drawText(rectImageSize, Qt::AlignRight | Qt::AlignVCenter, imageSizeAndResolution);
 
     p.drawText(rectExpFstop, Qt::AlignRight | Qt::AlignVCenter, expFStop);
     p.drawText(rectFocalLength, Qt::AlignRight | Qt::AlignVCenter, imageFocalLength);

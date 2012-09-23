@@ -42,12 +42,18 @@ public:
 
     QImage * getImage();
 
+    int getSourceWidth();
+    int getSourceHeight();
+
 signals:
     void loadImageFinished(QImage * imgAdd);
 
 private:
     QString fn;
     QImage * img;
+
+    int source_width;
+    int source_height;
 
     int target_width;
     int target_height;

@@ -30,6 +30,9 @@ loadImage::loadImage()
 
     this->target_height = 0;
     this->target_width = 0;
+
+    this->source_width = -1;
+    this->source_height = -1;
 }
 
 loadImage::loadImage(const QString & filename, int w, int h)
@@ -53,10 +56,15 @@ void loadImage::setTask(const QString &filename, int w, int h, ScaleType type)
 
 void loadImage::run()
 {
-    if (this->fn.isEmpty())
-        this->img = new QImage();
-
     QImage temp = QImage(fn);
+    if (temp.isNull())
+    {
+        this->img = new QImage();
+        return;
+    }
+
+    this->source_width = temp.width();
+    this->source_height = temp.height();
 
     if (this->img != NULL)
         delete this->img;
@@ -74,4 +82,14 @@ void loadImage::run()
 QImage * loadImage::getImage()
 {
     return this->img;
+}
+
+int loadImage::getSourceWidth()
+{
+    return this->source_width;
+}
+
+int loadImage::getSourceHeight()
+{
+    return this->source_height;
 }

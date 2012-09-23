@@ -29,6 +29,8 @@ August 2012
 #include <overlaybase.h>
 #include "exif.h"
 
+#include <time.h>
+
 class overlayInfo : public overlayBase
 {
     Q_OBJECT
@@ -38,6 +40,7 @@ public:
     void setImageNumberAndNumberOfImages(int num, int total);
     void setCurrentExifInformation(EXIFInfo info);
     void setCurrentFileInformation(QFileInfo info);
+    void setCurrentImageResolution(const QString & imgRes);
 
     static void ggT (float fl, int &numerator, int &denominator);
 
@@ -53,6 +56,7 @@ private:
 
     EXIFInfo currentInformation;
     QFileInfo currentFileInformation;
+    QString currentImageResolution;
 };
 
 #endif // OVERLAYINFO_H

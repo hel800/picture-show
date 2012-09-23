@@ -194,6 +194,7 @@ void MainWidget::directoryLoadFinished(bool success)
         return;
     }
 
+    this->current_list_imageSizes.clear();
     this->current_task = RECALC;
 
     if (this->current_directory_list.size() > 0)
@@ -218,6 +219,9 @@ void MainWidget::loadImageFinished()
 
     if (this->active_recalc_processes == 0)
         this->current_task = NONE;
+
+    if (this->load_img->getSourceWidth() > 0 && this->load_img->getSourceWidth() > 0)
+        this->current_list_imageSizes.insert(this->current_position, tr("%1 x %2").arg(this->load_img->getSourceWidth()).arg(this->load_img->getSourceHeight()));
 
 
     if (this->img.isNull())
@@ -247,6 +251,9 @@ void MainWidget::loadImagePrevFinished()
     if (this->active_recalc_processes == 0)
         this->current_task = NONE;
 
+    if (this->load_img_prev->getSourceWidth() > 0 && this->load_img_prev->getSourceWidth() > 0)
+        this->current_list_imageSizes.insert(this->current_position-1, tr("%1 x %2").arg(this->load_img_prev->getSourceWidth()).arg(this->load_img_prev->getSourceHeight()));
+
     this->processQueuedCommands();
 }
 
@@ -258,6 +265,10 @@ void MainWidget::loadImageNextFinished()
 
     if (this->active_recalc_processes == 0)
         this->current_task = NONE;
+
+    if (this->load_img_next->getSourceWidth() > 0 && this->load_img_next->getSourceWidth() > 0)
+        this->current_list_imageSizes.insert(this->current_position+1, tr("%1 x %2").arg(this->load_img_next->getSourceWidth()).arg(this->load_img_next->getSourceHeight()));
+
 
     this->processQueuedCommands();
 }
@@ -426,6 +437,7 @@ void MainWidget::restoreDisplayState()
         EXIFInfo exif = readExifHeader(fname);
         this->displayInfo->setCurrentExifInformation(exif);
         this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
+        this->displayInfo->setCurrentImageResolution(this->current_list_imageSizes.value(this->current_position, QString()));
 
         if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
         {
@@ -569,6 +581,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             EXIFInfo exif = readExifHeader(fname);
             this->displayInfo->setCurrentExifInformation(exif);
             this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
+            this->displayInfo->setCurrentImageResolution(this->current_list_imageSizes.value(this->current_position, QString()));
 
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {
