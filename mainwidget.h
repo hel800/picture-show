@@ -39,6 +39,7 @@ February 2012
 #include <QFileInfo>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QMouseEvent>
 
 #include "global.h"
 #include "loaddirectory.h"
@@ -106,6 +107,8 @@ protected:
 
     void keyPressEvent_showingHelp ( QKeyEvent * event );
     void keyPressEvent_showingInfo ( QKeyEvent * event );
+
+    void mouseReleaseEvent(QMouseEvent *event);
     
 private:
     QPixmap scale(const QPixmap &map);
@@ -135,7 +138,7 @@ private:
     QList<QFileInfo> current_directory_list;
     int current_position;
 
-    QMap<int, QString> current_list_imageSizes;
+    QMap<int, QString> current_list_imageSizes  ;
 
     BlendType current_blendType;
     ScaleType current_scaleType;

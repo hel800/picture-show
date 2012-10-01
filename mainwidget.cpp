@@ -762,6 +762,23 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
     }
 }
 
+void MainWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+        this->advanceImages(false);
+
+    if (event->button() == Qt::MiddleButton)
+    {
+        if (this->settingsDial->isHidden())
+            this->settingsDial->show();
+        else
+            this->settingsDial->hide();
+    }
+
+    if (event->button() == Qt::RightButton)
+        this->advanceImages(true);
+}
+
 QPixmap MainWidget::scale(const QPixmap & map)
 {
     return map.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);

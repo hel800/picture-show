@@ -49,7 +49,7 @@ void overlayInfo::ggT (float fl, int & numerator, int & denominator)
    }
 
    int num = int(newFL);
-   int den = int(pow(float(10), float(c)));
+   int den = int(qPow(float(10), float(c)));
 
    if (num >= den)
    {

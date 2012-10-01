@@ -25,11 +25,13 @@ August 2012
 #define OVERLAYINFO_H
 
 #include <QFileInfo>
+#include <QtCore/qmath.h>
 
 #include <overlaybase.h>
 #include "exif.h"
 
 #include <time.h>
+
 
 class overlayInfo : public overlayBase
 {
