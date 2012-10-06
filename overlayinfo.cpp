@@ -7,7 +7,7 @@ overlayInfo::overlayInfo(QWidget *pWidget) : overlayBase(pWidget)
 {
     this->imageNumber = -1;
     this->numTotalImages = -1;
-    this->m_fadeSpeed = 0.05;
+    this->m_fadeSpeed = 0.075;
 }
 
 void overlayInfo::setImageNumberAndNumberOfImages(int num, int total)
@@ -173,8 +173,8 @@ void overlayInfo::generatePixmap()
     QPen rect2Pen(QColor::fromRgb(0, 0, 0, 0));
     rect2Pen.setWidth(0);
 
-    QPixmap infoLogo(":/images/img/Button-info-256.png");
-    infoLogo = infoLogo.scaledToHeight(int(this->m_paintWidget->width() * 0.06), Qt::SmoothTransformation);
+    QPixmap infoLogo(":/images/img/info-logo.png");
+    infoLogo = infoLogo.scaledToHeight(int(this->m_paintWidget->width() * 0.045), Qt::SmoothTransformation);
 
     QString imageNumber = tr("%1/%2").arg(this->imageNumber).arg(this->numTotalImages);
     QFont fontNumber(QString("Helvetica"), int(rect2Height*0.18));
@@ -230,7 +230,7 @@ void overlayInfo::generatePixmap()
     p.setPen(rect2Pen);
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, radius2, radius2);
-    p.drawPixmap(rectPosX + 2*borderwidth, int(rectPosY - borderwidth*0.5), infoLogo);
+    p.drawPixmap(rectPosX + 2*borderwidth, int(rectPosY - borderwidth *0.75), infoLogo);
     p.setPen(textPen);
     p.setFont(fontNumber);
     p.drawText(rectImageNumber, Qt::AlignLeft | Qt::AlignVCenter, imageNumber);
@@ -268,6 +268,6 @@ void overlayInfo::paint(QPaintDevice * device)
     p.setPen(QPen(QColor(0, 0, 0)));
     p.setBrush(QBrush(QColor(0,0,0)));
     p.setOpacity(this->m_currentBlendValue);
-    p.drawPixmap(0, fadeHeight * (1 - this->m_currentBlendValue), device->width(), device->height(), this->m_overlay);
+    p.drawPixmap(0, fadeHeight * (0.15 - 0.15 * this->m_currentBlendValue), device->width(), device->height(), this->m_overlay);
     p.end();
 }
