@@ -95,6 +95,11 @@ QString SettingsDialog::getLanguage()
         return QString("en");
 }
 
+bool SettingsDialog::getMouseControl()
+{
+    return ui->checkBox_mouseControl->isChecked();
+}
+
 void SettingsDialog::updateLanguage()
 {
     this->languageChangeSignalOff = true;
@@ -134,6 +139,7 @@ void SettingsDialog::loadSettings()
     }
 
     ui->comboBox_language->setCurrentIndex(languageID);
+    ui->checkBox_mouseControl->setChecked(settings.value("mouseControl").toBool());
 }
 
 void SettingsDialog::saveSettings()
@@ -145,6 +151,7 @@ void SettingsDialog::saveSettings()
     settings.setValue("sortOrder", QVariant(ui->comboBox_sort->currentIndex()));
     settings.setValue("scaleType", QVariant(ui->comboBox_scaling->currentIndex()));
     settings.setValue("languageID", QVariant(ui->comboBox_language->currentIndex()));
+    settings.setValue("mouseControl", QVariant(ui->checkBox_mouseControl->isChecked()));
 }
 
 void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)

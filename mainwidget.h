@@ -135,6 +135,8 @@ private:
     nextTask current_task;
     bool imagesLoaded;
 
+    bool mouseControl;
+
     QList<QFileInfo> current_directory_list;
     int current_position;
 

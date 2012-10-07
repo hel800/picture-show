@@ -9,36 +9,54 @@
         <translation>picture-view</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="179"/>
+        <location filename="mainwidget.cpp" line="182"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="189"/>
+        <location filename="mainwidget.cpp" line="192"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="189"/>
+        <location filename="mainwidget.cpp" line="192"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="224"/>
-        <location filename="mainwidget.cpp" line="255"/>
-        <location filename="mainwidget.cpp" line="270"/>
+        <location filename="mainwidget.cpp" line="227"/>
+        <location filename="mainwidget.cpp" line="259"/>
+        <location filename="mainwidget.cpp" line="274"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="229"/>
+        <location filename="mainwidget.cpp" line="233"/>
+        <location filename="mainwidget.cpp" line="353"/>
+        <location filename="mainwidget.cpp" line="384"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="229"/>
+        <location filename="mainwidget.cpp" line="233"/>
+        <source>Das Bild &quot;%1&quot; konnte nicht geladen werden!</source>
+        <translation>The picture \&quot;%1\&quot; could not be loaded!</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="353"/>
+        <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
+ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
+        <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="384"/>
+        <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
+Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
+        <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
+    </message>
+    <message>
         <source>Das Bild %1 konnte nicht geladen werden!</source>
-        <translation>The picture %1 could not be loaded!</translation>
+        <translation type="obsolete">The picture %1 could not be loaded!</translation>
     </message>
 </context>
 <context>
@@ -48,72 +66,92 @@
         <translation type="obsolete">picture-show options</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="14"/>
+        <location filename="settingsdialog.ui" line="20"/>
         <source>picture show - Bilder öffnen und Einstellungen</source>
         <translation>picture-show - open images and options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="44"/>
+        <location filename="settingsdialog.ui" line="58"/>
+        <source>Sonstige Optionen</source>
+        <translation>Miscellaneous options</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="100"/>
+        <source>Maussteuerung aktivieren: </source>
+        <translation>Mouse control enabled: </translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="141"/>
         <source>Durchsuchen...</source>
         <translation>Browse...</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="92"/>
+        <location filename="settingsdialog.ui" line="151"/>
+        <source>Presentation Optionen</source>
+        <translation>Presentation options</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="214"/>
         <source>Sortierung: </source>
         <translation>Sort by:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="103"/>
+        <location filename="settingsdialog.ui" line="225"/>
         <source>nach Dateiname</source>
         <translation>filename</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="108"/>
+        <location filename="settingsdialog.ui" line="230"/>
         <source>nach Erstellungsdatum</source>
         <translation>date of origin</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="116"/>
+        <location filename="settingsdialog.ui" line="301"/>
+        <source>&lt;b&gt;F1 oder &apos;H&apos; drücken für Hilfe im Presentationsmodus.&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/b&gt;</translation>
+    </message>
+    <message utf8="true">
+        <location filename="settingsdialog.ui" line="200"/>
         <source>Übergangszeit: </source>
         <translation>Fading time: </translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="127"/>
+        <location filename="settingsdialog.ui" line="242"/>
         <source>0,5 Sekunden</source>
         <translation>0.5 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="132"/>
+        <location filename="settingsdialog.ui" line="247"/>
         <source>1 Sekunde</source>
         <translation>1 second</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="137"/>
+        <location filename="settingsdialog.ui" line="252"/>
         <source>2 Sekunden</source>
         <translation>2 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="142"/>
+        <location filename="settingsdialog.ui" line="257"/>
         <source>3 Sekunden</source>
         <translation>3 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="150"/>
+        <location filename="settingsdialog.ui" line="207"/>
         <source>Skalierung: </source>
         <translation>Scale:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="158"/>
+        <location filename="settingsdialog.ui" line="266"/>
         <source>ganzes Bild</source>
         <translation>whole image</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="163"/>
+        <location filename="settingsdialog.ui" line="271"/>
         <source>Bildschirm füllen</source>
         <translation>whole screen</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="171"/>
+        <location filename="settingsdialog.ui" line="291"/>
         <source>Übergangseffekt: </source>
         <translation>Fading effect:</translation>
     </message>
@@ -133,27 +171,26 @@
         <translation>slide</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="200"/>
+        <location filename="settingsdialog.ui" line="73"/>
         <source>Sprache: </source>
         <translation>Language:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="208"/>
+        <location filename="settingsdialog.ui" line="87"/>
         <source>Deutsch</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="213"/>
+        <location filename="settingsdialog.ui" line="92"/>
         <source>English</source>
         <translation>English</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="224"/>
         <source>F1 oder &apos;H&apos; drücken für Hilfe im Presentationsmodus.</source>
-        <translation>Press F1 or &apos;h&apos; for help in presentation mode.</translation>
+        <translation type="obsolete">Press F1 or &apos;h&apos; for help in presentation mode.</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="109"/>
+        <location filename="settingsdialog.cpp" line="114"/>
         <source>Open Directory</source>
         <translation>Open directory</translation>
     </message>

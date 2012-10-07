@@ -49,6 +49,7 @@ public:
     Sorting getDirectorySorting();
     ScaleType getScaleType();
     QString getLanguage();
+    bool getMouseControl();
 
     void updateLanguage();
 

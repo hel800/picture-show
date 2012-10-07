@@ -87,6 +87,8 @@ MainWidget::MainWidget(QWidget *parent) :
     this->load_img = new loadImage();
     this->load_img_next = new loadImage();
 
+    this->mouseControl = false;
+
     connect(this->load_img_prev, SIGNAL(finished()), this, SLOT(loadImagePrevFinished()));
     connect(this->load_img, SIGNAL(finished()), this, SLOT(loadImageFinished()));
     connect(this->load_img_next, SIGNAL(finished()), this, SLOT(loadImageNextFinished()));
@@ -150,6 +152,7 @@ void MainWidget::initialize()
     this->effectEngine->setScaleTypeTo(this->settingsDial->getScaleType());
     this->current_blendType = this->settingsDial->getBlendType();
     this->current_scaleType = this->settingsDial->getScaleType();
+    this->mouseControl = this->settingsDial->getMouseControl();
 
 //    qApp->removeTranslator(&translator);
 //    if (this->settingsDial->getLanguage() != "de")
@@ -226,7 +229,8 @@ void MainWidget::loadImageFinished()
 
     if (this->img.isNull())
     {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das Bild %1 konnte nicht geladen werden!").arg(this->current_directory_list.at(this->current_position).absoluteFilePath()));
+        this->automaticForward->stop();
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Bild \"%1\" konnte nicht geladen werden!").arg(this->current_directory_list.at(this->current_position).fileName()));
         this->settingsDial->show();
     }
     else
@@ -343,6 +347,14 @@ void MainWidget::advanceImages(bool forward, bool hard)
     {
         if (this->current_position > 0)
         {
+            if (this->img_prev.isNull())
+            {
+                this->automaticForward->stop();
+                QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\n Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
+                this->settingsDial->show();
+                return;
+            }
+
             this->current_position--;
 
             this->effectEngine->blendImages(this->img, this->img_prev, false);
@@ -366,6 +378,14 @@ void MainWidget::advanceImages(bool forward, bool hard)
     {
         if (this->current_position < this->current_directory_list.size()-1)
         {
+            if (this->img_next.isNull())
+            {
+                this->automaticForward->stop();
+                QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\nDie Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
+                this->settingsDial->show();
+                return;
+            }
+
             this->current_position++;
 
             this->effectEngine->blendImages(this->img, this->img_next);
@@ -764,6 +784,9 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
 
 void MainWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (!this->mouseControl)
+        return;
+
     if (event->button() == Qt::LeftButton)
         this->advanceImages(false);
 
