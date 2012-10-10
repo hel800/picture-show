@@ -31,6 +31,7 @@ MainWidget::MainWidget(QWidget *parent) :
     this->effectEngine = new animation(this);
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(restoreDisplayState()));
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(processQueuedCommands()));
+    connect(this->effectEngine, SIGNAL(textBarFadeOutFinished()), this, SLOT(processQueuedCommands()));
 
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
@@ -96,15 +97,37 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(this->load_directory, SIGNAL(loadDirectoryFinished(bool)), this, SLOT(directoryLoadFinished(bool)));
 
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "Picture Show");
+
+    QDesktopWidget * desktop = QApplication::desktop();
+    QSize mainW_size = settings.value("MainWindow_size", QSize(800, 600)).toSize();
+    QPoint mainW_pos = settings.value("MainWindow_pos", QPoint(200, 200)).toPoint();
+
+    // Move it to the saved location, then check if it is on a visible screen
+    this->resize(mainW_size);
+    this->move(mainW_pos);
+
+    // MainWidget is not visible on a screen. That means virtual screens from previous
+    // session are no longer available. The widget has to be moved back to the primary screen
+    if (desktop->screenNumber(this) == -1)
+    {
+        QSize primaryScreen_size = desktop->availableGeometry(desktop->primaryScreen()).size();
+        if (primaryScreen_size.width() < mainW_size.width())
+            mainW_size.setWidth(primaryScreen_size.width());
+
+        if (primaryScreen_size.height() < mainW_size.height())
+            mainW_size.setHeight(primaryScreen_size.height());
+
+        mainW_pos.setX((primaryScreen_size.width() - mainW_size.width()) / 2);
+        mainW_pos.setY((primaryScreen_size.height() - mainW_size.height()) / 2);
+    }
+
+    this->resize(mainW_size);
+    this->move(mainW_pos);
+
     if (settings.value("fullscreenState", QVariant(false)).toBool())
     {
         this->setWindowState(Qt::WindowFullScreen);
         this->setCursor(Qt::BlankCursor);
-    }
-    else
-    {
-        this->resize(settings.value("MainWindow_size", QSize(800, 600)).toSize());
-        this->move(settings.value("MainWindow_pos", QPoint(200, 200)).toPoint());
     }
 
     this->settingsDial->show();
@@ -355,6 +378,32 @@ void MainWidget::advanceImages(bool forward, bool hard)
                 return;
             }
 
+            // CHECK if dislay_info or a textbar is blend in and blend it out first
+            if (this->displayState == SHOW_INFO || this->displayState == SHOW_HELP || this->effectEngine->isShowingTextbar())
+            {
+                this->m_queuedComm = PREV_IMG;
+                if (!hard)
+                    this->m_queuedBlendComm = this->current_blendType;
+                else
+                    this->m_queuedBlendComm = HARD;
+
+                if (this->displayState == SHOW_INFO)
+                {
+                    this->m_displayInfo_active = true;
+                    this->displayInfo->blendOut();
+                }
+                else if (this->displayState == SHOW_HELP)
+                {
+                    this->displayHelp->blendOut();
+                }
+                else
+                {
+                    this->effectEngine->escPressed();
+                }
+
+                return;
+            }
+
             this->current_position--;
 
             this->effectEngine->blendImages(this->img, this->img_prev, false);
@@ -383,6 +432,32 @@ void MainWidget::advanceImages(bool forward, bool hard)
                 this->automaticForward->stop();
                 QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\nDie Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
                 this->settingsDial->show();
+                return;
+            }
+
+            // CHECK if dislay_info or a textbar is blend in and blend it out first
+            if (this->displayState == SHOW_INFO || this->displayState == SHOW_HELP || this->effectEngine->isShowingTextbar())
+            {
+                this->m_queuedComm = NEXT_IMG;
+                if (!hard)
+                    this->m_queuedBlendComm = this->current_blendType;
+                else
+                    this->m_queuedBlendComm = HARD;
+
+                if (this->displayState == SHOW_INFO)
+                {
+                    this->m_displayInfo_active = true;
+                    this->displayInfo->blendOut();
+                }
+                else if (this->displayState == SHOW_HELP)
+                {
+                    this->displayHelp->blendOut();
+                }
+                else
+                {
+                    this->effectEngine->escPressed();
+                }
+
                 return;
             }
 
@@ -437,7 +512,7 @@ void MainWidget::processQueuedCommands()
     {
         if (this->m_queuedComm == NEXT_IMG)
             this->advanceImages(true, this->m_queuedBlendComm == HARD);
-        else
+        else if (this->m_queuedComm == PREV_IMG)
             this->advanceImages(false, this->m_queuedBlendComm == HARD);
 
         this->m_queuedComm = EMPTY;
@@ -711,36 +786,19 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
         switch (event->key())
         {
         case Qt::Key_Left:
-            if ((this->current_position - 1) >= 0)
-                this->displayInfo->blendOut();
-            this->m_displayInfo_active = true;
-            this->m_queuedComm = PREV_IMG;
-            this->m_queuedBlendComm = this->current_blendType;
+            this->advanceImages(false);
         break;
         case Qt::Key_Right:
-            if ((this->current_position + 1) < this->current_directory_list.size())
-                this->displayInfo->blendOut();
-            this->m_displayInfo_active = true;
-            this->m_queuedComm = NEXT_IMG;
-            this->m_queuedBlendComm = this->current_blendType;
+            this->advanceImages();
         break;
         case Qt::Key_PageUp:
-            if ((this->current_position - 1) >= 0)
-                this->displayInfo->blendOut();
-            this->m_displayInfo_active = true;
-            this->m_queuedComm = PREV_IMG;
-            this->m_queuedBlendComm = HARD;
+            this->advanceImages(false, true);
         break;
         case Qt::Key_PageDown:
-            if ((this->current_position + 1) < this->current_directory_list.size())
-                this->displayInfo->blendOut();
-            this->m_displayInfo_active = true;
-            this->m_queuedComm = NEXT_IMG;
-            this->m_queuedBlendComm = HARD;
+            this->advanceImages(true, true);
         break;
         }
     }
-
 
     switch (event->key())
     {

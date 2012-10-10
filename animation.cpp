@@ -410,7 +410,10 @@ void animation::enterPressed()
 void animation::escPressed()
 {
     if (this->m_textbarVisible)
+    {
+        this->m_isAskingExit = false;
         this->blendTextbar(this->m_textbarText);
+    }
 }
 
 void animation::textBarReset()
@@ -622,6 +625,8 @@ void animation::paintWaiting()
 
 void animation::paintTextbar()
 {
+    bool emitFadeOutFinished = false;
+
     if (this->m_current_textbar_blend >= 1.0 || this->m_current_textbar_blend < 0.0)
     {
         this->m_textbarTimer->stop();
@@ -629,14 +634,12 @@ void animation::paintTextbar()
         if (this->m_current_textbar_blend >= 1.0)
         {
             this->m_current_textbar_blend = 0.999;
-
-//            this->m_textWaitTimer->setSingleShot(true);
-//            this->m_textWaitTimer->start(2500);
         }
         // wieder ausgeblendet
         else
         {
             this->m_current_textbar_blend = 0.0;
+            emitFadeOutFinished = true;
         }
 
         this->m_textbarVisible = !this->m_textbarVisible;
@@ -664,6 +667,10 @@ void animation::paintTextbar()
         else
             this->m_current_textbar_blend += 0.1;
     }
+
+    if (emitFadeOutFinished)
+        emit textBarFadeOutFinished();
+
 }
 
 void animation::textBarOff()

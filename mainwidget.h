@@ -34,6 +34,7 @@ February 2012
 #include <QList>
 #include <QPair>
 #include <QTranslator>
+#include <QDesktopWidget>
 
 #include <QDir>
 #include <QFileInfo>

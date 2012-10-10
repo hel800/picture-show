@@ -102,6 +102,7 @@ signals:
     void automaticTimer(int secs);
     void jumptoImage(int number);
     void finishedBlending();
+    void textBarFadeOutFinished();
 
 private slots:
     void paint();
