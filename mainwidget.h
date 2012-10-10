@@ -70,7 +70,9 @@ public:
     enum queuedCommand {
         EMPTY,
         PREV_IMG,
-        NEXT_IMG
+        NEXT_IMG,
+        INFO_BAR,
+        JUMP_TO
     };
 
     enum state {

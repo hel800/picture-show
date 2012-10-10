@@ -57,6 +57,10 @@ void loadDirectory::run()
 
     QStringList filters;
     filters << "*.jpeg" << "*.jpg" << "*.JPG" << "*.JPEG";
+    filters << "*.bmp" << "*.BMP";
+    filters << "*.gif" << "*.GIF";
+    filters << "*.png" << "*.PNG";
+    filters << "*.tif" << "*.tiff" << "*.TIF" << "*.TIFF";
 
     QDir current_dir = QDir(this->m_path);
     if (!current_dir.exists())

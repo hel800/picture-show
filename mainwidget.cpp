@@ -32,6 +32,7 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(restoreDisplayState()));
     connect(this->effectEngine, SIGNAL(finishedBlending()), this, SLOT(processQueuedCommands()));
     connect(this->effectEngine, SIGNAL(textBarFadeOutFinished()), this, SLOT(processQueuedCommands()));
+    connect(this->effectEngine, SIGNAL(textBarFadeOutFinished()), this, SLOT(restoreDisplayState()));
 
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
@@ -511,9 +512,26 @@ void MainWidget::processQueuedCommands()
     if (this->m_queuedComm != EMPTY && this->current_task == NONE && !this->effectEngine->isBusy())
     {
         if (this->m_queuedComm == NEXT_IMG)
+        {
             this->advanceImages(true, this->m_queuedBlendComm == HARD);
+        }
         else if (this->m_queuedComm == PREV_IMG)
+        {
             this->advanceImages(false, this->m_queuedBlendComm == HARD);
+        }
+        else if (this->m_queuedComm == INFO_BAR)
+        {
+            if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
+            {
+                this->displayState = SHOW_INFO;
+                this->effectEngine->textBarReset();
+            }
+        }
+        else if (this->m_queuedComm == JUMP_TO)
+        {
+            this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
+            this->displayState = SHOW_TEXTBAR;
+        }
 
         this->m_queuedComm = EMPTY;
     }
@@ -678,10 +696,18 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
             this->displayInfo->setCurrentImageResolution(this->current_list_imageSizes.value(this->current_position, QString()));
 
-            if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
+            if (this->effectEngine->isShowingTextbar())
             {
-                this->displayState = SHOW_INFO;
-                this->effectEngine->textBarReset();
+                this->effectEngine->escPressed();
+                this->m_queuedComm = INFO_BAR;
+            }
+            else
+            {
+                if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
+                {
+                    this->displayState = SHOW_INFO;
+                    this->effectEngine->textBarReset();
+                }
             }
         }
     break;
@@ -823,9 +849,10 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
         if (this->effectEngine->isDoingNothing())
         {
             this->automaticForward->stop();
-            this->displayState = SHOW_TEXTBAR;
             this->m_displayInfo_active = true;
-            this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
+
+            this->displayInfo->blendOut();
+            this->m_queuedComm = JUMP_TO;
         }
     break;
     case Qt::Key_O:
