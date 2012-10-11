@@ -36,6 +36,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->displayHelp = new overlayHelp(this);
     connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
+    connect(this->displayHelp, SIGNAL(blendOutFinished()), this, SLOT(restoreDisplayState()));
 
     this->displayInfo = new overlayInfo(this);
     connect(this->displayInfo, SIGNAL(blendOutFinished()), this, SLOT(overlayBlendOutFinished()));
@@ -163,6 +164,9 @@ MainWidget::~MainWidget()
 
 void MainWidget::initialize()
 {
+    if (!QDir(this->settingsDial->getCurrentDirectory()).exists())
+        return;
+
     this->current_task = START;
 
     this->effectEngine->reset();
@@ -203,20 +207,24 @@ void MainWidget::directoryLoadFinished(bool success)
 
     if (!success)
     {
-        QMessageBox::warning(this, tr("Fehler beim laden des Ordners"), this->load_directory->getErrorMsg());
         this->effectEngine->paintStartScreen();
         this->current_task = NONE;
         this->imagesLoaded = false;
+
+        QMessageBox::warning(this, tr("Fehler beim laden des Ordners"), this->load_directory->getErrorMsg());
+
         this->settingsDial->show();
         return;
     }
 
     if (this->current_directory_list.size() == 0)
     {
-        QMessageBox::warning(this, tr("Keine Bilder"), tr("In dem angegebenen Ordner wurden keine Bilder gefunden!"));
         this->effectEngine->paintStartScreen();
         this->current_task = NONE;
         this->imagesLoaded = false;
+
+        QMessageBox::warning(this, tr("Keine Bilder"), tr("In dem angegebenen Ordner wurden keine Bilder gefunden!"));
+
         this->settingsDial->show();
         return;
     }
@@ -532,6 +540,30 @@ void MainWidget::processQueuedCommands()
             this->effectEngine->startJumptoBar(this->current_position+1, this->current_directory_list.size());
             this->displayState = SHOW_TEXTBAR;
         }
+        else if (this->m_queuedComm == TIMER)
+        {
+            if (this->automaticForward->isActive())
+            {
+                this->automaticForward->stop();
+                this->effectEngine->stopTimerBar();
+            }
+            else if (this->imagesLoaded)
+            {
+                this->effectEngine->startTimerBar(int(this->automaticForwardInverval/1000));
+            }
+        }
+        else if (this->m_queuedComm == HELP_WINDOW)
+        {
+            if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
+            {
+                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+                settings.setValue("firstStart", QVariant(false));
+                this->effectEngine->setFirstStart(false);
+                this->displayState = SHOW_HELP;
+                this->automaticForward->stop();
+                this->effectEngine->textBarReset();
+            }
+        }
 
         this->m_queuedComm = EMPTY;
     }
@@ -539,6 +571,9 @@ void MainWidget::processQueuedCommands()
 
 void MainWidget::restoreDisplayState()
 {
+    if (this->effectEngine->isBusy())
+        return;
+
     if (this->displayState == SHOW_HELP)
         this->displayHelp->blendIn(this->effectEngine->currentDisplay());
 
@@ -610,26 +645,61 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
     if (this->current_task == START && event->key() == Qt::Key_Escape)
         this->close();
 
+    if (this->imagesLoaded)
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            this->advanceImages(false);
+        break;
+        case Qt::Key_Right:
+            this->advanceImages();
+        break;
+        case Qt::Key_PageUp:
+            this->advanceImages(false, true);
+        break;
+        case Qt::Key_PageDown:
+            this->advanceImages(true, true);
+        break;
+        }
+    }
+
+    switch (event->key())
+    {
+        case Qt::Key_O:
+        if (this->effectEngine->isBusy() && this->current_task == NONE)
+            return;
+
+        if (this->settingsDial->isHidden())
+        {
+            this->automaticForward->stop();
+            this->settingsDial->show();
+        }
+        else
+            this->settingsDial->hide();
+        break;
+        case Qt::Key_F:
+        if (this->current_task == NONE)
+        {
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
+                this->setCursor(Qt::BlankCursor);
+            else
+                this->unsetCursor();
+        }
+        break;
+    }
+
+    // KEY bindings in HELP and INFO mode
     if (this->displayState == SHOW_HELP)
         return this->keyPressEvent_showingHelp( event );
     else if (this->displayState == SHOW_INFO)
         return this->keyPressEvent_showingInfo( event );
 
+
     // KEY bindings in NORMAL display mode
     switch (event->key())
     {
-    case Qt::Key_Left:
-        this->advanceImages(false);
-    break;
-    case Qt::Key_Right:
-        this->advanceImages();
-    break;
-    case Qt::Key_PageUp:
-        this->advanceImages(false, true);
-    break;
-    case Qt::Key_PageDown:
-        this->advanceImages(true, true);
-    break;
     case Qt::Key_Escape:
         if (this->effectEngine->exitRequested())
             this->close();
@@ -638,19 +708,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         else
             this->effectEngine->startExitApp();
     break;
-    case Qt::Key_O:
-        if (this->effectEngine->isBusy() && this->current_task == NONE)
-            return;
 
-        if (this->settingsDial->isHidden())
-        {
-            this->settingsDial->show();
-        }
-        else
-        {
-            this->settingsDial->hide();
-        }
-    break;
     case Qt::Key_Space:
         if (this->automaticForward->isActive() && !this->effectEngine->isBusy())
         {
@@ -726,16 +784,6 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             }
         }
     break;
-    case Qt::Key_F:
-        if (this->current_task == NONE)
-        {
-            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
-            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
-                this->setCursor(Qt::BlankCursor);
-            else
-                this->unsetCursor();
-        }
-    break;
     }
 }
 
@@ -743,33 +791,6 @@ void MainWidget::keyPressEvent_showingHelp ( QKeyEvent * event )
 {
     if (!this->effectEngine->isDoingNothing())
         return;
-
-    if (this->imagesLoaded)
-    {
-        switch (event->key())
-        {
-        case Qt::Key_Left:
-            this->displayHelp->blendOut();
-            this->m_queuedComm = PREV_IMG;
-            this->m_queuedBlendComm = this->current_blendType;
-        break;
-        case Qt::Key_Right:
-            this->displayHelp->blendOut();
-            this->m_queuedComm = NEXT_IMG;
-            this->m_queuedBlendComm = this->current_blendType;
-        break;
-        case Qt::Key_PageUp:
-            this->displayHelp->blendOut();
-            this->m_queuedComm = PREV_IMG;
-            this->m_queuedBlendComm = HARD;
-        break;
-        case Qt::Key_PageDown:
-            this->displayHelp->blendOut();
-            this->m_queuedComm = NEXT_IMG;
-            this->m_queuedBlendComm = HARD;
-            break;
-        }
-    }
 
     switch (event->key())
     {
@@ -780,25 +801,6 @@ void MainWidget::keyPressEvent_showingHelp ( QKeyEvent * event )
     case Qt::Key_Escape:
         this->displayHelp->blendOut();
     break;
-    case Qt::Key_F:
-        if (this->current_task == NONE)
-        {
-            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
-            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
-                this->setCursor(Qt::BlankCursor);
-            else
-                this->unsetCursor();
-        }
-    break;
-    case Qt::Key_O:
-        if (this->effectEngine->isBusy())
-            return;
-
-        if (this->settingsDial->isHidden())
-            this->settingsDial->show();
-        else
-            this->settingsDial->hide();
-    break;
     }
 }
 
@@ -806,25 +808,6 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
 {
     if (!this->effectEngine->isDoingNothing())
         return;
-
-    if (this->imagesLoaded)
-    {
-        switch (event->key())
-        {
-        case Qt::Key_Left:
-            this->advanceImages(false);
-        break;
-        case Qt::Key_Right:
-            this->advanceImages();
-        break;
-        case Qt::Key_PageUp:
-            this->advanceImages(false, true);
-        break;
-        case Qt::Key_PageDown:
-            this->advanceImages(true, true);
-        break;
-        }
-    }
 
     switch (event->key())
     {
@@ -835,34 +818,26 @@ void MainWidget::keyPressEvent_showingInfo ( QKeyEvent * event )
         this->displayInfo->blendOut();
         this->m_displayInfo_active = false;
     break;
-    case Qt::Key_F:
-        if (this->current_task == NONE)
-        {
-            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
-            if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
-                this->setCursor(Qt::BlankCursor);
-            else
-                this->unsetCursor();
-        }
+    case Qt::Key_Space:
+        this->m_displayInfo_active = true;
+
+        this->displayInfo->blendOut();
+        this->m_queuedComm = TIMER;
     break;
     case Qt::Key_J:
-        if (this->effectEngine->isDoingNothing())
-        {
-            this->automaticForward->stop();
-            this->m_displayInfo_active = true;
+        this->automaticForward->stop();
+        this->m_displayInfo_active = true;
 
-            this->displayInfo->blendOut();
-            this->m_queuedComm = JUMP_TO;
-        }
+        this->displayInfo->blendOut();
+        this->m_queuedComm = JUMP_TO;
     break;
-    case Qt::Key_O:
-        if (this->effectEngine->isBusy())
-            return;
+    case Qt::Key_H:
+    case Qt::Key_F1:
+        this->automaticForward->stop();
+        this->m_displayInfo_active = true;
 
-        if (this->settingsDial->isHidden())
-            this->settingsDial->show();
-        else
-            this->settingsDial->hide();
+        this->displayInfo->blendOut();
+        this->m_queuedComm = HELP_WINDOW;
     break;
     }
 }

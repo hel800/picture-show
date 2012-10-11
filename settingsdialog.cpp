@@ -67,6 +67,8 @@ BlendType SettingsDialog::getBlendType()
         return FADE;
     else if (ui->comboBox_effect->currentIndex() == 2)
         return SLIDE;
+    else if (ui->comboBox_effect->currentIndex() == 3)
+        return SLIDE_FADE;
     else
         return HARD;
 }

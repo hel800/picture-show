@@ -180,7 +180,9 @@ QStringList overlayHelp::helpItems()
     items << "F" << tr("Wechselt zwischen Fullscreen- und Fenstermodus hin und her");
     items << "" << tr("");
     items << tr("<Pfeil rechts>") << tr("Zum nächsten Bild blenden");
+    items << tr("<Maus rechts>") << tr("Zum nächsten Bild blenden (wenn aktiviert)");
     items << tr("<Pfeil links>") << tr("Zum vorherigen Bild blenden");
+    items << tr("<Maus links>") << tr("Zum vorherigen Bild blenden (wenn aktiviert)");
     items << tr("<Bild ab>") << tr("Springt zum nächsten Bild");
     items << tr("<Bild auf>") << tr("Springt zum vorherigen Bild");
     items << "J" << tr("Jump-to Dialog zum springen zu einem Bild, Eingabe der Bildnummer gefolgt von <Enter>");

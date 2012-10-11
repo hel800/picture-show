@@ -34,6 +34,7 @@ enum ScaleType {
 enum BlendType {
     FADE,
     SLIDE,
+    SLIDE_FADE,
     HARD
 };
 

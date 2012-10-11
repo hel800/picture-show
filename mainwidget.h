@@ -72,7 +72,9 @@ public:
         PREV_IMG,
         NEXT_IMG,
         INFO_BAR,
-        JUMP_TO
+        JUMP_TO,
+        TIMER,
+        HELP_WINDOW
     };
 
     enum state {

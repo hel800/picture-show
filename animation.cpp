@@ -524,6 +524,8 @@ void animation::paint()
         this->paintFADE();
     else if (this->m_bType == SLIDE)
         this->paintSLIDE();
+    else if (this->m_bType == SLIDE_FADE)
+        this->paintSLIDE_FADE();
     else
         this->paintHARD();
 }
@@ -558,8 +560,6 @@ void animation::paintSLIDE()
     QPainter p;
     p.begin(this->m_paintWidget);
 
-//    int fromWidth = this->m_blendFrom.size().width();
-    int toWidth = this->m_blendTo.size().width();
     int screenWidth = this->m_paintWidget->width();
 
     double t = (this->m_current_blend * 16.0) - 8.0;
@@ -568,12 +568,7 @@ void animation::paintSLIDE()
     double sig_min = 1 / (1 + exp(8.0));
     double sig_new = (sig - sig_min) * (1/(sig_max - sig_min));
 
-//    qDebug(QString::number(sig).toStdString().c_str());
-
     int current_slide = int((screenWidth * sig_new) + .5);
-    int extra = screenWidth - toWidth;
-    if (extra < 0)
-        extra = 0;
 
     if (this->m_nextBlendForward)
     {
@@ -585,6 +580,54 @@ void animation::paintSLIDE()
         this->drawPixmap(&p, this->m_blendFrom, 1. - sig_new, true, current_slide);
         this->drawPixmap(&p, this->m_blendTo, sig_new, false, (-1 * screenWidth) + current_slide);
     }
+
+    p.end();
+
+    this->m_current_blend += this->m_fadeSpeed;
+}
+
+void animation::paintSLIDE_FADE()
+{
+    QPainter p;
+    p.begin(this->m_paintWidget);
+
+    int screenWidth = this->m_paintWidget->width();
+    double indent = 0.1;
+    int offset1 = 0;
+    int offset2 = 0;
+
+    double t = (this->m_current_blend * 8.0) - 4.0;
+    double sig = 1 / (1 + exp(-t));
+    double sig_max = 1 / (1 + exp(-4.0));
+    double sig_min = 1 / (1 + exp(4.0));
+    double sig_new = (sig - sig_min) * (1/(sig_max - sig_min));
+
+    if (this->m_nextBlendForward)
+    {
+        offset1 = int((screenWidth * indent) * sig_new) * -1;
+        offset2 = int((screenWidth * indent) * (1.0 - sig_new));
+    }
+    else
+    {
+        offset1 = int((screenWidth * indent) * sig_new);
+        offset2 = int((screenWidth * indent) * (1.0 - sig_new)) * -1;
+    }
+
+    double blend1 = 1.0 - (this->m_current_blend * 1.5);
+    if (blend1 < 0.0)
+        blend1 = 0.0;
+
+    if (blend1 > 0.0)
+        this->drawPixmap(&p, this->m_blendFrom, blend1, true, offset1);
+
+    double blend2 = (this->m_current_blend - 0.5) * (this->m_current_blend * 2.0);
+    if (blend1 < 0.0)
+        blend1 = 0.0;
+
+    if (blend2 > 0.0 && blend1 <= 0.0)
+        this->drawPixmap(&p, this->m_blendTo, blend2, true, offset2);
+    else if (blend2 > 0.0)
+        this->drawPixmap(&p, this->m_blendTo, blend2, false, offset2);
 
     p.end();
 

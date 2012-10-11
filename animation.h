@@ -115,6 +115,7 @@ private:
     void paintFADE();
     void paintHARD();
     void paintSLIDE();
+    void paintSLIDE_FADE();
 
     void blendTextbar(const QString &text);
     void setTextbarText(const QString &text);
@@ -122,7 +123,6 @@ private:
     void drawStartScreen(QPainter * p);
     void drawPixmap(QPainter * p, QPixmap & pix, double opacity = 1.0, bool background = true, int offset = 0);
     void drawTextbar(QPainter * p, IconType icon, double opacity = 1.0);
-
 
     QWidget * m_paintWidget;
     QColor backgroundColor;
