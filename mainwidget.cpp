@@ -44,13 +44,16 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->setupUi(this);
 
     this->settingsDial = new SettingsDialog(this);
-    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));    
+    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));
+    connect(this->settingsDial, SIGNAL(applyClicked()), this, SLOT(applyNewOptions()));
 
     if (this->settingsDial->getLanguage() != "de")
-        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
+    {
+        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage(), "."))
             qApp->installTranslator(&translator);
-    this->settingsDial->updateLanguage();
+    }
 
+    this->settingsDial->updateLanguage();
 
     connect(this->settingsDial, SIGNAL(languageChanged(QString)), this, SLOT(changeLanguage(QString)));
 
@@ -104,6 +107,9 @@ MainWidget::MainWidget(QWidget *parent) :
     QSize mainW_size = settings.value("MainWindow_size", QSize(800, 600)).toSize();
     QPoint mainW_pos = settings.value("MainWindow_pos", QPoint(200, 200)).toPoint();
 
+    this->last_nonFullscreen_size = mainW_size;
+    this->last_nonFullscreen_pos = mainW_pos;
+
     // Move it to the saved location, then check if it is on a visible screen
     this->resize(mainW_size);
     this->move(mainW_pos);
@@ -147,8 +153,17 @@ MainWidget::~MainWidget()
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
     settings.setValue("fullscreenState", QVariant(this->windowState() == Qt::WindowFullScreen));
     settings.setValue("automaticTimerInterval", QVariant(this->automaticForwardInverval));
-    settings.setValue("MainWindow_size", this->size());
-    settings.setValue("MainWindow_pos", this->pos());
+
+    if (this->windowState() != Qt::WindowFullScreen)
+    {
+        settings.setValue("MainWindow_size", this->size());
+        settings.setValue("MainWindow_pos", this->pos());
+    }
+    else
+    {
+        settings.setValue("MainWindow_size", this->last_nonFullscreen_size);
+        settings.setValue("MainWindow_pos", this->last_nonFullscreen_pos);
+    }
 
     delete ui;
 
@@ -182,12 +197,6 @@ void MainWidget::initialize()
     this->current_scaleType = this->settingsDial->getScaleType();
     this->mouseControl = this->settingsDial->getMouseControl();
 
-//    qApp->removeTranslator(&translator);
-//    if (this->settingsDial->getLanguage() != "de")
-//        if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + this->settingsDial->getLanguage()))
-//            qApp->installTranslator(&translator);
-//    this->settingsDial->updateLanguage();
-
     this->img = QPixmap();
     this->img_next = QPixmap();
     this->img_prev = QPixmap();
@@ -197,6 +206,51 @@ void MainWidget::initialize()
     this->load_directory->setDirectory(this->settingsDial->getCurrentDirectory());
     this->load_directory->setSorting(this->settingsDial->getDirectorySorting());
     this->load_directory->start();
+}
+
+void MainWidget::applyNewOptions()
+{
+    if (!this->imagesLoaded)
+        this->initialize();
+
+    if (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting())
+    {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Frage"));
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setText(tr("Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn."));
+        msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um alte Sortierung weiter zu verwenden."));
+
+        QPushButton *yesButton = msgBox.addButton(tr("Ja"), QMessageBox::YesRole);
+        QPushButton *noButton = msgBox.addButton(tr("Nein"), QMessageBox::NoRole);
+        msgBox.setDefaultButton(noButton);
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == dynamic_cast<QAbstractButton*>(yesButton))
+        {
+            this->initialize();
+            return;
+        }
+        else
+        {
+            this->settingsDial->setDirectorySorting(this->load_directory->getSorting());
+        }
+    }
+
+    this->effectEngine->setFadeSteps(this->settingsDial->getCurrentFadeTime());
+    this->effectEngine->setCurrentBlendType(this->settingsDial->getBlendType());
+    this->current_blendType = this->settingsDial->getBlendType();
+    this->mouseControl = this->settingsDial->getMouseControl();
+
+    if (this->current_scaleType != this->settingsDial->getScaleType())
+    {
+        this->current_scaleType = this->settingsDial->getScaleType();
+        this->effectEngine->setScaleTypeTo(this->settingsDial->getScaleType());
+
+        this->effectEngine->paintToWaiting();
+        this->reloadImages();
+    }
 }
 
 void MainWidget::directoryLoadFinished(bool success)
@@ -232,6 +286,8 @@ void MainWidget::directoryLoadFinished(bool success)
     this->current_list_imageSizes.clear();
     this->current_task = RECALC;
 
+    this->settingsDial->addDirectoryToHistory(this->load_directory->getDirectory());
+
     if (this->current_directory_list.size() > 0)
     {
         this->active_recalc_processes++;
@@ -239,7 +295,7 @@ void MainWidget::directoryLoadFinished(bool success)
         this->load_img->start();
     }
 
-    if (this->current_directory_list.size() > 0)
+    if (this->current_directory_list.size() > 1)
     {
         this->active_recalc_processes++;
         this->load_img_next->setTask(this->current_directory_list.at(1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
@@ -382,7 +438,7 @@ void MainWidget::advanceImages(bool forward, bool hard)
             if (this->img_prev.isNull())
             {
                 this->automaticForward->stop();
-                QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\n Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
+                QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\nDie Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
                 this->settingsDial->show();
                 return;
             }
@@ -681,6 +737,12 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         case Qt::Key_F:
         if (this->current_task == NONE)
         {
+            if (this->windowState() != Qt::WindowFullScreen)
+            {
+                this->last_nonFullscreen_size = this->size();
+                this->last_nonFullscreen_pos = this->pos();
+            }
+
             this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
             if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
                 this->setCursor(Qt::BlankCursor);

@@ -43,8 +43,10 @@ public:
     loadDirectory();
 
     void setDirectory(const QString &path);
+    const QString & getDirectory();
     void setDirectoryList(QList<QFileInfo> *list);
     void setSorting(Sorting sortType);
+    Sorting getSorting();
     QString& getErrorMsg();
 
     void run();

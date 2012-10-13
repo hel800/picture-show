@@ -35,6 +35,8 @@ February 2012
 #include <QPair>
 #include <QTranslator>
 #include <QDesktopWidget>
+#include <QAbstractButton>
+#include <QPushButton>
 
 #include <QDir>
 #include <QFileInfo>
@@ -89,6 +91,7 @@ public:
 
 public slots:
     void initialize();
+    void applyNewOptions();
     void directoryLoadFinished(bool success);
     void overlayBlendOutFinished();
     void changeLanguage(QString language_short);
@@ -125,6 +128,8 @@ private:
     SettingsDialog *settingsDial;
 
     state displayState;
+    QSize last_nonFullscreen_size;
+    QPoint last_nonFullscreen_pos;
 
     animation * effectEngine;
     overlayHelp * displayHelp;

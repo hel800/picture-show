@@ -25,6 +25,7 @@ February 2012
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QLineEdit>
 #include <QFileDialog>
 #include <QSettings>
 #include <QHideEvent>
@@ -47,19 +48,25 @@ public:
     double getCurrentFadeTime();
     BlendType getBlendType();
     Sorting getDirectorySorting();
+    void setDirectorySorting(Sorting sort);
     ScaleType getScaleType();
     QString getLanguage();
     bool getMouseControl();
 
     void updateLanguage();
+    void updateHistory();
+
+    void addDirectoryToHistory(const QString & dir);
 
 signals:
     void languageChanged(QString lang);
+    void applyClicked();
     
 private slots:
     void on_pushButton_browse_clicked();
-
     void on_comboBox_language_currentIndexChanged(int index);
+
+    void on_pushButton_deleteHistory_clicked();
 
 private:
     Ui::SettingsDialog *ui;

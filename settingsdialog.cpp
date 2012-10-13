@@ -24,6 +24,8 @@ February 2012
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
+#include <iostream>
+
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SettingsDialog)
@@ -31,9 +33,16 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->setupUi(this);    
     this->setModal(true);
 
+    ui->comboBox_directoryPath->setEditable(true);
+
+    connect(ui->pushButton_apply, SIGNAL(clicked()), this, SIGNAL(applyClicked()));
+    connect(ui->pushButton_apply, SIGNAL(clicked()), this, SLOT(hide()));
+
     this->languageChangeSignalOff = true;
     this->loadSettings();
     this->languageChangeSignalOff = false;
+
+    ui->comboBox_directoryPath->setCurrentIndex(0);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -44,7 +53,7 @@ SettingsDialog::~SettingsDialog()
 
 QString SettingsDialog::getCurrentDirectory()
 {
-    return ui->lineEdit_directory->text();
+    return ui->comboBox_directoryPath->lineEdit()->text();
 }
 
 double SettingsDialog::getCurrentFadeTime()
@@ -81,6 +90,14 @@ Sorting SettingsDialog::getDirectorySorting()
         return FILENAME;
 }
 
+void SettingsDialog::setDirectorySorting(Sorting sort)
+{
+    if (sort == DATE_CREATED)
+        ui->comboBox_sort->setCurrentIndex(1);
+    else
+        ui->comboBox_sort->setCurrentIndex(0);
+}
+
 ScaleType SettingsDialog::getScaleType()
 {
     if (ui->comboBox_scaling->currentIndex() == 0)
@@ -107,22 +124,61 @@ void SettingsDialog::updateLanguage()
     this->languageChangeSignalOff = true;
     this->saveSettings();
     ui->retranslateUi(this);
+    int currentIndex = ui->comboBox_directoryPath->currentIndex();
     this->loadSettings();
+    ui->comboBox_directoryPath->setCurrentIndex(currentIndex);
     this->languageChangeSignalOff = false;
+}
+
+void SettingsDialog::updateHistory()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+    QStringList history = settings.value("historyOfDirectories").toStringList();
+
+    ui->comboBox_directoryPath->clear();
+
+    foreach(QString dir, history)
+        ui->comboBox_directoryPath->addItem(dir);
+}
+
+void SettingsDialog::addDirectoryToHistory(const QString & dir)
+{
+    if (!ui->checkBox_historySave->isChecked())
+        return;
+
+    QString newDir = QString(dir);
+    if (dir.endsWith(QDir::separator()))
+        newDir = dir.left(dir.length()-1);
+
+    QDir directory(newDir);
+
+    if (!directory.isAbsolute() && !directory.exists())
+        return;
+
+    QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+    QStringList history = settings.value("historyOfDirectories").toStringList();
+
+    history.removeAll(newDir);
+    history.prepend(newDir);
+
+    settings.setValue("historyOfDirectories", QVariant(history));
+
+    this->updateHistory();
 }
 
 void SettingsDialog::on_pushButton_browse_clicked()
 {
-    ui->lineEdit_directory->setText(QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                     ui->lineEdit_directory->text(),
-                                                     QFileDialog::ShowDirsOnly
-                                                     | QFileDialog::DontResolveSymlinks));
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Öffne Verzeichnis"),
+                                                          ui->comboBox_directoryPath->lineEdit()->text(),
+                                                          QFileDialog::ShowDirsOnly);
+
+    if (!directory.isEmpty())
+        ui->comboBox_directoryPath->lineEdit()->setText(directory);
 }
 
 void SettingsDialog::loadSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-    ui->lineEdit_directory->setText(settings.value("lastDir", QVariant(QString(""))).toString());
     ui->comboBox_effect->setCurrentIndex(settings.value("effect", QVariant(1)).toInt());
     ui->comboBox_fadeTime->setCurrentIndex(settings.value("fadeTime", QVariant(2)).toInt());
     ui->comboBox_sort->setCurrentIndex(settings.value("sortOrder", QVariant(0)).toInt());
@@ -140,20 +196,27 @@ void SettingsDialog::loadSettings()
             languageID = 1;
     }
 
+    QStringList history = settings.value("historyOfDirectories").toStringList();
+
+    ui->comboBox_directoryPath->clear();
+    foreach(QString dir, history)
+        ui->comboBox_directoryPath->addItem(dir);
+
     ui->comboBox_language->setCurrentIndex(languageID);
-    ui->checkBox_mouseControl->setChecked(settings.value("mouseControl").toBool());
+    ui->checkBox_mouseControl->setChecked(settings.value("mouseControl", QVariant(false)).toBool());
+    ui->checkBox_historySave->setChecked(settings.value("saveHistory", QVariant(true)).toBool());
 }
 
 void SettingsDialog::saveSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-    settings.setValue("lastDir", QVariant(ui->lineEdit_directory->text()));
     settings.setValue("effect", QVariant(ui->comboBox_effect->currentIndex()));
     settings.setValue("fadeTime", QVariant(ui->comboBox_fadeTime->currentIndex()));
     settings.setValue("sortOrder", QVariant(ui->comboBox_sort->currentIndex()));
     settings.setValue("scaleType", QVariant(ui->comboBox_scaling->currentIndex()));
     settings.setValue("languageID", QVariant(ui->comboBox_language->currentIndex()));
     settings.setValue("mouseControl", QVariant(ui->checkBox_mouseControl->isChecked()));
+    settings.setValue("saveHistory", QVariant(ui->checkBox_historySave->isChecked()));
 }
 
 void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)
@@ -163,4 +226,14 @@ void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)
         QString lang = this->getLanguage();
         emit this->languageChanged(lang);
     }
+}
+
+void SettingsDialog::on_pushButton_deleteHistory_clicked()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+    QStringList emptyHistory;
+
+    settings.setValue("historyOfDirectories", QVariant(emptyHistory));
+
+    this->updateHistory();
 }

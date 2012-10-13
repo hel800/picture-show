@@ -35,6 +35,11 @@ void loadDirectory::setDirectory(const QString &path)
     this->m_path = path;
 }
 
+const QString& loadDirectory::getDirectory()
+{
+    return this->m_path;
+}
+
 void loadDirectory::setDirectoryList(QList<QFileInfo> * list)
 {
     this->m_dirList = list;
@@ -43,6 +48,11 @@ void loadDirectory::setDirectoryList(QList<QFileInfo> * list)
 void loadDirectory::setSorting(Sorting sortType)
 {
     this->m_sorting = sortType;
+}
+
+Sorting loadDirectory::getSorting()
+{
+    return this->m_sorting;
 }
 
 QString& loadDirectory::getErrorMsg()

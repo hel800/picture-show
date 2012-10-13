@@ -9,47 +9,74 @@
         <translation>picture-view</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="182"/>
+        <location filename="mainwidget.cpp" line="219"/>
+        <source>Frage</source>
+        <translation>Question</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="221"/>
+        <source>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
+        <oldsource>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.  &quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
+        <translation>Sorting of the pictures has been changed. For the new order to take effect the show must be restarted from the beginning.</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="222"/>
+        <source>&quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</source>
+        <oldsource>Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
+        <translation>Click &quot;Yes&quot; to restart the presentation, &quot;No&quot; to continue with the old sorting order.</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="224"/>
+        <source>Ja</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="225"/>
+        <source>Nein</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="268"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="192"/>
+        <location filename="mainwidget.cpp" line="280"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="192"/>
+        <location filename="mainwidget.cpp" line="280"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="227"/>
-        <location filename="mainwidget.cpp" line="259"/>
-        <location filename="mainwidget.cpp" line="274"/>
+        <location filename="mainwidget.cpp" line="315"/>
+        <location filename="mainwidget.cpp" line="347"/>
+        <location filename="mainwidget.cpp" line="362"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="233"/>
-        <location filename="mainwidget.cpp" line="353"/>
-        <location filename="mainwidget.cpp" line="384"/>
+        <location filename="mainwidget.cpp" line="321"/>
+        <location filename="mainwidget.cpp" line="441"/>
+        <location filename="mainwidget.cpp" line="498"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="233"/>
+        <location filename="mainwidget.cpp" line="321"/>
         <source>Das Bild &quot;%1&quot; konnte nicht geladen werden!</source>
         <translation>The picture \&quot;%1\&quot; could not be loaded!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="353"/>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
  Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
-        <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
+        <translation type="obsolete">The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="384"/>
+        <location filename="mainwidget.cpp" line="441"/>
+        <location filename="mainwidget.cpp" line="498"/>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
 Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
         <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
@@ -71,117 +98,160 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>picture-show - open images and options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="58"/>
+        <location filename="settingsdialog.ui" line="32"/>
         <source>Sonstige Optionen</source>
         <translation>Miscellaneous options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="100"/>
+        <location filename="settingsdialog.ui" line="54"/>
         <source>Maussteuerung aktivieren: </source>
         <translation>Mouse control enabled: </translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="141"/>
-        <source>Durchsuchen...</source>
-        <translation>Browse...</translation>
+        <location filename="settingsdialog.ui" line="88"/>
+        <source>History speichern: </source>
+        <translation>Save history: </translation>
     </message>
-    <message>
-        <location filename="settingsdialog.ui" line="151"/>
-        <source>Presentation Optionen</source>
+    <message utf8="true">
+        <location filename="settingsdialog.ui" line="117"/>
+        <source>History löschen</source>
+        <translation>Delete History</translation>
+    </message>
+    <message utf8="true">
+        <location filename="settingsdialog.ui" line="130"/>
+        <source>Präsentation Optionen</source>
         <translation>Presentation options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="214"/>
+        <location filename="settingsdialog.ui" line="176"/>
+        <source>Blenden+Schieben</source>
+        <translation>fade+slide</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="285"/>
+        <source>Bilderverzeichnis</source>
+        <translation>Picture directory</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="316"/>
+        <source>Durchsuchen...</source>
+        <translation>Browse...</translation>
+    </message>
+    <message utf8="true">
+        <location filename="settingsdialog.ui" line="339"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;F1 oder &apos;H&apos; drücken für Hilfe im Präsentationsmodus.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="371"/>
+        <source>Laden</source>
+        <translation>Load</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="378"/>
+        <source>Anwenden</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="385"/>
+        <source>Abbrechen</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Presentation Optionen</source>
+        <translation type="obsolete">Presentation options</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="198"/>
         <source>Sortierung: </source>
         <translation>Sort by:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="225"/>
+        <location filename="settingsdialog.ui" line="209"/>
         <source>nach Dateiname</source>
         <translation>filename</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="230"/>
+        <location filename="settingsdialog.ui" line="214"/>
         <source>nach Erstellungsdatum</source>
         <translation>date of origin</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="301"/>
         <source>&lt;b&gt;F1 oder &apos;H&apos; drücken für Hilfe im Presentationsmodus.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/b&gt;</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="200"/>
+        <location filename="settingsdialog.ui" line="184"/>
         <source>Übergangszeit: </source>
         <translation>Fading time: </translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="242"/>
+        <location filename="settingsdialog.ui" line="226"/>
         <source>0,5 Sekunden</source>
         <translation>0.5 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="247"/>
+        <location filename="settingsdialog.ui" line="231"/>
         <source>1 Sekunde</source>
         <translation>1 second</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="252"/>
+        <location filename="settingsdialog.ui" line="236"/>
         <source>2 Sekunden</source>
         <translation>2 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="257"/>
+        <location filename="settingsdialog.ui" line="241"/>
         <source>3 Sekunden</source>
         <translation>3 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="207"/>
+        <location filename="settingsdialog.ui" line="191"/>
         <source>Skalierung: </source>
         <translation>Scale:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="266"/>
+        <location filename="settingsdialog.ui" line="250"/>
         <source>ganzes Bild</source>
         <translation>whole image</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="271"/>
+        <location filename="settingsdialog.ui" line="255"/>
         <source>Bildschirm füllen</source>
         <translation>whole screen</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="291"/>
+        <location filename="settingsdialog.ui" line="275"/>
         <source>Übergangseffekt: </source>
         <translation>Fading effect:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="182"/>
+        <location filename="settingsdialog.ui" line="161"/>
         <source>Keiner</source>
         <translation>none</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="187"/>
+        <location filename="settingsdialog.ui" line="166"/>
         <source>Blenden</source>
         <translation>blend</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="192"/>
+        <location filename="settingsdialog.ui" line="171"/>
         <source>Schieben</source>
         <translation>slide</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="73"/>
+        <location filename="settingsdialog.ui" line="47"/>
         <source>Sprache: </source>
         <translation>Language:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="87"/>
+        <location filename="settingsdialog.ui" line="68"/>
         <source>Deutsch</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="92"/>
+        <location filename="settingsdialog.ui" line="73"/>
         <source>English</source>
         <translation>English</translation>
     </message>
@@ -190,8 +260,12 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Press F1 or &apos;h&apos; for help in presentation mode.</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="114"/>
         <source>Open Directory</source>
+        <translation type="obsolete">Open directory</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.cpp" line="171"/>
+        <source>Öffne Verzeichnis</source>
         <translation>Open directory</translation>
     </message>
 </context>
@@ -206,7 +280,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
     <message>
         <location filename="animation.cpp" line="284"/>
         <location filename="animation.cpp" line="298"/>
-        <location filename="animation.cpp" line="687"/>
+        <location filename="animation.cpp" line="737"/>
         <source>%1 Sekunden</source>
         <translation>%1 seconds</translation>
     </message>
@@ -226,8 +300,8 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>%1%2 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="730"/>
-        <location filename="animation.cpp" line="736"/>
+        <location filename="animation.cpp" line="780"/>
+        <location filename="animation.cpp" line="786"/>
         <source>Bitte H drücken für Hilfe</source>
         <translation>Press &apos;H&apos; for help</translation>
     </message>
@@ -242,7 +316,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
 <context>
     <name>loadDirectory</name>
     <message>
-        <location filename="loaddirectory.cpp" line="64"/>
+        <location filename="loaddirectory.cpp" line="78"/>
         <source>Das angegebene Verzeichnis existiert nicht!</source>
         <translation>The chosen directory doesn&apos;t exist!</translation>
     </message>
@@ -295,66 +369,91 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
     </message>
     <message>
         <location filename="overlayhelp.cpp" line="183"/>
+        <source>&lt;Maus rechts&gt;</source>
+        <translation>&lt;Mouse right&gt;</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="183"/>
+        <source>Zum nächsten Bild blenden (wenn aktiviert)</source>
+        <translation>Blend to next image (if mouse control is active)</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="184"/>
         <source>Zum vorherigen Bild blenden</source>
         <translation>Blend to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="183"/>
+        <location filename="overlayhelp.cpp" line="184"/>
         <source>&lt;Pfeil links&gt;</source>
         <translation>&lt;left arrow&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="184"/>
+        <location filename="overlayhelp.cpp" line="185"/>
+        <source>&lt;Maus links&gt;</source>
+        <translation>&lt;Mouse left&gt;</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="185"/>
+        <source>Zum vorherigen Bild blenden (wenn aktiviert)</source>
+        <translation>Blend to previous image (if mouse control is active)</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="186"/>
         <source>Springt zum nächsten Bild</source>
         <translation>Jump to next image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="184"/>
+        <location filename="overlayhelp.cpp" line="186"/>
         <source>&lt;Bild ab&gt;</source>
         <translation>&lt;Page down&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="185"/>
+        <location filename="overlayhelp.cpp" line="187"/>
         <source>Springt zum vorherigen Bild</source>
         <translation>Jump to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="185"/>
+        <location filename="overlayhelp.cpp" line="187"/>
         <source>&lt;Bild auf&gt;</source>
         <translation>&lt;Page up&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="186"/>
+        <location filename="overlayhelp.cpp" line="188"/>
         <source>Jump-to Dialog zum springen zu einem Bild, Eingabe der Bildnummer gefolgt von &lt;Enter&gt;</source>
         <translation>Jump to dialog to jump to a specified image (type the image number, then press &lt;Enter&gt;)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="187"/>
+        <location filename="overlayhelp.cpp" line="189"/>
         <source>I</source>
         <translation>I</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="187"/>
+        <location filename="overlayhelp.cpp" line="189"/>
         <source>Anzeige mit Infos über das aktuelle Bild anzeigen</source>
         <translation>Show infobar with metadata for current image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="188"/>
+        <location filename="overlayhelp.cpp" line="190"/>
         <source>Startet den Timer, Eingabe der Dauer in Sekunden (4-99) gefolgt von &lt;Enter&gt;</source>
         <translation>Starts the timer, then type the duration in seconds (4-99) followed by &lt;Enter&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="188"/>
+        <location filename="overlayhelp.cpp" line="190"/>
         <source>&lt;Leertaste&gt;</source>
         <translation>&lt;Space&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="190"/>
+        <location filename="overlayhelp.cpp" line="191"/>
+        <source>Beendet den Timer, wenn aktiv</source>
+        <translation>Terminates the timer (if active)</translation>
+    </message>
+    <message>
+        <location filename="overlayhelp.cpp" line="193"/>
         <source>Diese Hilfe anzeigen</source>
         <translation>Shows this help dialog</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="191"/>
+        <location filename="overlayhelp.cpp" line="194"/>
         <source>Blendet Overlays aus bzw. beendet das Programm</source>
         <translation>Sets overlays to off/exits the program</translation>
     </message>
