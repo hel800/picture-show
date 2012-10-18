@@ -37,6 +37,7 @@ protected:
     void generatePixmap();
 
     QStringList helpItems();
+    int calcTextSize(int targetSize);
 };
 
 #endif // OVERLAYHELP_H

@@ -51,9 +51,9 @@ int main(int argc, char *argv[])
     #endif
 
     #if defined (_M_X64) || defined (__x86_64__)
-        appVersion += QString(" x64)");
+        appVersion += QString("x64)");
     #else
-        appVersion += QString(" x86)");
+        appVersion += QString("x86)");
     #endif
 
 

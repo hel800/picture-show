@@ -21,5 +21,6 @@
         <file>img/Button-info-256.png</file>
         <file>img/exit_logo.png</file>
         <file>img/info-logo.png</file>
+        <file>img/Commands.png</file>
     </qresource>
 </RCC>

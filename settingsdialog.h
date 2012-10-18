@@ -45,6 +45,7 @@ public:
     ~SettingsDialog();
 
     QString getCurrentDirectory();
+    void setCurrentDirectory(const QString & dir);
     double getCurrentFadeTime();
     BlendType getBlendType();
     Sorting getDirectorySorting();

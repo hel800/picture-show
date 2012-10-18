@@ -56,6 +56,11 @@ QString SettingsDialog::getCurrentDirectory()
     return ui->comboBox_directoryPath->lineEdit()->text();
 }
 
+void SettingsDialog::setCurrentDirectory(const QString & dir)
+{
+    ui->comboBox_directoryPath->lineEdit()->setText(dir);
+}
+
 double SettingsDialog::getCurrentFadeTime()
 {
     if (ui->comboBox_fadeTime->currentIndex() == 0)

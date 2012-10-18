@@ -213,13 +213,23 @@ void MainWidget::applyNewOptions()
     if (!this->imagesLoaded)
         this->initialize();
 
-    if (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting())
+    if ( (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting()) ||
+         (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory()) )
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Frage"));
         msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText(tr("Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn."));
-        msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um alte Sortierung weiter zu verwenden."));
+
+        if (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory())
+        {
+            msgBox.setText(tr("Das Bilderverzeichnis wurde geändert. Damit die Bilder aus dem neuen Verzeichnis angezeigt werden, muss eine neue Show geladen werden."));
+            msgBox.setInformativeText(tr("\"Ja\" klicken, um neus Verzeichnis zu laden, \"Nein\" um altes Verzeichnis weiter anzuzeigen."));
+        }
+        else
+        {
+            msgBox.setText(tr("Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn."));
+            msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um alte Sortierung weiter zu verwenden."));
+        }
 
         QPushButton *yesButton = msgBox.addButton(tr("Ja"), QMessageBox::YesRole);
         QPushButton *noButton = msgBox.addButton(tr("Nein"), QMessageBox::NoRole);
@@ -235,6 +245,7 @@ void MainWidget::applyNewOptions()
         else
         {
             this->settingsDial->setDirectorySorting(this->load_directory->getSorting());
+            this->settingsDial->setCurrentDirectory(this->load_directory->getDirectory());
         }
     }
 
@@ -735,6 +746,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
             this->settingsDial->hide();
         break;
         case Qt::Key_F:
+        case Qt::Key_F11:
         if (this->current_task == NONE)
         {
             if (this->windowState() != Qt::WindowFullScreen)

@@ -23,6 +23,8 @@ March 2012
 
 #include "overlayhelp.h"
 
+#include <iostream>
+
 overlayHelp::overlayHelp(QWidget *pWidget) : overlayBase(pWidget)
 {
 }
@@ -88,6 +90,9 @@ void overlayHelp::generatePixmap()
     QPixmap logoText(":/images/img/logoText.png");
     logoText = logoText.scaledToHeight(int(rect2Height*0.05), Qt::SmoothTransformation);
 
+    QPixmap commands(":/images/img/Commands.png");
+    commands = commands.scaledToWidth(int(rect2Width-skipH), Qt::SmoothTransformation);
+
     QString version = tr("version: %1").arg(qApp->applicationVersion());
     QFont fontVersion(QString("Helvetica"), int(rectHeight*0.015));
     QFontMetrics fm(fontVersion);
@@ -107,13 +112,17 @@ void overlayHelp::generatePixmap()
     QRect rectHeader(rect2PosX + int(headerLogo.width()*1.5) + int(skipH/2.0), rect2PosY + (logo.height() + logoText.height() + heightVersion + int(skipV/2.0)), rect2Width - int(headerLogo.width()*1.5) - skipH, fmHeader.height());
     QString header = tr("Kommandos");
 
-    QFont fontText1(QString("Helvetica"), int(rectWidth * 0.013), QFont::Bold);
-    QFont fontText2(QString("Helvetica"), int(rectWidth * 0.013));
+    int appropiateSize = this->calcTextSize(rect2Width - (skipH*4.5));
+    QFont fontText1(QString("Helvetica"), appropiateSize, QFont::Bold);
+    QFont fontText2(QString("Helvetica"), appropiateSize);
     fontText1.setStyleStrategy(QFont::PreferAntialias);
     fontText2.setStyleStrategy(QFont::PreferAntialias);
     QFontMetrics fmText(fontText2);
     QRect rectText1(rect2PosX + int(skipH/2.0),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV), skipH*3, fmText.height());
     QRect rectText2(rect2PosX + int(skipH*3.5),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV), rect2Width - (skipH*4), fmText.height());
+    QRect rectCommands(rect2PosX + + int(skipH/2.0),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV),int(rect2Width-skipH), commands.height());
+
+
     QStringList items = this->helpItems();
 
     QPixmap header2Logo(":/images/img/header2Logo.png");
@@ -148,18 +157,22 @@ void overlayHelp::generatePixmap()
     p.setFont(fontHeader);
     p.drawText(rectHeader, Qt::AlignLeft, header);
 
-    for (int i = 0; i < items.size(); i+=2)
-    {
-        p.setFont(fontText1);
-        p.drawText(rectText1, Qt::AlignLeft, items.at(i));
-        p.setFont(fontText2);
-        p.drawText(rectText2, Qt::AlignLeft, items.at(i+1));
-        rectText1.moveTop(rectText1.top() + int(fmText.height() * 1.3));
-        rectText2.moveTop(rectText2.top() + int(fmText.height() * 1.3));
+//    for (int i = 0; i < items.size(); i+=2)
+//    {
+//        p.setFont(fontText1);
+//        p.drawText(rectText1, Qt::AlignLeft, items.at(i));
+//        p.setFont(fontText2);
+//        p.drawText(rectText2, Qt::AlignLeft, items.at(i+1));
+//        rectText1.moveTop(rectText1.top() + int(fmText.height() * 1.3));
+//        rectText2.moveTop(rectText2.top() + int(fmText.height() * 1.3));
 
-        if (rectText1.bottom() > rect2PosY + rect2Width - fmHeader.height() - (2.0*fmText.height()) - skipV)
-            break;
-    }
+//        if (rectText1.bottom() > rect2PosY + rect2Width - fmHeader.height() - (2.0*fmText.height()) - skipV)
+//            break;
+//    }
+
+//    p.drawRect(rectCommands);
+    p.setOpacity(0.98);
+    p.drawPixmap(rectCommands, commands);
 
     p.setOpacity(lightOpacity);
     p.drawPixmap(rectHeader2.x() - int(header2Logo.width()*1.5), rectHeader2.y(), header2Logo.width(), header2Logo.height(), header2Logo);
@@ -191,7 +204,36 @@ QStringList overlayHelp::helpItems()
     items << "" << tr("Beendet den Timer, wenn aktiv");
     items << "" << tr("");
     items << "H / F1" << tr("Diese Hilfe anzeigen");
-    items << "ESC" << tr("Blendet Overlays aus bzw. beendet das Programm");
+    items << "ESC" << tr("Blendet Info-Leise oder diese Hilfe aus bzw. beendet das Programm");
 
     return items;
+}
+
+int overlayHelp::calcTextSize(int targetSize)
+{
+    QStringList entries = this->helpItems();
+
+    int size = 35;
+    QFont testFont(QString("Helvetica"), size);
+    bool sizeAppropriate = false;
+
+    while (!sizeAppropriate)
+    {
+        sizeAppropriate = true;
+        size--;
+        testFont.setPointSize(size);
+
+        for (int i = 1; i < entries.size(); i += 2)
+        {
+            QFontMetrics fm(testFont);
+            int widthVersion = fm.width(entries.at(i));
+            if (widthVersion > targetSize)
+            {
+                sizeAppropriate = false;
+                break;
+            }
+        }
+    }
+
+    return size;
 }
