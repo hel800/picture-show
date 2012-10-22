@@ -103,6 +103,11 @@ void SettingsDialog::setDirectorySorting(Sorting sort)
         ui->comboBox_sort->setCurrentIndex(0);
 }
 
+bool SettingsDialog::getIncludeSubdirs()
+{
+    return ui->checkBox_subdirs->isChecked();
+}
+
 ScaleType SettingsDialog::getScaleType()
 {
     if (ui->comboBox_scaling->currentIndex() == 0)
@@ -210,6 +215,7 @@ void SettingsDialog::loadSettings()
     ui->comboBox_language->setCurrentIndex(languageID);
     ui->checkBox_mouseControl->setChecked(settings.value("mouseControl", QVariant(false)).toBool());
     ui->checkBox_historySave->setChecked(settings.value("saveHistory", QVariant(true)).toBool());
+    ui->checkBox_subdirs->setChecked(settings.value("includeSubdirs", QVariant(false)).toBool());
 }
 
 void SettingsDialog::saveSettings()
@@ -222,6 +228,7 @@ void SettingsDialog::saveSettings()
     settings.setValue("languageID", QVariant(ui->comboBox_language->currentIndex()));
     settings.setValue("mouseControl", QVariant(ui->checkBox_mouseControl->isChecked()));
     settings.setValue("saveHistory", QVariant(ui->checkBox_historySave->isChecked()));
+    settings.setValue("includeSubdirs", QVariant(ui->checkBox_subdirs->isChecked()));
 }
 
 void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)

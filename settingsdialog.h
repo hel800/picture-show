@@ -50,6 +50,7 @@ public:
     BlendType getBlendType();
     Sorting getDirectorySorting();
     void setDirectorySorting(Sorting sort);
+    bool getIncludeSubdirs();
     ScaleType getScaleType();
     QString getLanguage();
     bool getMouseControl();

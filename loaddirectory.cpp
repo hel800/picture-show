@@ -28,6 +28,7 @@ March 2012
 loadDirectory::loadDirectory() : QThread()
 {
     this->m_dirList = NULL;
+    this->m_subdirs = false;
 }
 
 void loadDirectory::setDirectory(const QString &path)
@@ -53,6 +54,16 @@ void loadDirectory::setSorting(Sorting sortType)
 Sorting loadDirectory::getSorting()
 {
     return this->m_sorting;
+}
+
+bool loadDirectory::getIncludeSubdirs()
+{
+    return this->m_subdirs;
+}
+
+void loadDirectory::setIncludeSubdirs(bool sd)
+{
+    this->m_subdirs = sd;
 }
 
 QString& loadDirectory::getErrorMsg()
@@ -82,7 +93,12 @@ void loadDirectory::run()
 
     this->m_dirList->clear();
 
-    QList<QFileInfo> tempList = current_dir.entryInfoList(filters, QDir::Files, QDir::Name | QDir::IgnoreCase);
+    QList<QFileInfo> tempList;
+
+    if (this->m_subdirs)
+        this->addItemsInDir(tempList, filters, current_dir);
+    else
+        tempList.append(current_dir.entryInfoList(filters, QDir::Files, QDir::Name | QDir::IgnoreCase));
 
     if (this->m_sorting == DATE_CREATED)
     {
@@ -112,6 +128,22 @@ void loadDirectory::run()
 //    qDebug(QString::number(end - start).toStdString().c_str());
 
     emit loadDirectoryFinished(true);
+}
+
+void loadDirectory::addItemsInDir(QList<QFileInfo> & t_list, QStringList t_filters, QDir t_directory)
+{
+    QList<QFileInfo> dirList = t_directory.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+    foreach (QFileInfo str_dir, dirList)
+    {
+        if (str_dir.isDir())
+        {
+            QDir cur_dir(str_dir.absoluteFilePath());
+            if (cur_dir.exists())
+                this->addItemsInDir(t_list, t_filters, cur_dir);
+        }
+    }
+
+    t_list.append(t_directory.entryInfoList(t_filters, QDir::Files, QDir::Name | QDir::IgnoreCase));
 }
 
 bool fileCreateLessThan(const QPair<QFileInfo, QDateTime> &f1, const QPair<QFileInfo, QDateTime> &f2)

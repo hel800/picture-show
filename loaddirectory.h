@@ -47,6 +47,9 @@ public:
     void setDirectoryList(QList<QFileInfo> *list);
     void setSorting(Sorting sortType);
     Sorting getSorting();
+    bool getIncludeSubdirs();
+    void setIncludeSubdirs(bool sd);
+
     QString& getErrorMsg();
 
     void run();
@@ -55,8 +58,11 @@ signals:
     void loadDirectoryFinished(bool success);
 
 private:
+    void addItemsInDir(QList<QFileInfo> & t_list, QStringList t_filters, QDir t_directory);
+
     Sorting m_sorting;
     QString m_path;
+    bool m_subdirs;
     QString m_error_msg;
     QList<QFileInfo> * m_dirList;
     
