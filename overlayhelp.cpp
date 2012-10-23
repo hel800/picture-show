@@ -27,6 +27,18 @@ March 2012
 
 overlayHelp::overlayHelp(QWidget *pWidget) : overlayBase(pWidget)
 {
+    this->language = "de";
+    this->mouseControl = false;
+}
+
+void overlayHelp::setLanguage(const QString & lang)
+{
+    this->language = lang;
+}
+
+void overlayHelp::setMouseControl(bool mc)
+{
+    this->mouseControl = mc;
 }
 
 void overlayHelp::generatePixmap()
@@ -37,15 +49,12 @@ void overlayHelp::generatePixmap()
     this->m_overlay = QPixmap(this->m_paintWidget->width(), this->m_paintWidget->height());
     this->m_overlay.fill(QColor(0, 0, 0, 0));
 
-    double lightOpacity = 0.8;
-    double darkOpacity = 0.9;
-
     int rectWidth;
     int rectHeight;
     int rectPosX;
     int rectPosY;
 
-
+    double opacity = 0.9;
 
     if (this->m_paintWidget->width() > this->m_paintWidget->height())
     {
@@ -72,12 +81,12 @@ void overlayHelp::generatePixmap()
     int skipH = int(rect2Width * 0.05);
     int skipV = int(rect2Height * 0.05);
 
-    QBrush rectBrush(QColor::fromRgb(255, 255, 255, 120));
+    QBrush rectBrush(QColor::fromRgb(255, 255, 255, 180));
     QPen rectPen(QColor::fromRgb(255, 255, 255, 0));
     rectPen.setWidth(0);
 
     QLinearGradient linearGrad(0.0, 0.0, this->m_paintWidget->width(), this->m_paintWidget->height());
-    linearGrad.setColorAt(0, QColor::fromRgb(0, 0, 0, 100));
+    linearGrad.setColorAt(0, QColor::fromRgb(0, 0, 0, 150));
     linearGrad.setColorAt(1, QColor::fromRgb(0, 0, 0, 240));
     QBrush rect2Brush(linearGrad);
 
@@ -90,7 +99,16 @@ void overlayHelp::generatePixmap()
     QPixmap logoText(":/images/img/logoText.png");
     logoText = logoText.scaledToHeight(int(rect2Height*0.05), Qt::SmoothTransformation);
 
-    QPixmap commands(":/images/img/Commands.png");
+    QString lang_fn = ":/images/img/commands_";
+    if (this->mouseControl)
+        lang_fn += "mouse_";
+    else
+        lang_fn += "keyboard_";
+
+    QPixmap commands(lang_fn + this->language + ".png");
+    if (commands.width() <= 0)
+        commands = QPixmap(lang_fn + "de");
+
     commands = commands.scaledToWidth(int(rect2Width-skipH), Qt::SmoothTransformation);
 
     QString version = tr("version: %1").arg(qApp->applicationVersion());
@@ -120,8 +138,7 @@ void overlayHelp::generatePixmap()
     QFontMetrics fmText(fontText2);
     QRect rectText1(rect2PosX + int(skipH/2.0),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV), skipH*3, fmText.height());
     QRect rectText2(rect2PosX + int(skipH*3.5),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV), rect2Width - (skipH*4), fmText.height());
-    QRect rectCommands(rect2PosX + + int(skipH/2.0),  rect2PosY + (logo.height() + logoText.height() + heightVersion + fmHeader.height() + skipV),int(rect2Width-skipH), commands.height());
-
+    QRect rectCommands(rect2PosX + int(skipH/2.0), rect2PosY + (logo.height() + logoText.height() + heightVersion + skipV),int(rect2Width-skipH), commands.height());
 
     QStringList items = this->helpItems();
 
@@ -138,24 +155,21 @@ void overlayHelp::generatePixmap()
     p.setRenderHint(QPainter::Antialiasing);
     p.setRenderHint(QPainter::HighQualityAntialiasing);
     p.setRenderHint(QPainter::TextAntialiasing);
-    p.setOpacity(lightOpacity);
+    p.setOpacity(opacity);
     p.setPen(rectPen);
     p.setBrush(rectBrush);
     p.drawRoundedRect(rectPosX, rectPosY, rectWidth, rectHeight, 22.0, 22.0);
     p.setPen(rect2Pen);
     p.setBrush(rect2Brush);
     p.drawRoundedRect(rect2PosX, rect2PosY, rect2Width, rect2Height, 20.0, 20.0);
-    p.setOpacity(darkOpacity);
     p.drawPixmap(int((this->m_paintWidget->width() / 2.0) - (logo.width() / 2.0)), rect2PosY + 6, logo.width(), logo.height(), logo);
     p.drawPixmap(int((this->m_paintWidget->width() / 2.0) - (logoText.width() / 2.0)), rect2PosY + 6 + logo.height(), logoText.width(), logoText.height(), logoText);
     p.setPen(QPen(Qt::white));
     p.setFont(fontVersion);
     p.drawText(rectVersion, Qt::AlignHCenter, version);
-    p.setOpacity(lightOpacity);
-    p.drawPixmap(rect2PosX + int(skipH/2.0), rect2PosY + (logo.height() + logoText.height() + heightVersion + int(skipV/2.0)), headerLogo.width(), headerLogo.height(), headerLogo);
-    p.setOpacity(darkOpacity);
+    //p.drawPixmap(rect2PosX + int(skipH/2.0), rect2PosY + (logo.height() + logoText.height() + heightVersion + int(skipV/2.0)), headerLogo.width(), headerLogo.height(), headerLogo);
     p.setFont(fontHeader);
-    p.drawText(rectHeader, Qt::AlignLeft, header);
+    //p.drawText(rectHeader, Qt::AlignLeft, header);
 
 //    for (int i = 0; i < items.size(); i+=2)
 //    {
@@ -174,9 +188,8 @@ void overlayHelp::generatePixmap()
     p.setOpacity(0.98);
     p.drawPixmap(rectCommands, commands);
 
-    p.setOpacity(lightOpacity);
+    p.setOpacity(opacity);
     p.drawPixmap(rectHeader2.x() - int(header2Logo.width()*1.5), rectHeader2.y(), header2Logo.width(), header2Logo.height(), header2Logo);
-    p.setOpacity(darkOpacity);
 
     p.setFont(fontHeader);
     p.drawText(rectHeader2, Qt::AlignLeft, header2);

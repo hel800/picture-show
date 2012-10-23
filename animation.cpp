@@ -95,6 +95,8 @@ animation::animation(QWidget * pWidget)
     this->m_waitingPix.append(QPixmap(":/images/img/waiting08.png"));
 
     this->m_textbarPix = QPixmap(":/images/img/textbar_big.png");
+    this->m_textbarPix_extended = QPixmap(":/images/img/textbar_big_extended.png");
+    this->m_infoLogo = QPixmap(":/images/img/header2Logo.png").scaledToWidth(18, Qt::SmoothTransformation);
     this->backgroundColor = QColor(25, 25, 25);
 }
 
@@ -322,7 +324,7 @@ void animation::startJumptoBar(int currentImage, int numImages)
     this->m_tbReason = JUMP;
     this->m_nothingEnteredYet = true;
 
-    this->blendTextbar(tr("Jump to: %1/%2").arg(currentImage).arg(numImages));
+    this->blendTextbar(tr("Springe zu: %1/%2").arg(currentImage).arg(numImages), tr("Bildnummer eingeben + Enter"));
 }
 
 void animation::startExitApp()
@@ -390,11 +392,11 @@ void animation::numberEntered(int num)
         if (newNum > numImages || this->m_nothingEnteredYet)
         {
             if (num <= numImages && num > 0)
-                this->setTextbarText(tr("Jump to: %1/%2").arg(num).arg(numImages));
+                this->setTextbarText(tr("Springe zu: %1/%2").arg(num).arg(numImages), this->m_textbarInfo);
         }
         else
         {
-            this->setTextbarText(tr("Jump to: %1/%2").arg(newNum).arg(numImages));
+            this->setTextbarText(tr("Springe zu: %1/%2").arg(newNum).arg(numImages), this->m_textbarInfo);
         }
 
         this->m_nothingEnteredYet = false;
@@ -412,7 +414,7 @@ void animation::escPressed()
     if (this->m_textbarVisible)
     {
         this->m_isAskingExit = false;
-        this->blendTextbar(this->m_textbarText);
+        this->blendTextbar(this->m_textbarText, this->m_textbarInfo);
     }
 }
 
@@ -444,17 +446,19 @@ QPixmap animation::currentDisplay()
     return pixmap;
 }
 
-void animation::blendTextbar(const QString & text)
+void animation::blendTextbar(const QString & text, const QString & info)
 {
     if (this->isBusy() || this->isWaiting())
         return;
 
     this->m_textbarText = QString(text);
+    this->m_textbarInfo = QString(info);
+
     this->m_doingWhat = BLENDING;
     this->m_textbarTimer->start(10);
 }
 
-void animation::setTextbarText(const QString &text)
+void animation::setTextbarText(const QString &text, const QString &info)
 {
     if (this->isBusy() || this->isWaiting())
         return;
@@ -463,6 +467,7 @@ void animation::setTextbarText(const QString &text)
         return;
 
     this->m_textbarText = QString(text);
+    this->m_textbarInfo = QString(info);
 
     QPainter p;
     p.begin(this->m_paintWidget);
@@ -758,7 +763,7 @@ void animation::textBarOff()
     this->m_isAskingExit = false;
 
     // fade textbar out
-    this->blendTextbar(this->m_textbarText);
+    this->blendTextbar(this->m_textbarText, this->m_textbarInfo);
 }
 
 void animation::drawStartScreen(QPainter * p)
@@ -837,17 +842,28 @@ void animation::drawTextbar(QPainter * p, IconType icon, double opacity)
     this->drawPixmap(p, this->m_blendTo);
 
     p->setOpacity(opacity);
-    p->drawPixmap(int(this->m_paintWidget->width()/2)-236, int(this->m_paintWidget->height()/2)-65, this->m_textbarPix);
+
+    int vert_offset = 50;
+    int vert_offset2 = 4;
+    if (m_textbarInfo.isEmpty())
+    {
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-236, int(this->m_paintWidget->height()/2)-65, this->m_textbarPix);
+    }
+    else
+    {
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-236, int(this->m_paintWidget->height()/2)-65, this->m_textbarPix_extended);
+        vert_offset = 60;
+        vert_offset2 = -10;
+    }
 
     if (icon == STOPWATCH)
-        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_stopwatch_icon);
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_stopwatch_icon);
     else if (icon == STOPWATCH_OFF)
-        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_stopwatch_off_icon);
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_stopwatch_off_icon);
     else if (icon == JUMP_TO)
-        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_jumpto_icon);
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_jumpto_icon);
     else if (icon == EXIT_ICO)
-        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-50, this->m_exit_icon);
-
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_exit_icon);
 
     QFont f("Helvetica");
     f.setPixelSize(26);
@@ -862,5 +878,22 @@ void animation::drawTextbar(QPainter * p, IconType icon, double opacity)
     p->setPen(QColor(255, 255, 255, 220));
     p->setFont(f);
     p->setRenderHint(QPainter::TextAntialiasing);
-    p->drawText(int(this->m_paintWidget->width()/2)-int(nWidth/2) + 50, int(this->m_paintWidget->height()/2 + 4), this->m_textbarText);
+    p->drawText(int(this->m_paintWidget->width()/2) - int(nWidth/2) + 50, int(this->m_paintWidget->height()/2 + vert_offset2), this->m_textbarText);
+
+    if (!m_textbarInfo.isEmpty())
+    {
+        QFont f("Helvetica");
+        f.setPixelSize(12);
+        f.setStyleStrategy(QFont::PreferAntialias);
+        p->setRenderHint(QPainter::TextAntialiasing);
+        p->setFont(f);
+
+        QFontMetrics fm(f);
+        int nWidth = fm.width(this->m_textbarInfo);
+        if (nWidth < 275)
+        {
+            p->drawPixmap(int(this->m_paintWidget->width()/2) - int(nWidth/2) + 23, int(this->m_paintWidget->height()/2 + 6), this->m_infoLogo);
+            p->drawText(int(this->m_paintWidget->width()/2) - int(nWidth/2) + 50, int(this->m_paintWidget->height()/2 + 20), this->m_textbarInfo);
+        }
+    }
 }

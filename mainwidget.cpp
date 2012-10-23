@@ -54,6 +54,7 @@ MainWidget::MainWidget(QWidget *parent) :
     }
 
     this->settingsDial->updateLanguage();
+    this->displayHelp->setLanguage(this->settingsDial->getLanguage());
 
     connect(this->settingsDial, SIGNAL(languageChanged(QString)), this, SLOT(changeLanguage(QString)));
 
@@ -196,6 +197,7 @@ void MainWidget::initialize()
     this->current_blendType = this->settingsDial->getBlendType();
     this->current_scaleType = this->settingsDial->getScaleType();
     this->mouseControl = this->settingsDial->getMouseControl();
+    this->displayHelp->setMouseControl(this->mouseControl);
 
     this->img = QPixmap();
     this->img_next = QPixmap();
@@ -390,6 +392,7 @@ void MainWidget::changeLanguage(QString language_short)
         if (translator.load(QCoreApplication::applicationDirPath() + "/picture-show_" + language_short))
             qApp->installTranslator(&translator);
     this->settingsDial->updateLanguage();
+    this->displayHelp->setLanguage(language_short);
 }
 
 void MainWidget::reloadImages()

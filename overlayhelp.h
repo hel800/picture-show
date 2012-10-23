@@ -26,18 +26,24 @@ March 2012
 
 #include "overlaybase.h"
 #include <QStringList>
+#include <QDir>
 
 class overlayHelp : public overlayBase
 {
     Q_OBJECT
 public:
     overlayHelp(QWidget * pWidget);
+    void setLanguage(const QString & lang);
+    void setMouseControl(bool mc);
 
 protected:
     void generatePixmap();
 
     QStringList helpItems();
     int calcTextSize(int targetSize);
+
+    QString language;
+    bool mouseControl;
 };
 
 #endif // OVERLAYHELP_H

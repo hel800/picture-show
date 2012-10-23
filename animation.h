@@ -117,8 +117,8 @@ private:
     void paintSLIDE();
     void paintSLIDE_FADE();
 
-    void blendTextbar(const QString &text);
-    void setTextbarText(const QString &text);
+    void blendTextbar(const QString &text, const QString &info = QString());
+    void setTextbarText(const QString &text, const QString &info = QString());
 
     void drawStartScreen(QPainter * p);
     void drawPixmap(QPainter * p, QPixmap & pix, double opacity = 1.0, bool background = true, int offset = 0);
@@ -153,10 +153,13 @@ private:
     TextBarReason m_tbReason;
 
     QPixmap m_textbarPix;
+    QPixmap m_textbarPix_extended;
+    QPixmap m_infoLogo;
     double m_current_textbar_blend;
     bool m_textbarVisible;
     bool m_nothingEnteredYet;
     QString m_textbarText;
+    QString m_textbarInfo;
 
     double m_fadeSpeed;
     bool m_isAskingExit;

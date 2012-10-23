@@ -446,6 +446,9 @@
   <tabstop>checkBox_mouseControl</tabstop>
   <tabstop>checkBox_historySave</tabstop>
   <tabstop>pushButton_deleteHistory</tabstop>
+  <tabstop>checkBox_subdirs</tabstop>
+  <tabstop>comboBox_directoryPath</tabstop>
+  <tabstop>pushButton_browse</tabstop>
  </tabstops>
  <resources/>
  <connections>
