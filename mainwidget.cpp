@@ -55,6 +55,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->settingsDial->updateLanguage();
     this->displayHelp->setLanguage(this->settingsDial->getLanguage());
+    this->displayHelp->setMouseControl(this->settingsDial->getMouseControl());
 
     connect(this->settingsDial, SIGNAL(languageChanged(QString)), this, SLOT(changeLanguage(QString)));
 
@@ -139,14 +140,22 @@ MainWidget::MainWidget(QWidget *parent) :
         this->setCursor(Qt::BlankCursor);
     }
 
-    this->settingsDial->show();
-
     this->automaticForwardInverval = settings.value("automaticTimerInterval", QVariant(10000)).toInt();
 
     this->show();
-    this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
+    //this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
     this->effectEngine->paintStartScreen();
     this->settingsDial->raise();
+
+    if (settings.value("firstStart", QVariant(true)).toBool())
+    {
+        this->displayHelp->blendIn(this->effectEngine->currentDisplay());
+        this->displayState = SHOW_HELP;
+    }
+    else
+    {
+        this->settingsDial->show();
+    }
 }
 
 MainWidget::~MainWidget()
@@ -853,9 +862,9 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         {
             if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
             {
-                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-                settings.setValue("firstStart", QVariant(false));
-                this->effectEngine->setFirstStart(false);
+//                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
+//                settings.setValue("firstStart", QVariant(false));
+                //this->effectEngine->setFirstStart(false);
                 this->displayState = SHOW_HELP;
                 this->automaticForward->stop();
                 this->effectEngine->textBarReset();
