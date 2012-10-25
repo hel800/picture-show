@@ -51,6 +51,7 @@ public:
     Sorting getDirectorySorting();
     void setDirectorySorting(Sorting sort);
     bool getIncludeSubdirs();
+    void setIncludeSubdirs(bool inc);
     ScaleType getScaleType();
     QString getLanguage();
     bool getMouseControl();

@@ -10,75 +10,95 @@
         <translation>picture show</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="221"/>
+        <location filename="mainwidget.cpp" line="235"/>
         <source>Frage</source>
         <translation>Question</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="226"/>
+        <location filename="mainwidget.cpp" line="240"/>
         <source>Das Bilderverzeichnis wurde geändert. Damit die Bilder aus dem neuen Verzeichnis angezeigt werden, muss eine neue Show geladen werden.</source>
         <translation>The picture directory has been changed. To load the images from the new directory a new show has to be started.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="227"/>
+        <location filename="mainwidget.cpp" line="241"/>
         <source>&quot;Ja&quot; klicken, um neus Verzeichnis zu laden, &quot;Nein&quot; um altes Verzeichnis weiter anzuzeigen.</source>
         <translation>Click &quot;Yes&quot; to load a new show, click &quot;No&quot; to keep the images from the old directory.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="231"/>
+        <location filename="mainwidget.cpp" line="245"/>
         <source>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
         <oldsource>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.  &quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
         <translation>Sorting of the pictures has been changed. For the new order to take effect the show must be restarted from the beginning.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="232"/>
+        <location filename="mainwidget.cpp" line="246"/>
         <source>&quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</source>
         <oldsource>Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
-        <translation>Click &quot;Yes&quot; to restart the presentation, &quot;No&quot; to continue with the old sorting order.</translation>
+        <translation>Click &quot;Yes&quot; to restart the show, &quot;No&quot; to continue with the old sorting order.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="235"/>
+        <location filename="mainwidget.cpp" line="250"/>
+        <source>Die Einstellung bzgl. der Unterverzeichnisse wurde geändert. Damit die neue Bildauswahl angezeigt werden kann, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
+        <translation>The setting regarding the subfolders has been changed. For the new setting to take effect the show must be restarted from the beginning.</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="251"/>
+        <source>&quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um die alte Einstellung weiter zu verwenden.</source>
+        <translation>Click &quot;Yes&quot; to restart the show, &quot;No&quot; to continue with the previous settings.</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="254"/>
         <source>Ja</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="236"/>
+        <location filename="mainwidget.cpp" line="255"/>
         <source>Nein</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="280"/>
+        <location filename="mainwidget.cpp" line="300"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="292"/>
+        <location filename="mainwidget.cpp" line="312"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="292"/>
+        <location filename="mainwidget.cpp" line="312"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="327"/>
-        <location filename="mainwidget.cpp" line="359"/>
-        <location filename="mainwidget.cpp" line="374"/>
+        <location filename="mainwidget.cpp" line="347"/>
+        <location filename="mainwidget.cpp" line="373"/>
+        <location filename="mainwidget.cpp" line="388"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="333"/>
-        <location filename="mainwidget.cpp" line="453"/>
-        <location filename="mainwidget.cpp" line="510"/>
+        <location filename="mainwidget.cpp" line="353"/>
+        <location filename="mainwidget.cpp" line="468"/>
+        <location filename="mainwidget.cpp" line="525"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="333"/>
+        <location filename="mainwidget.cpp" line="353"/>
         <source>Das Bild &quot;%1&quot; konnte nicht geladen werden!</source>
         <translation>The picture \&quot;%1\&quot; could not be loaded!</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="583"/>
+        <source>Ende der Slideshow</source>
+        <translation>End of slideshow</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="583"/>
+        <source>Der Timer wurde gestoppt!</source>
+        <translation>The timer has been stopped!</translation>
     </message>
     <message>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
@@ -86,8 +106,8 @@
         <translation type="obsolete">The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="453"/>
-        <location filename="mainwidget.cpp" line="510"/>
+        <location filename="mainwidget.cpp" line="468"/>
+        <location filename="mainwidget.cpp" line="525"/>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
 Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
         <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
@@ -280,7 +300,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Open directory</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="181"/>
+        <location filename="settingsdialog.cpp" line="189"/>
         <source>Öffne Verzeichnis</source>
         <translation>Open directory</translation>
     </message>
@@ -288,48 +308,48 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
 <context>
     <name>animation</name>
     <message>
-        <location filename="animation.cpp" line="276"/>
-        <location filename="animation.cpp" line="310"/>
+        <location filename="animation.cpp" line="277"/>
+        <location filename="animation.cpp" line="311"/>
         <source>Timer aus</source>
         <translation>timer off</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="286"/>
-        <location filename="animation.cpp" line="300"/>
-        <location filename="animation.cpp" line="742"/>
+        <location filename="animation.cpp" line="287"/>
+        <location filename="animation.cpp" line="301"/>
+        <location filename="animation.cpp" line="757"/>
         <source>%1 Sekunden</source>
         <translation>%1 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="327"/>
-        <location filename="animation.cpp" line="395"/>
-        <location filename="animation.cpp" line="399"/>
+        <location filename="animation.cpp" line="328"/>
+        <location filename="animation.cpp" line="408"/>
+        <location filename="animation.cpp" line="412"/>
         <source>Springe zu: %1/%2</source>
         <translation>Jump to: %1/%2</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="327"/>
+        <location filename="animation.cpp" line="328"/>
         <source>Bildnummer eingeben + Enter</source>
         <translation>Type image number + Enter</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="348"/>
+        <location filename="animation.cpp" line="361"/>
         <source>ESC zum beenden</source>
         <translation>Press ESC to exit</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="367"/>
+        <location filename="animation.cpp" line="380"/>
         <source>%1_ Sekunden</source>
         <translation>%1_ seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="369"/>
+        <location filename="animation.cpp" line="382"/>
         <source>%1%2 Sekunden</source>
         <translation>%1%2 seconds</translation>
     </message>
     <message>
-        <location filename="animation.cpp" line="785"/>
-        <location filename="animation.cpp" line="791"/>
+        <location filename="animation.cpp" line="800"/>
+        <location filename="animation.cpp" line="806"/>
         <source>Bitte H drücken für Hilfe</source>
         <translation>Press &apos;H&apos; for help</translation>
     </message>
@@ -349,22 +369,22 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
 <context>
     <name>overlayHelp</name>
     <message>
-        <location filename="overlayhelp.cpp" line="96"/>
+        <location filename="overlayhelp.cpp" line="114"/>
         <source>version: %1</source>
         <translation>version: %1</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="113"/>
+        <location filename="overlayhelp.cpp" line="131"/>
         <source>Kommandos</source>
         <translation>Commands</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="131"/>
+        <location filename="overlayhelp.cpp" line="148"/>
         <source>Über picture-show</source>
         <translation>About picture show</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="134"/>
+        <location filename="overlayhelp.cpp" line="151"/>
         <source>Dieses Programm unterliegt der GPL v3 Lizenz. Es kann frei verwendet und verändert werden, muss allerdings stets unter GPL Lizenz veröffentlicht werden. Es verwendet das Qt Framework (version %1). 
 
 2012 by Sebastian Schäfer / web: http://code.google.com/p/picture-show/</source>
@@ -373,112 +393,112 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
 2012 by Sebastian Schäfer / web: http://code.google.com/p/picture-show/</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="192"/>
+        <location filename="overlayhelp.cpp" line="205"/>
         <source>Öffnet den Dialog zur Auswahl das Bilderordners und der Einstellungen für die picture show</source>
         <translation>Opens the dialog to choose the image directory and the preferences for picture-show</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="193"/>
+        <location filename="overlayhelp.cpp" line="206"/>
         <source>Wechselt zwischen Fullscreen- und Fenstermodus hin und her</source>
         <translation>Changes between Fullscreen and windowed mode (and back)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="195"/>
+        <location filename="overlayhelp.cpp" line="208"/>
         <source>Zum nächsten Bild blenden</source>
         <translation>Blend to next image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="195"/>
+        <location filename="overlayhelp.cpp" line="208"/>
         <source>&lt;Pfeil rechts&gt;</source>
         <translation>&lt;right arrow&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="196"/>
+        <location filename="overlayhelp.cpp" line="209"/>
         <source>&lt;Maus rechts&gt;</source>
         <translation>&lt;Mouse right&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="196"/>
+        <location filename="overlayhelp.cpp" line="209"/>
         <source>Zum nächsten Bild blenden (wenn aktiviert)</source>
         <translation>Blend to next image (if mouse control is active)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="197"/>
+        <location filename="overlayhelp.cpp" line="210"/>
         <source>Zum vorherigen Bild blenden</source>
         <translation>Blend to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="197"/>
+        <location filename="overlayhelp.cpp" line="210"/>
         <source>&lt;Pfeil links&gt;</source>
         <translation>&lt;left arrow&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="198"/>
+        <location filename="overlayhelp.cpp" line="211"/>
         <source>&lt;Maus links&gt;</source>
         <translation>&lt;Mouse left&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="198"/>
+        <location filename="overlayhelp.cpp" line="211"/>
         <source>Zum vorherigen Bild blenden (wenn aktiviert)</source>
         <translation>Blend to previous image (if mouse control is active)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="199"/>
+        <location filename="overlayhelp.cpp" line="212"/>
         <source>Springt zum nächsten Bild</source>
         <translation>Jump to next image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="199"/>
+        <location filename="overlayhelp.cpp" line="212"/>
         <source>&lt;Bild ab&gt;</source>
         <translation>&lt;Page down&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="200"/>
+        <location filename="overlayhelp.cpp" line="213"/>
         <source>Springt zum vorherigen Bild</source>
         <translation>Jump to previous image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="200"/>
+        <location filename="overlayhelp.cpp" line="213"/>
         <source>&lt;Bild auf&gt;</source>
         <translation>&lt;Page up&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="201"/>
+        <location filename="overlayhelp.cpp" line="214"/>
         <source>Jump-to Dialog zum springen zu einem Bild, Eingabe der Bildnummer gefolgt von &lt;Enter&gt;</source>
         <translation>Jump to dialog to jump to a specified image (type the image number, then press &lt;Enter&gt;)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="202"/>
+        <location filename="overlayhelp.cpp" line="215"/>
         <source>I</source>
         <translation>I</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="202"/>
+        <location filename="overlayhelp.cpp" line="215"/>
         <source>Anzeige mit Infos über das aktuelle Bild anzeigen</source>
         <translation>Show infobar with metadata for current image</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="203"/>
+        <location filename="overlayhelp.cpp" line="216"/>
         <source>Startet den Timer, Eingabe der Dauer in Sekunden (4-99) gefolgt von &lt;Enter&gt;</source>
         <translation>Starts the timer, then type the duration in seconds (4-99) followed by &lt;Enter&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="203"/>
+        <location filename="overlayhelp.cpp" line="216"/>
         <source>&lt;Leertaste&gt;</source>
         <translation>&lt;Space&gt;</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="204"/>
+        <location filename="overlayhelp.cpp" line="217"/>
         <source>Beendet den Timer, wenn aktiv</source>
         <translation>Terminates the timer (if active)</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="206"/>
+        <location filename="overlayhelp.cpp" line="219"/>
         <source>Diese Hilfe anzeigen</source>
         <translation>Shows this help dialog</translation>
     </message>
     <message>
-        <location filename="overlayhelp.cpp" line="207"/>
+        <location filename="overlayhelp.cpp" line="220"/>
         <source>Blendet Info-Leise oder diese Hilfe aus bzw. beendet das Programm</source>
         <translation>Fades out the info bar and this help window or terminates the application</translation>
     </message>

@@ -143,14 +143,16 @@ MainWidget::MainWidget(QWidget *parent) :
     this->automaticForwardInverval = settings.value("automaticTimerInterval", QVariant(10000)).toInt();
 
     this->show();
-    //this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
     this->effectEngine->paintStartScreen();
     this->settingsDial->raise();
 
-    if (settings.value("firstStart", QVariant(true)).toBool())
+    QString current_version = qApp->applicationVersion();
+
+    if (settings.value("lastOpenedVersion", QVariant("true")).toString() != current_version)
     {
         this->displayHelp->blendIn(this->effectEngine->currentDisplay());
         this->displayState = SHOW_HELP;
+        settings.setValue("lastOpenedVersion", QVariant(current_version));
     }
     else
     {
@@ -226,7 +228,8 @@ void MainWidget::applyNewOptions()
         this->initialize();
 
     if ( (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting()) ||
-         (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory()) )
+         (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory()) ||
+         (this->load_directory->getIncludeSubdirs() != this->settingsDial->getIncludeSubdirs()) )
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Frage"));
@@ -237,10 +240,15 @@ void MainWidget::applyNewOptions()
             msgBox.setText(tr("Das Bilderverzeichnis wurde geändert. Damit die Bilder aus dem neuen Verzeichnis angezeigt werden, muss eine neue Show geladen werden."));
             msgBox.setInformativeText(tr("\"Ja\" klicken, um neus Verzeichnis zu laden, \"Nein\" um altes Verzeichnis weiter anzuzeigen."));
         }
-        else
+        else if (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory())
         {
             msgBox.setText(tr("Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn."));
             msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um alte Sortierung weiter zu verwenden."));
+        }
+        else
+        {
+            msgBox.setText(tr("Die Einstellung bzgl. der Unterverzeichnisse wurde geändert. Damit die neue Bildauswahl angezeigt werden kann, muss die Show neu geladen werden. Sie startet neu von Beginn."));
+            msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um die alte Einstellung weiter zu verwenden."));
         }
 
         QPushButton *yesButton = msgBox.addButton(tr("Ja"), QMessageBox::YesRole);
@@ -258,6 +266,7 @@ void MainWidget::applyNewOptions()
         {
             this->settingsDial->setDirectorySorting(this->load_directory->getSorting());
             this->settingsDial->setCurrentDirectory(this->load_directory->getDirectory());
+            this->settingsDial->setIncludeSubdirs(this->load_directory->getIncludeSubdirs());
         }
     }
 
@@ -347,12 +356,6 @@ void MainWidget::loadImageFinished()
     else
     {
         this->imagesLoaded = true;
-
-        // Set firstStart to false for future sessions
-        QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-        settings.setValue("firstStart", QVariant(false));
-        this->effectEngine->setFirstStart(settings.value("firstStart", QVariant(true)).toBool());
-
         this->effectEngine->paintFromWaiting(this->img);
     }
 }
@@ -571,6 +574,15 @@ void MainWidget::advanceImages(bool forward, bool hard)
                 this->load_img_next->start();
             }
         }
+        // last image
+        else if (this->current_position == this->current_directory_list.size()-1)
+        {
+            if (this->automaticForward->isActive())
+            {
+                this->automaticForward->stop();
+                this->effectEngine->showInfoMessage(tr("Ende der Slideshow"), tr("Der Timer wurde gestoppt!"));
+            }
+        }
     }
 }
 
@@ -609,6 +621,14 @@ void MainWidget::processQueuedCommands()
         }
         else if (this->m_queuedComm == INFO_BAR)
         {
+            this->displayInfo->setImageNumberAndNumberOfImages(this->current_position+1, this->current_directory_list.size());
+
+            QString fname = this->current_directory_list.at(this->current_position).absoluteFilePath();
+            EXIFInfo exif = readExifHeader(fname);
+            this->displayInfo->setCurrentExifInformation(exif);
+            this->displayInfo->setCurrentFileInformation(this->current_directory_list.at(this->current_position));
+            this->displayInfo->setCurrentImageResolution(this->current_list_imageSizes.value(this->current_position, QString()));
+
             if (this->displayInfo->blendIn(this->effectEngine->currentDisplay()))
             {
                 this->displayState = SHOW_INFO;
@@ -636,9 +656,6 @@ void MainWidget::processQueuedCommands()
         {
             if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
             {
-                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-                settings.setValue("firstStart", QVariant(false));
-                this->effectEngine->setFirstStart(false);
                 this->displayState = SHOW_HELP;
                 this->automaticForward->stop();
                 this->effectEngine->textBarReset();
@@ -691,6 +708,18 @@ void MainWidget::resizeEvent ( QResizeEvent * event )
             else
                 this->effectEngine->paintStartScreen();
         }
+
+//        if (this->isMaximized() && this->current_task == NONE)
+//        {
+//            if (this->windowState() != Qt::WindowFullScreen)
+//            {
+//                this->last_nonFullscreen_size = event->oldSize();
+//                this->last_nonFullscreen_pos = this->pos();
+
+//                this->setWindowState(Qt::WindowFullScreen);
+//                this->setCursor(Qt::BlankCursor);
+//            }
+//        }
     }
 }
 
@@ -862,9 +891,6 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         {
             if (this->displayHelp->blendIn(this->effectEngine->currentDisplay()))
             {
-//                QSettings settings(QSettings::IniFormat, QSettings::SystemScope, "bsSoft", "picture Show");
-//                settings.setValue("firstStart", QVariant(false));
-                //this->effectEngine->setFirstStart(false);
                 this->displayState = SHOW_HELP;
                 this->automaticForward->stop();
                 this->effectEngine->textBarReset();
@@ -887,6 +913,20 @@ void MainWidget::keyPressEvent_showingHelp ( QKeyEvent * event )
     case Qt::Key_Return:
     case Qt::Key_Escape:
         this->displayHelp->blendOut();
+    break;
+    case Qt::Key_J:
+        if (this->imagesLoaded)
+        {
+            this->displayHelp->blendOut();
+            this->m_queuedComm = JUMP_TO;
+        }
+    break;
+    case Qt::Key_I:
+        if (this->imagesLoaded)
+        {
+            this->displayHelp->blendOut();
+            this->m_queuedComm = INFO_BAR;
+        }
     break;
     }
 }

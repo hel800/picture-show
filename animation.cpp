@@ -83,6 +83,7 @@ animation::animation(QWidget * pWidget)
     this->m_stopwatch_off_icon = QPixmap(":/images/img/stopwatchOff-icon.png");
     this->m_jumpto_icon = QPixmap(":/images/img/jumpto-icon.png");
     this->m_exit_icon = QPixmap(":/images/img/exit_logo.png");
+    this->m_infoLogo_big = QPixmap(":/images/img/info-logo.png").scaledToWidth(94, Qt::SmoothTransformation);
     this->m_logoText = QPixmap(":/images/img/logoText.png");
 
     this->m_waitingPix.append(QPixmap(":/images/img/waiting01.png"));
@@ -325,6 +326,18 @@ void animation::startJumptoBar(int currentImage, int numImages)
     this->m_nothingEnteredYet = true;
 
     this->blendTextbar(tr("Springe zu: %1/%2").arg(currentImage).arg(numImages), tr("Bildnummer eingeben + Enter"));
+}
+
+void animation::showInfoMessage(const QString& msg, const QString &info, int secs)
+{
+    if (this->isBusy() || this->isWaiting() || this->m_blendTo.isNull())
+        return;
+
+    this->m_tbReason = INFO_MESSAGE;
+    this->blendTextbar(msg, info);
+
+    this->m_textWaitTimer->setSingleShot(true);
+    this->m_textWaitTimer->start(secs * 1000);
 }
 
 void animation::startExitApp()
@@ -703,6 +716,8 @@ void animation::paintTextbar()
         this->drawTextbar(&p, STOPWATCH_OFF, this->m_current_textbar_blend);
     else if (this->m_tbReason == JUMP)
         this->drawTextbar(&p, JUMP_TO, this->m_current_textbar_blend);
+    else if (this->m_tbReason == INFO_MESSAGE)
+        this->drawTextbar(&p, INFO, this->m_current_textbar_blend);
     else if (this->m_tbReason == EXIT)
         this->drawTextbar(&p, EXIT_ICO, this->m_current_textbar_blend);
 
@@ -862,6 +877,8 @@ void animation::drawTextbar(QPainter * p, IconType icon, double opacity)
         p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_stopwatch_off_icon);
     else if (icon == JUMP_TO)
         p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_jumpto_icon);
+    else if (icon == INFO)
+        p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_infoLogo_big);
     else if (icon == EXIT_ICO)
         p->drawPixmap(int(this->m_paintWidget->width()/2)-190, int(this->m_paintWidget->height()/2)-vert_offset, this->m_exit_icon);
 

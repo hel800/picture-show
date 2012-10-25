@@ -49,6 +49,7 @@ public:
         STOPWATCH,
         STOPWATCH_OFF,
         JUMP_TO,
+        INFO,
         EXIT_ICO
     };
 
@@ -56,6 +57,7 @@ public:
         TIMER_ON,
         TIMER_OFF,
         JUMP,
+        INFO_MESSAGE,
         EXIT
     };
 
@@ -87,6 +89,7 @@ public:
     void startTimerBar(int secs = 10);
     void stopTimerBar();
     void startJumptoBar(int currentImage, int numImages);
+    void showInfoMessage(const QString& msg, const QString &info, int secs = 3);
     void startExitApp();
 
     bool exitRequested();
@@ -155,6 +158,7 @@ private:
     QPixmap m_textbarPix;
     QPixmap m_textbarPix_extended;
     QPixmap m_infoLogo;
+    QPixmap m_infoLogo_big;
     double m_current_textbar_blend;
     bool m_textbarVisible;
     bool m_nothingEnteredYet;

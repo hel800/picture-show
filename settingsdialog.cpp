@@ -108,6 +108,14 @@ bool SettingsDialog::getIncludeSubdirs()
     return ui->checkBox_subdirs->isChecked();
 }
 
+void SettingsDialog::setIncludeSubdirs(bool inc)
+{
+    if (inc)
+        ui->checkBox_subdirs->setCheckState(Qt::Checked);
+    else
+        ui->checkBox_subdirs->setCheckState(Qt::Unchecked);
+}
+
 ScaleType SettingsDialog::getScaleType()
 {
     if (ui->comboBox_scaling->currentIndex() == 0)
@@ -181,6 +189,7 @@ void SettingsDialog::on_pushButton_browse_clicked()
     QString directory = QFileDialog::getExistingDirectory(this, tr("Öffne Verzeichnis"),
                                                           ui->comboBox_directoryPath->lineEdit()->text(),
                                                           QFileDialog::ShowDirsOnly);
+
 
     if (!directory.isEmpty())
         ui->comboBox_directoryPath->lineEdit()->setText(directory);
