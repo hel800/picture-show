@@ -274,6 +274,7 @@ void MainWidget::applyNewOptions()
     this->effectEngine->setCurrentBlendType(this->settingsDial->getBlendType());
     this->current_blendType = this->settingsDial->getBlendType();
     this->mouseControl = this->settingsDial->getMouseControl();
+    this->displayHelp->setMouseControl(this->mouseControl);
 
     if (this->current_scaleType != this->settingsDial->getScaleType())
     {
