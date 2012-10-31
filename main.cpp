@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     #elif defined (__GNUC__)
         std::ostringstream os;
         os << __GNUC__ << "." << __GNUC_MINOR__;
-        appVersion += QString("(GCC v") + QString(os.str().c_str() + QString(" ");
+        appVersion += QString("(GCC v") + QString(os.str().c_str()) + QString(" ");
     #elif defined (__MINGW32__)
         std::ostringstream os;
         os << __MINGW32_MAJOR_VERSION << "." << __MINGW32_MINOR_VERSION;
