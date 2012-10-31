@@ -32,6 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);    
     this->setModal(true);
+    this->setWindowFlags( this->windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
     ui->comboBox_directoryPath->setEditable(true);
 
