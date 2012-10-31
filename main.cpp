@@ -36,12 +36,12 @@ int main(int argc, char *argv[])
         #elif _MSC_VER >= 1500
             appVersion += QString("(MSVC v9.0 ");
         #else
-            appVersion += QString("(MSVC < 9.0");
+            appVersion += QString("(MSVC < 9.0 ");
         #endif
     #elif defined (__GNUC__)
         std::ostringstream os;
         os << __GNUC__ << "." << __GNUC_MINOR__;
-        appVersion += QString("GCC v") + QString(os.str().c_str());
+        appVersion += QString("(GCC v") + QString(os.str().c_str() + " ");
     #elif defined (__MINGW32__)
         std::ostringstream os;
         os << __MINGW32_MAJOR_VERSION << "." << __MINGW32_MINOR_VERSION;
