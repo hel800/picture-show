@@ -44,8 +44,12 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->setupUi(this);
 
     this->settingsDial = new SettingsDialog(this);
+    connect(this->settingsDial, SIGNAL(rejected()), this, SLOT(restoreCursorState()));
+    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(restoreCursorState()));
+    connect(this->settingsDial, SIGNAL(applyClicked()), this, SLOT(restoreCursorState()));
     connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));
     connect(this->settingsDial, SIGNAL(applyClicked()), this, SLOT(applyNewOptions()));
+
 
     if (this->settingsDial->getLanguage() != "de")
     {
@@ -156,6 +160,7 @@ MainWidget::MainWidget(QWidget *parent) :
     }
     else
     {
+        this->unsetCursor();
         this->settingsDial->show();
     }
 }
@@ -286,6 +291,12 @@ void MainWidget::applyNewOptions()
     }
 }
 
+void MainWidget::restoreCursorState()
+{
+    if ((this->windowState() == Qt::WindowFullScreen) || (this->windowState() == (Qt::WindowFullScreen | Qt::WindowMaximized)))
+        this->setCursor(Qt::BlankCursor);
+}
+
 void MainWidget::directoryLoadFinished(bool success)
 {
     // if any overlays have been shown, now they're set back
@@ -300,7 +311,9 @@ void MainWidget::directoryLoadFinished(bool success)
 
         QMessageBox::warning(this, tr("Fehler beim laden des Ordners"), this->load_directory->getErrorMsg());
 
+        this->unsetCursor();
         this->settingsDial->show();
+
         return;
     }
 
@@ -312,6 +325,7 @@ void MainWidget::directoryLoadFinished(bool success)
 
         QMessageBox::warning(this, tr("Keine Bilder"), tr("In dem angegebenen Ordner wurden keine Bilder gefunden!"));
 
+        this->unsetCursor();
         this->settingsDial->show();
         return;
     }
@@ -352,6 +366,8 @@ void MainWidget::loadImageFinished()
     {
         this->automaticForward->stop();
         QMessageBox::warning(this, tr("Fehler"), tr("Das Bild \"%1\" konnte nicht geladen werden!").arg(this->current_directory_list.at(this->current_position).fileName()));
+
+        this->unsetCursor();
         this->settingsDial->show();
     }
     else
@@ -467,6 +483,8 @@ void MainWidget::advanceImages(bool forward, bool hard)
             {
                 this->automaticForward->stop();
                 QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\nDie Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
+
+                this->unsetCursor();
                 this->settingsDial->show();
                 return;
             }
@@ -524,6 +542,8 @@ void MainWidget::advanceImages(bool forward, bool hard)
             {
                 this->automaticForward->stop();
                 QMessageBox::warning(this, tr("Fehler"), tr("Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!\nDie Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden..."));
+
+                this->unsetCursor();
                 this->settingsDial->show();
                 return;
             }
@@ -783,6 +803,7 @@ void MainWidget::keyPressEvent ( QKeyEvent * event )
         if (this->settingsDial->isHidden())
         {
             this->automaticForward->stop();
+            this->unsetCursor();
             this->settingsDial->show();
         }
         else

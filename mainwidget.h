@@ -92,6 +92,7 @@ public:
 public slots:
     void initialize();
     void applyNewOptions();
+    void restoreCursorState();
     void directoryLoadFinished(bool success);
     void overlayBlendOutFinished();
     void changeLanguage(QString language_short);
