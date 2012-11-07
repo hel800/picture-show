@@ -112,7 +112,7 @@ void animation::reset()
 
 bool animation::isBusy()
 {
-    return this->m_doingWhat == BLENDING;
+    return this->m_doingWhat != NOTHING;
 }
 
 bool animation::isWaiting()
