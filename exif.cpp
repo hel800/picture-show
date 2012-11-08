@@ -118,7 +118,13 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
 
 //    std::cout << std::dec << "@" << offs << ": tag: " << std::hex << tag << std::dec << " ncomp: " << ncomp << " coffs: " << coffs << std::endl;
 
-    switch(tag) {
+    switch(tag) {    
+      case 0x112:
+        {
+            unsigned short orient = parse16((unsigned char*) &coffs, alignIntel);
+            result.orientation = orient;
+        }
+        break;
       case 0x8769:
         // EXIF subIFD offset
         exifSubIFD = ifdOffset + coffs;
@@ -181,7 +187,6 @@ int ParseEXIF(unsigned char *buf, unsigned len, EXIFInfo &result) {
     unsigned coffs = parse32(buf+offs+8, alignIntel);
 
     switch(tag) {
-
       case 0x9003:
       {
         // original image date/time string

@@ -28,7 +28,9 @@ February 2012
 #include <QImage>
 #include <QFile>
 #include <QPicture>
+#include <QTransform>
 
+#include "readExif.h"
 #include "global.h"
 
 class loadImage : public QThread

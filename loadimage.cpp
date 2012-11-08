@@ -76,7 +76,49 @@ void loadImage::run()
         this->img = new QImage(temp.scaled(this->target_width, this->target_height, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
 
     if (this->img == NULL)
+    {
         this->img = new QImage();
+    }
+    else
+    {
+        EXIFInfo exif = readExifHeader(fn);
+
+        if (exif.orientation != 1)
+        {
+            QTransform trans;
+            QImage newImage(*this->img);
+            switch (exif.orientation)
+            {
+            case 2:
+                newImage = this->img->mirrored(true, false);
+            break;
+            case 3:
+                trans.rotate(180.0);
+            break;
+            case 4:
+                newImage = this->img->mirrored(false, true);
+            break;
+            case 5:
+                newImage = this->img->mirrored(true, false);
+                trans.rotate(270.0);
+            break;
+            case 6:
+                trans.rotate(90.0);
+            break;
+            case 7:
+                newImage = this->img->mirrored(true, false);
+                trans.rotate(90.0);
+            break;
+            case 8:
+                trans.rotate(270.0);
+            break;
+            }
+
+            delete this->img;
+            this->img = NULL;
+            this->img = new QImage(newImage.transformed(trans));
+        }
+    }
 }
 
 QImage * loadImage::getImage()

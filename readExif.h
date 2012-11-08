@@ -107,11 +107,12 @@ static EXIFInfo readExifHeader(const QString &fname)
     }
 
     qint64 fsize = file.size();
-    unsigned char * buf = new unsigned char[fsize];
+    qint64 cappedSize = 3000;
+    unsigned char * buf = new unsigned char[cappedSize];
 
     file.seek(0);
-    qint64 newSize = file.read((char*)buf, fsize);
-    if (newSize != fsize)
+    qint64 newSize = file.read((char*)buf, cappedSize);
+    if (newSize != cappedSize)
     {
         qDebug("Can't read file");
         delete[] buf;
@@ -119,7 +120,7 @@ static EXIFInfo readExifHeader(const QString &fname)
         return headerData;
     }
 
-    ParseEXIF(buf, fsize, headerData);
+    ParseEXIF(buf, cappedSize, headerData);
 
     return headerData;
 }

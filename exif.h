@@ -63,6 +63,7 @@ public:
   float FStop;        // F-number of lens = 1/FStop
   float exposureTime;      // Exposure time in seconds
   QString exposureTime_st;
+  unsigned short orientation;
 
   // Destructor
   ~EXIFInfo() {
@@ -83,6 +84,7 @@ public:
     cameraMake = cameraModel = dateTimeModified = dateTimeOriginal = imgDescription = (char*)0;
     focalLength = 0;
     FStop = exposureTime = 0;
+    orientation = 1;
   }
 
 };
