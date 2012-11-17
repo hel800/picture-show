@@ -414,14 +414,7 @@
       <item>
        <widget class="QPushButton" name="pushButton_load">
         <property name="text">
-         <string>Laden</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_apply">
-        <property name="text">
-         <string>Anwenden</string>
+         <string>Ok</string>
         </property>
        </widget>
       </item>
@@ -439,7 +432,6 @@
  </widget>
  <tabstops>
   <tabstop>pushButton_load</tabstop>
-  <tabstop>pushButton_apply</tabstop>
   <tabstop>pushButton_cancel</tabstop>
   <tabstop>comboBox_effect</tabstop>
   <tabstop>comboBox_fadeTime</tabstop>

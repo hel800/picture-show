@@ -10,93 +10,97 @@
         <translation>picture show</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="235"/>
+        <location filename="mainwidget.cpp" line="236"/>
         <source>Frage</source>
         <translation>Question</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="240"/>
+        <location filename="mainwidget.cpp" line="241"/>
         <source>Das Bilderverzeichnis wurde geändert. Damit die Bilder aus dem neuen Verzeichnis angezeigt werden, muss eine neue Show geladen werden.</source>
         <translation>The picture directory has been changed. To load the images from the new directory a new show has to be started.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="241"/>
+        <location filename="mainwidget.cpp" line="242"/>
         <source>&quot;Ja&quot; klicken, um neus Verzeichnis zu laden, &quot;Nein&quot; um altes Verzeichnis weiter anzuzeigen.</source>
         <translation>Click &quot;Yes&quot; to load a new show, click &quot;No&quot; to keep the images from the old directory.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="245"/>
+        <location filename="mainwidget.cpp" line="246"/>
         <source>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
         <oldsource>Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn.  &quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
         <translation>Sorting of the pictures has been changed. For the new order to take effect the show must be restarted from the beginning.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="246"/>
+        <location filename="mainwidget.cpp" line="247"/>
         <source>&quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</source>
         <oldsource>Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um alte Sortierung weiter zu verwenden.</oldsource>
         <translation>Click &quot;Yes&quot; to restart the show, &quot;No&quot; to continue with the old sorting order.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="250"/>
         <source>Die Einstellung bzgl. der Unterverzeichnisse wurde geändert. Damit die neue Bildauswahl angezeigt werden kann, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
-        <translation>The setting regarding the subfolders has been changed. For the new setting to take effect the show must be restarted from the beginning.</translation>
+        <translation type="obsolete">The setting regarding the subfolders has been changed. For the new setting to take effect the show must be restarted from the beginning.</translation>
     </message>
     <message>
         <location filename="mainwidget.cpp" line="251"/>
+        <source>Einstellungen wurden geändert. Damit sie wirksam werden, muss die Show neu geladen werden. Sie startet neu von Beginn.</source>
+        <translation>The setting have been changed. For the new setting to take effect the show must be restarted from the beginning.</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="252"/>
         <source>&quot;Ja&quot; klicken, zum neustarten, &quot;Nein&quot; um die alte Einstellung weiter zu verwenden.</source>
         <translation>Click &quot;Yes&quot; to restart the show, &quot;No&quot; to continue with the previous settings.</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="254"/>
+        <location filename="mainwidget.cpp" line="255"/>
         <source>Ja</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="255"/>
+        <location filename="mainwidget.cpp" line="256"/>
         <source>Nein</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="300"/>
+        <location filename="mainwidget.cpp" line="308"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="312"/>
+        <location filename="mainwidget.cpp" line="322"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="312"/>
+        <location filename="mainwidget.cpp" line="322"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="347"/>
-        <location filename="mainwidget.cpp" line="373"/>
-        <location filename="mainwidget.cpp" line="388"/>
+        <location filename="mainwidget.cpp" line="358"/>
+        <location filename="mainwidget.cpp" line="386"/>
+        <location filename="mainwidget.cpp" line="401"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="353"/>
-        <location filename="mainwidget.cpp" line="468"/>
-        <location filename="mainwidget.cpp" line="525"/>
+        <location filename="mainwidget.cpp" line="364"/>
+        <location filename="mainwidget.cpp" line="481"/>
+        <location filename="mainwidget.cpp" line="540"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="353"/>
+        <location filename="mainwidget.cpp" line="364"/>
         <source>Das Bild &quot;%1&quot; konnte nicht geladen werden!</source>
         <translation>The picture \&quot;%1\&quot; could not be loaded!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="583"/>
+        <location filename="mainwidget.cpp" line="600"/>
         <source>Ende der Slideshow</source>
         <translation>End of slideshow</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="583"/>
+        <location filename="mainwidget.cpp" line="600"/>
         <source>Der Timer wurde gestoppt!</source>
         <translation>The timer has been stopped!</translation>
     </message>
@@ -106,8 +110,8 @@
         <translation type="obsolete">The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="468"/>
-        <location filename="mainwidget.cpp" line="525"/>
+        <location filename="mainwidget.cpp" line="481"/>
+        <location filename="mainwidget.cpp" line="540"/>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
 Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
         <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
@@ -154,19 +158,24 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>Presentation options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="211"/>
+        <location filename="settingsdialog.ui" line="214"/>
         <source>Blenden+Schieben</source>
         <translation>fade+slide</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="338"/>
+        <location filename="settingsdialog.ui" line="341"/>
         <source>Bilderverzeichnis</source>
         <translation>Picture directory</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="369"/>
+        <location filename="settingsdialog.ui" line="372"/>
         <source>Durchsuchen...</source>
         <translation>Browse...</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="417"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
     </message>
     <message utf8="true">
         <location filename="settingsdialog.ui" line="26"/>
@@ -174,22 +183,20 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="379"/>
+        <location filename="settingsdialog.ui" line="382"/>
         <source>Unterverzeichnisse einbeziehen</source>
         <translation>Include subdirectories</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="414"/>
         <source>Laden</source>
-        <translation>Load</translation>
+        <translation type="obsolete">Load</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="421"/>
         <source>Anwenden</source>
-        <translation>Apply</translation>
+        <translation type="obsolete">Apply</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="428"/>
+        <location filename="settingsdialog.ui" line="424"/>
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
@@ -198,17 +205,17 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Presentation options</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="233"/>
+        <location filename="settingsdialog.ui" line="236"/>
         <source>Sortierung: </source>
         <translation>Sort by:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="250"/>
+        <location filename="settingsdialog.ui" line="253"/>
         <source>nach Dateiname</source>
         <translation>filename</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="255"/>
+        <location filename="settingsdialog.ui" line="258"/>
         <source>nach Erstellungsdatum</source>
         <translation>date of origin</translation>
     </message>
@@ -217,62 +224,62 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">&lt;b&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/b&gt;</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="219"/>
+        <location filename="settingsdialog.ui" line="222"/>
         <source>Übergangszeit: </source>
         <translation>Fading time: </translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="273"/>
+        <location filename="settingsdialog.ui" line="276"/>
         <source>0,5 Sekunden</source>
         <translation>0.5 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="278"/>
+        <location filename="settingsdialog.ui" line="281"/>
         <source>1 Sekunde</source>
         <translation>1 second</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="283"/>
+        <location filename="settingsdialog.ui" line="286"/>
         <source>2 Sekunden</source>
         <translation>2 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="288"/>
+        <location filename="settingsdialog.ui" line="291"/>
         <source>3 Sekunden</source>
         <translation>3 seconds</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="226"/>
+        <location filename="settingsdialog.ui" line="229"/>
         <source>Skalierung: </source>
         <translation>Scale:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="303"/>
+        <location filename="settingsdialog.ui" line="306"/>
         <source>ganzes Bild</source>
         <translation>whole image</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="308"/>
+        <location filename="settingsdialog.ui" line="311"/>
         <source>Bildschirm füllen</source>
         <translation>whole screen</translation>
     </message>
     <message utf8="true">
-        <location filename="settingsdialog.ui" line="328"/>
+        <location filename="settingsdialog.ui" line="331"/>
         <source>Übergangseffekt: </source>
         <translation>Fading effect:</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="196"/>
+        <location filename="settingsdialog.ui" line="199"/>
         <source>Keiner</source>
         <translation>none</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="201"/>
+        <location filename="settingsdialog.ui" line="204"/>
         <source>Blenden</source>
         <translation>blend</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="206"/>
+        <location filename="settingsdialog.ui" line="209"/>
         <source>Schieben</source>
         <translation>slide</translation>
     </message>
@@ -300,7 +307,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Open directory</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="189"/>
+        <location filename="settingsdialog.cpp" line="187"/>
         <source>Öffne Verzeichnis</source>
         <translation>Open directory</translation>
     </message>

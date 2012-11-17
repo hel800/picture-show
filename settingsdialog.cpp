@@ -36,9 +36,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->comboBox_directoryPath->setEditable(true);
 
-    connect(ui->pushButton_apply, SIGNAL(clicked()), this, SIGNAL(applyClicked()));
-    connect(ui->pushButton_apply, SIGNAL(clicked()), this, SLOT(hide()));
-
     this->languageChangeSignalOff = true;
     this->loadSettings();
     this->languageChangeSignalOff = false;

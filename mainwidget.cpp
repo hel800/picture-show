@@ -46,10 +46,7 @@ MainWidget::MainWidget(QWidget *parent) :
     this->settingsDial = new SettingsDialog(this);
     connect(this->settingsDial, SIGNAL(rejected()), this, SLOT(restoreCursorState()));
     connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(restoreCursorState()));
-    connect(this->settingsDial, SIGNAL(applyClicked()), this, SLOT(restoreCursorState()));
-    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(initialize()));
-    connect(this->settingsDial, SIGNAL(applyClicked()), this, SLOT(applyNewOptions()));
-
+    connect(this->settingsDial, SIGNAL(accepted()), this, SLOT(applyNewOptions()));
 
     if (this->settingsDial->getLanguage() != "de")
     {
@@ -229,30 +226,29 @@ void MainWidget::initialize()
 
 void MainWidget::applyNewOptions()
 {
-    if (!this->imagesLoaded)
+    if ( (!this->imagesLoaded) || (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory()) )
         this->initialize();
 
     if ( (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting()) ||
-         (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory()) ||
          (this->load_directory->getIncludeSubdirs() != this->settingsDial->getIncludeSubdirs()) )
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Frage"));
         msgBox.setIcon(QMessageBox::Question);
 
-        if (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory())
+        if (this->load_directory->getIncludeSubdirs() != this->settingsDial->getIncludeSubdirs())
         {
             msgBox.setText(tr("Das Bilderverzeichnis wurde geändert. Damit die Bilder aus dem neuen Verzeichnis angezeigt werden, muss eine neue Show geladen werden."));
             msgBox.setInformativeText(tr("\"Ja\" klicken, um neus Verzeichnis zu laden, \"Nein\" um altes Verzeichnis weiter anzuzeigen."));
         }
-        else if (this->load_directory->getDirectory() != this->settingsDial->getCurrentDirectory())
+        else if (this->load_directory->getSorting() != this->settingsDial->getDirectorySorting())
         {
             msgBox.setText(tr("Der Sortierungsmodus wurde geändert. Damit die neue Sortierung angewendet wird, muss die Show neu geladen werden. Sie startet neu von Beginn."));
             msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um alte Sortierung weiter zu verwenden."));
         }
         else
         {
-            msgBox.setText(tr("Die Einstellung bzgl. der Unterverzeichnisse wurde geändert. Damit die neue Bildauswahl angezeigt werden kann, muss die Show neu geladen werden. Sie startet neu von Beginn."));
+            msgBox.setText(tr("Einstellungen wurden geändert. Damit sie wirksam werden, muss die Show neu geladen werden. Sie startet neu von Beginn."));
             msgBox.setInformativeText(tr("\"Ja\" klicken, zum neustarten, \"Nein\" um die alte Einstellung weiter zu verwenden."));
         }
 
