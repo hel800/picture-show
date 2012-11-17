@@ -25,6 +25,8 @@ August 2012
 #define OVERLAYINFO_H
 
 #include <QFileInfo>
+#include <QDateTime>
+#include <QRegExp>
 #include <QtCore/qmath.h>
 
 #include <overlaybase.h>

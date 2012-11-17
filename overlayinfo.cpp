@@ -123,6 +123,18 @@ void overlayInfo::generatePixmap()
     if (this->currentInformation.focalLength >= 1.0)
         imageFocalLength += QString::number(this->currentInformation.focalLength, 'f', 0) + " mm";
 
+    QString dateTime = this->currentInformation.dateTimeOriginal_st.trimmed();
+    QRegExp exp("^[0-9]{4}:[0-9]{2}:[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$");
+    if (exp.exactMatch(dateTime))
+    {
+        QDateTime dt = QDateTime::fromString(dateTime, "yyyy:MM:dd hh:mm:ss");
+        if (dt.isValid())
+        {
+            dateTime = dt.toString("dd.MM.yyyy hh:mm:ss");
+        }
+    }
+
+
 //    // get image dimensions from file
 //    QString imageDimensions = "";
 //    int t0 = clock();
@@ -248,7 +260,7 @@ void overlayInfo::generatePixmap()
     p.drawText(rectCameraModel, Qt::AlignRight | Qt::AlignVCenter, cameraString);
     p.drawText(rectDescription, Qt::AlignRight | Qt::AlignVCenter, imageDescription);
 
-    p.drawText(rectDateTaken, Qt::AlignRight | Qt::AlignVCenter, this->currentInformation.dateTimeOriginal_st.trimmed());
+    p.drawText(rectDateTaken, Qt::AlignRight | Qt::AlignVCenter, dateTime);
 
     p.end();
 }
