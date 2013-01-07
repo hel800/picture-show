@@ -193,7 +193,7 @@ void animation::paintToWaiting(const QPixmap &from)
     this->m_current_wait_angle = 0.0;
 
     this->m_doingWhat = WAITING;
-    this->m_waitTimer->start(5);
+    this->m_waitTimer->start(10);
 }
 
 
@@ -241,7 +241,7 @@ void animation::blendImages(QPixmap &from, QPixmap &to, bool forward)
     this->m_nextBlendForward = forward;
 
     this->m_current_blend = 0.0;
-    this->m_blendTimer->start(5);
+    this->m_blendTimer->start(picture_shot_standard);
 }
 
 void animation::repaintState()
@@ -271,7 +271,7 @@ void animation::startTimerBar(int secs)
     if (this->m_textbarVisible && this->m_tbReason == TIMER_ON)
     {
         this->m_textWaitTimer->setSingleShot(true);
-        this->m_textWaitTimer->start(2500);
+        this->m_textWaitTimer->start(short_wait);
 
         this->m_tbReason = TIMER_OFF;
         this->m_textbarText = tr("Timer aus");
@@ -281,7 +281,7 @@ void animation::startTimerBar(int secs)
     else if (this->m_textbarVisible && this->m_tbReason == TIMER_OFF)
     {
         this->m_textWaitTimer->setSingleShot(true);
-        this->m_textWaitTimer->start(2500);
+        this->m_textWaitTimer->start(standard_wait);
 
         this->m_tbReason = TIMER_ON;
         this->m_textbarText = tr("%1 Sekunden").arg(secs);
@@ -295,7 +295,7 @@ void animation::startTimerBar(int secs)
 
     // restart textWaitTimer, because TextBar might not be faded in, because it is already visible
     this->m_textWaitTimer->setSingleShot(true);
-    this->m_textWaitTimer->start(2500);
+    this->m_textWaitTimer->start(standard_wait);
 
     // if Textbar is not yet there fade it in
     this->blendTextbar(tr("%1 Sekunden").arg(secs));
@@ -311,7 +311,7 @@ void animation::stopTimerBar()
     this->blendTextbar(tr("Timer aus"));
 
     this->m_textWaitTimer->setSingleShot(true);
-    this->m_textWaitTimer->start(2500);
+    this->m_textWaitTimer->start(short_wait);
 }
 
 void animation::startJumptoBar(int currentImage, int numImages)
@@ -356,7 +356,7 @@ void animation::startExitApp()
     this->m_isAskingExit = true;
 
     this->m_textWaitTimer->setSingleShot(true);
-    this->m_textWaitTimer->start(2500);
+    this->m_textWaitTimer->start(standard_wait);
 
     this->blendTextbar(tr("ESC zum beenden"));
 }
@@ -382,7 +382,7 @@ void animation::numberEntered(int num)
             this->setTextbarText(tr("%1%2 Sekunden").arg(this->m_textbarText.left(1)).arg(num));
 
         this->m_textWaitTimer->setSingleShot(true);
-        this->m_textWaitTimer->start(2500);
+        this->m_textWaitTimer->start(standard_wait);
     }
     else if (this->m_tbReason == JUMP)
     {
@@ -504,7 +504,7 @@ void animation::blendImages()
         return;
 
     this->m_current_blend = 0.0;
-    this->m_blendTimer->start(5);
+    this->m_blendTimer->start(picture_shot_standard);
 }
 
 void animation::paint()

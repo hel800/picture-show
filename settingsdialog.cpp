@@ -62,13 +62,13 @@ void SettingsDialog::setCurrentDirectory(const QString & dir)
 double SettingsDialog::getCurrentFadeTime()
 {
     if (ui->comboBox_fadeTime->currentIndex() == 0)
-        return 0.04;
+        return 0.03; // 33 executions --> 15 ms between shots
     else if (ui->comboBox_fadeTime->currentIndex() == 1)
-        return 0.02;
+        return 0.015; // 66 executions --> 15 ms between shots
     else if (ui->comboBox_fadeTime->currentIndex() == 2)
-        return 0.01;
+        return 0.0075; // 133 executions --> 15 ms between shots
     else if (ui->comboBox_fadeTime->currentIndex() == 3)
-        return 0.005;
+        return 0.005; // 200 executions --> 15 ms between shots
     else
         return 0.01;
 }
@@ -112,6 +112,19 @@ void SettingsDialog::setIncludeSubdirs(bool inc)
         ui->checkBox_subdirs->setCheckState(Qt::Checked);
     else
         ui->checkBox_subdirs->setCheckState(Qt::Unchecked);
+}
+
+bool SettingsDialog::getLoopSlideShow()
+{
+    return ui->checkBox_loop->isChecked();
+}
+
+void SettingsDialog::setLoopSlideShow(bool loop)
+{
+    if (loop)
+        ui->checkBox_loop->setCheckState(Qt::Checked);
+    else
+        ui->checkBox_loop->setCheckState(Qt::Unchecked);
 }
 
 ScaleType SettingsDialog::getScaleType()
@@ -223,6 +236,7 @@ void SettingsDialog::loadSettings()
     ui->checkBox_mouseControl->setChecked(settings.value("mouseControl", QVariant(false)).toBool());
     ui->checkBox_historySave->setChecked(settings.value("saveHistory", QVariant(true)).toBool());
     ui->checkBox_subdirs->setChecked(settings.value("includeSubdirs", QVariant(false)).toBool());
+    ui->checkBox_loop->setChecked(settings.value("loopSlideShow", QVariant(false)).toBool());
 }
 
 void SettingsDialog::saveSettings()
@@ -236,6 +250,8 @@ void SettingsDialog::saveSettings()
     settings.setValue("mouseControl", QVariant(ui->checkBox_mouseControl->isChecked()));
     settings.setValue("saveHistory", QVariant(ui->checkBox_historySave->isChecked()));
     settings.setValue("includeSubdirs", QVariant(ui->checkBox_subdirs->isChecked()));
+    settings.setValue("loopSlideShow", QVariant(ui->checkBox_loop->isChecked()));
+
 }
 
 void SettingsDialog::on_comboBox_language_currentIndexChanged(int index)

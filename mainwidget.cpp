@@ -285,6 +285,12 @@ void MainWidget::applyNewOptions()
         this->effectEngine->paintToWaiting();
         this->reloadImages();
     }
+
+    if ( (this->img_next.isNull() || this->img_prev.isNull()) && (this->settingsDial->getLoopSlideShow()) )
+    {
+        this->effectEngine->paintToWaiting();
+        this->reloadImages();
+    }
 }
 
 void MainWidget::restoreCursorState()
@@ -343,6 +349,10 @@ void MainWidget::directoryLoadFinished(bool success)
         this->active_recalc_processes++;
         this->load_img_next->setTask(this->current_directory_list.at(1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
         this->load_img_next->start();
+
+        this->active_recalc_processes++;
+        this->load_img_prev->setTask(this->current_directory_list.last().absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
+        this->load_img_prev->start();
     }
 }
 
@@ -355,8 +365,9 @@ void MainWidget::loadImageFinished()
         this->current_task = NONE;
 
     if (this->load_img->getSourceWidth() > 0 && this->load_img->getSourceWidth() > 0)
+    {
         this->current_list_imageSizes.insert(this->current_position, tr("%1 x %2").arg(this->load_img->getSourceWidth()).arg(this->load_img->getSourceHeight()));
-
+    }
 
     if (this->img.isNull())
     {
@@ -383,7 +394,12 @@ void MainWidget::loadImagePrevFinished()
         this->current_task = NONE;
 
     if (this->load_img_prev->getSourceWidth() > 0 && this->load_img_prev->getSourceWidth() > 0)
-        this->current_list_imageSizes.insert(this->current_position-1, tr("%1 x %2").arg(this->load_img_prev->getSourceWidth()).arg(this->load_img_prev->getSourceHeight()));
+    {
+        int truePosition = this->current_position-1;
+        if (truePosition < 0)
+            truePosition = this->current_directory_list.size()-1;
+        this->current_list_imageSizes.insert(truePosition, tr("%1 x %2").arg(this->load_img_prev->getSourceWidth()).arg(this->load_img_prev->getSourceHeight()));
+    }
 
     this->processQueuedCommands();
 }
@@ -398,8 +414,12 @@ void MainWidget::loadImageNextFinished()
         this->current_task = NONE;
 
     if (this->load_img_next->getSourceWidth() > 0 && this->load_img_next->getSourceWidth() > 0)
-        this->current_list_imageSizes.insert(this->current_position+1, tr("%1 x %2").arg(this->load_img_next->getSourceWidth()).arg(this->load_img_next->getSourceHeight()));
-
+    {
+        int truePosition = this->current_position+1;
+        if (truePosition >= this->current_directory_list.size())
+            truePosition = 0;
+        this->current_list_imageSizes.insert(truePosition, tr("%1 x %2").arg(this->load_img_next->getSourceWidth()).arg(this->load_img_next->getSourceHeight()));
+    }
 
     this->processQueuedCommands();
 }
@@ -434,17 +454,27 @@ void MainWidget::reloadImages()
     this->load_img->setTask(this->current_directory_list.at(this->current_position).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
     this->load_img->start();
 
-    if (this->current_position > 0)
+    if (this->current_position > 0 || this->settingsDial->getLoopSlideShow())
     {
         this->active_recalc_processes++;
-        this->load_img_prev->setTask(this->current_directory_list.at(this->current_position-1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
+
+        int truePosition = this->current_position-1;
+        if (truePosition < 0)
+            truePosition = this->current_directory_list.size()-1;
+
+        this->load_img_prev->setTask(this->current_directory_list.at(truePosition).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
         this->load_img_prev->start();
     }
 
-    if (this->current_directory_list.size() > this->current_position+1)
+    if (this->current_directory_list.size() > this->current_position+1 || this->settingsDial->getLoopSlideShow())
     {
         this->active_recalc_processes++;
-        this->load_img_next->setTask(this->current_directory_list.at(this->current_position+1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
+
+        int truePosition = this->current_position+1;
+        if (truePosition >= this->current_directory_list.size())
+            truePosition = 0;
+
+        this->load_img_next->setTask(this->current_directory_list.at(truePosition).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
         this->load_img_next->start();
     }
 }
@@ -473,7 +503,7 @@ void MainWidget::advanceImages(bool forward, bool hard)
 
     if (!forward)
     {
-        if (this->current_position > 0)
+        if (this->current_position > 0 || this->settingsDial->getLoopSlideShow())
         {
             if (this->img_prev.isNull())
             {
@@ -512,6 +542,8 @@ void MainWidget::advanceImages(bool forward, bool hard)
             }
 
             this->current_position--;
+            if (this->current_position < 0)
+                this->current_position = this->current_directory_list.size()-1;
 
             this->effectEngine->blendImages(this->img, this->img_prev, false);
             if (this->automaticForward->isActive())
@@ -521,18 +553,23 @@ void MainWidget::advanceImages(bool forward, bool hard)
             this->img = this->img_prev;
             this->img_prev = QPixmap();
 
-            if (this->current_position > 0)
+            if (this->current_position > 0 || this->settingsDial->getLoopSlideShow())
             {
                 this->active_recalc_processes++;
+
+                int truePosition = this->current_position-1;
+                if (truePosition < 0)
+                    truePosition = this->current_directory_list.size()-1;
+
                 this->current_task = PREV;
-                this->load_img_prev->setTask(this->current_directory_list.at(this->current_position-1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
+                this->load_img_prev->setTask(this->current_directory_list.at(truePosition).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
                 this->load_img_prev->start();
             }
         }
     }
     else
     {
-        if (this->current_position < this->current_directory_list.size()-1)
+        if (this->current_position < this->current_directory_list.size()-1 || this->settingsDial->getLoopSlideShow())
         {
             if (this->img_next.isNull())
             {
@@ -572,6 +609,9 @@ void MainWidget::advanceImages(bool forward, bool hard)
 
             this->current_position++;
 
+            if (this->current_position >= this->current_directory_list.size())
+                this->current_position = 0;
+
             this->effectEngine->blendImages(this->img, this->img_next);
             if (this->automaticForward->isActive())
                 this->automaticForward->start(this->automaticForwardInverval);
@@ -583,11 +623,16 @@ void MainWidget::advanceImages(bool forward, bool hard)
             this->img = this->img_next;
             this->img_next = QPixmap();
 
-            if (this->current_position + 1 < this->current_directory_list.size())
+            if (this->current_position + 1 < this->current_directory_list.size() || this->settingsDial->getLoopSlideShow())
             {
                 this->active_recalc_processes++;
+
+                int truePosition = this->current_position+1;
+                if (truePosition >= this->current_directory_list.size())
+                    truePosition = 0;
+
                 this->current_task = NEXT;
-                this->load_img_next->setTask(this->current_directory_list.at(this->current_position+1).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
+                this->load_img_next->setTask(this->current_directory_list.at(truePosition).absoluteFilePath(), this->width(), this->height(), this->current_scaleType);
                 this->load_img_next->start();
             }
         }
@@ -995,7 +1040,7 @@ void MainWidget::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
         this->advanceImages(false);
 
-    if (event->button() == Qt::MiddleButton)
+    if (event->button() == Qt::MidButton)
     {
         if (this->settingsDial->isHidden())
             this->settingsDial->show();

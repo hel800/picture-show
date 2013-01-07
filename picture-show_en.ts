@@ -61,46 +61,46 @@
         <translation>No</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="308"/>
+        <location filename="mainwidget.cpp" line="314"/>
         <source>Fehler beim laden des Ordners</source>
         <translation>Error while loading directory</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="322"/>
+        <location filename="mainwidget.cpp" line="328"/>
         <source>Keine Bilder</source>
         <translation>No images</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="322"/>
+        <location filename="mainwidget.cpp" line="328"/>
         <source>In dem angegebenen Ordner wurden keine Bilder gefunden!</source>
         <translation>No pictures found in specified directory!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="358"/>
-        <location filename="mainwidget.cpp" line="386"/>
+        <location filename="mainwidget.cpp" line="369"/>
         <location filename="mainwidget.cpp" line="401"/>
+        <location filename="mainwidget.cpp" line="421"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="364"/>
-        <location filename="mainwidget.cpp" line="481"/>
-        <location filename="mainwidget.cpp" line="540"/>
+        <location filename="mainwidget.cpp" line="375"/>
+        <location filename="mainwidget.cpp" line="511"/>
+        <location filename="mainwidget.cpp" line="577"/>
         <source>Fehler</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="364"/>
+        <location filename="mainwidget.cpp" line="375"/>
         <source>Das Bild &quot;%1&quot; konnte nicht geladen werden!</source>
         <translation>The picture \&quot;%1\&quot; could not be loaded!</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="600"/>
+        <location filename="mainwidget.cpp" line="645"/>
         <source>Ende der Slideshow</source>
         <translation>End of slideshow</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="600"/>
+        <location filename="mainwidget.cpp" line="645"/>
         <source>Der Timer wurde gestoppt!</source>
         <translation>The timer has been stopped!</translation>
     </message>
@@ -110,8 +110,8 @@
         <translation type="obsolete">The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="481"/>
-        <location filename="mainwidget.cpp" line="540"/>
+        <location filename="mainwidget.cpp" line="511"/>
+        <location filename="mainwidget.cpp" line="577"/>
         <source>Der Inhalt des Bilderordners wurde geändert, Bilder wurden entfernt oder sind nicht mehr zugänglich!
 Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss neu geöffnet und eingelesen werden...</source>
         <translation>The content of the directory has been changed, pictures have been removed or are unavailable!\nThe timer has been stopped if active. The directory has to be reopened...</translation>
@@ -163,17 +163,22 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>fade+slide</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="341"/>
+        <location filename="settingsdialog.ui" line="338"/>
+        <source>Endloswiedergabe: </source>
+        <translation>Loop slide show</translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="355"/>
         <source>Bilderverzeichnis</source>
         <translation>Picture directory</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="372"/>
+        <location filename="settingsdialog.ui" line="386"/>
         <source>Durchsuchen...</source>
         <translation>Browse...</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="417"/>
+        <location filename="settingsdialog.ui" line="431"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -183,7 +188,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Press F1 or &apos;h&apos; for help in presentation mode.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="382"/>
+        <location filename="settingsdialog.ui" line="396"/>
         <source>Unterverzeichnisse einbeziehen</source>
         <translation>Include subdirectories</translation>
     </message>
@@ -196,7 +201,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Apply</translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="424"/>
+        <location filename="settingsdialog.ui" line="438"/>
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
@@ -307,7 +312,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
         <translation type="obsolete">Open directory</translation>
     </message>
     <message>
-        <location filename="settingsdialog.cpp" line="187"/>
+        <location filename="settingsdialog.cpp" line="200"/>
         <source>Öffne Verzeichnis</source>
         <translation>Open directory</translation>
     </message>
@@ -517,7 +522,7 @@ Die Timerfunktion wurde gestoppt, sofern sie aktiv war. Der Bilderordner muss ne
 <context>
     <name>overlayInfo</name>
     <message>
-        <location filename="overlayinfo.cpp" line="179"/>
+        <location filename="overlayinfo.cpp" line="191"/>
         <source>%1/%2</source>
         <translation></translation>
     </message>

@@ -38,6 +38,12 @@ class animation : public QObject
 {
     Q_OBJECT
 
+    static const int short_wait = 2500;
+    static const int standard_wait = 4000;
+    static const int long_wait = 6000;
+
+    static const int picture_shot_standard = 15;
+
 public:
     enum BusyType {
         BLENDING,

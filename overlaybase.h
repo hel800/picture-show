@@ -35,6 +35,9 @@ class overlayBase : public QObject
 {
     Q_OBJECT
 public:
+
+    static const int picture_shot_standard = 20;
+
     enum State
     {
         READY,

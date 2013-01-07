@@ -52,7 +52,7 @@ bool overlayBase::blendIn(const QPixmap& bg)
         this->generatePixmap();
         this->m_currentState = BLEND_IN;
         this->m_currentBlendValue = 0.0;
-        this->m_overlayTimer->start(5);
+        this->m_overlayTimer->start(picture_shot_standard);
         return true;
     }
 
@@ -65,7 +65,7 @@ bool overlayBase::blendOut()
     {
         this->generatePixmap();
         this->m_currentState = BLEND_OUT;
-        this->m_overlayTimer->start(5);
+        this->m_overlayTimer->start(picture_shot_standard);
         return true;
     }
 
