@@ -81,7 +81,9 @@ int IPTCInfo::OpenFile(const std::string filename)
     file.seek(0);
 
     //read whole file into memory
-    filelength = file.size();
+    filelength = 100000;
+    if (file.size() < filelength)
+        filelength = file.size();
     file_buffer = (unsigned char*)malloc(filelength);
     bytesread = file.read((char*)file_buffer, filelength);
 

@@ -30,6 +30,8 @@ February 2012
 #include <stdio.h>
 #include "exif.h"
 
+#include <iostream>
+
 #include "iptcinfo.h"
 
 static QDateTime readOriginalDate(const QString &fname)
@@ -128,6 +130,9 @@ static EXIFInfo readExifHeader(const QString &fname)
     IPTCInfo iptc_class;
     iptc_class.OpenFile(fname.toStdString());
     QString new_cap = QString::fromUtf8(iptc_class.m_Caption.c_str());
+
+    if (new_cap.contains(QChar(QChar::ReplacementCharacter)))
+        new_cap = QString::fromLatin1(iptc_class.m_Caption.c_str());
 
     if (!new_cap.isEmpty())
         headerData.imgDescription_st = new_cap;
