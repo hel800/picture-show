@@ -132,6 +132,10 @@ void overlayInfo::generatePixmap()
         {
             dateTime = dt.toString("dd.MM.yyyy hh:mm:ss");
         }
+        else
+        {
+            dateTime = "";
+        }
     }
 
 
