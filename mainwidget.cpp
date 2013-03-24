@@ -221,7 +221,7 @@ void MainWidget::initialize()
     this->load_directory->setDirectory(this->settingsDial->getCurrentDirectory());
     this->load_directory->setSorting(this->settingsDial->getDirectorySorting());
     this->load_directory->setIncludeSubdirs(this->settingsDial->getIncludeSubdirs());
-    this->load_directory->start();
+    this->load_directory->start(QThread::NormalPriority);
 }
 
 void MainWidget::applyNewOptions()
