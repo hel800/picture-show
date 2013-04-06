@@ -28,7 +28,7 @@ February 2012
 
 int main(int argc, char *argv[])
 {
-    QString appVersion = QString("0.9 beta ");
+    QString appVersion = QString("1.0 beta ");
 
     #if defined (_MSC_VER)
         #if _MSC_VER >= 1600
