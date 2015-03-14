@@ -1,0 +1,3 @@
+picture-show ist eine einfache aber elegante Anwendung um Fotos zu präsentieren. Es unterstützt Vollbildauflösung und verschiedene Übergangseffekte. Bilder können manuell weitergeschaltet werden oder über einen Timer. Beide Modi können auch gemischt verwendet werden. Es ist zudem kein Pre-rendering erforderlich, ein Verzeichnis auswählen reicht und die Show kann beginnen...
+
+Die Anwendung ist einfach gehalten. Es können neben dem Bilderverzeichnis ein paar grundlegende Anzeigeeinstellungen getroffen werden. Im Vollbildmodus wird zudem der Mauszeiger ausgebledet, es werden nicht ungefragt overlays eingeblendet, die mit der Wirkung der Bilder interferieren könnten. Die Steuerung während der picture show erfolgt daher mit Tastatur bzw. den Tasten der Maus.
